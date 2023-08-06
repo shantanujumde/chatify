@@ -11,8 +11,9 @@ const Profile = ({}) => {
     { enabled: sessionData?.user !== undefined }
   );
 
-  if (!user) return <div className="text-grey-300">Please login to access</div>;
-  if (isLoading) return <div className="text-grey-300">Loading...</div>;
+  if (!user)
+    return <div className=" text-gray-700">Please login to access</div>;
+  if (isLoading) return <div className=" text-gray-700">Loading...</div>;
 
   return (
     <div>

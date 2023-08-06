@@ -36,7 +36,7 @@ const SideNavBar = () => {
           <>
             <li>
               <Link
-                href={`/profile/${user?.id}`}
+                href={`/profile/${user.id}`}
                 className="border-none p-4  text-gray-700"
               >
                 Profile
