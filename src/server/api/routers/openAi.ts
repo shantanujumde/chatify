@@ -1,20 +1,13 @@
 import console from "console";
 import { encode } from "gpt-3-encoder";
-import { Configuration, OpenAIApi } from "openai";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { supabaseClient } from "./helplers";
+import { openai, supabaseClient } from "./helplers";
 
 export const opeanAiRouter = createTRPCRouter({
   createEmbeddings: publicProcedure
     .input(z.object({ id: z.string(), text: z.string() }))
     .mutation(({ input }) => {
-      const configuration = new Configuration({
-        apiKey: process.env.OPEN_AI_API_KEY,
-      });
-
-      const openai = new OpenAIApi(configuration);
-
       const chunkArray = chunkText({
         title: input.id,
         url: input.id,
@@ -34,24 +27,16 @@ export const opeanAiRouter = createTRPCRouter({
         const embedding = embeddingResponse.data.data[0]?.embedding;
         if (embedding) {
           const { error: insertPageSectionError, data: pageSection } =
-            await supabaseClient
-              .from("Embeddings")
-              .insert({
-                content: chunk.content,
-                content_length: chunk.content_length,
-                content_tokens: chunk.content_tokens,
-                embedding: embedding as unknown as string,
-                id:
-                  Math.random().toString(36).substring(2, 15) +
-                  Math.random().toString(36).substring(2, 15),
-                openAiResponce: JSON.stringify(embeddingResponse.data.data),
-                text_date: chunk.text_date,
-                text_url: chunk.text_url,
-                title: chunk.title,
-              })
-              .select()
-              .limit(1)
-              .single();
+            await supabaseClient.from("Embeddings").insert({
+              content: chunk.content,
+              content_length: chunk.content_length,
+              content_tokens: chunk.content_tokens,
+              embedding: embedding as unknown as string,
+              openAiResponce: JSON.stringify(embeddingResponse.data.data),
+              text_date: chunk.text_date,
+              text_url: chunk.text_url,
+              title: chunk.title,
+            });
 
           console.log(
             "openAi=>error, data",
@@ -60,6 +45,36 @@ export const opeanAiRouter = createTRPCRouter({
           );
         }
       });
+    }),
+
+  getClosestEmbeddings: publicProcedure
+    .input(z.object({ text: z.string() }))
+    .mutation(async ({ input }) => {
+      const embeddingResponse = await openai.createEmbedding({
+        model: "text-embedding-ada-002",
+        input: input.text.replaceAll("\n", " "),
+      });
+
+      if (embeddingResponse.status !== 200) {
+        throw new Error("Failed to create embedding for question");
+      }
+
+      const embedding = embeddingResponse.data.data[0]?.embedding;
+
+      if (!embedding) {
+        throw new Error("Failed to create embedding for question");
+      }
+      console.log("openAi=>embedding", embedding);
+
+      const { error: matchError, data: pageSections } =
+        await supabaseClient.rpc("match_page_sections", {
+          embedding: embedding as unknown as string,
+          match_threshold: 0.5,
+          match_count: 10,
+          min_content_length: 50,
+        });
+
+      console.log("openAi=>matchError, pageSections", matchError, pageSections);
     }),
 });
 

@@ -1,10 +1,9 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import type { DefaultArgs } from "@prisma/client/runtime/library";
 import { createClient, type Session } from "@supabase/supabase-js";
+import { Configuration, OpenAIApi } from "openai";
 import type { Database } from "./database.types";
 import type { TextChunks } from "./openAi";
-
-// generate supbase types SUPABASE_ACCESS_TOKEN="sbp_946b15a172ba5b1d946f2ab457a9f6d60432d503" npx supabase gen types typescript --project-id ihvlvwekjudpqbosoewy > database.types.ts
 
 export const supabaseClient = createClient<Database>(
   String(process.env.SUPABASE_URL),
@@ -16,6 +15,12 @@ export const supabaseClient = createClient<Database>(
     },
   }
 );
+
+const configuration = new Configuration({
+  apiKey: process.env.OPEN_AI_API_KEY,
+});
+
+export const openai = new OpenAIApi(configuration);
 
 export const rawQueryEmbeddings = async ({
   ctx,

@@ -101,7 +101,7 @@ export interface Database {
           content_tokens: number
           createdAt: string
           embedding: string | null
-          id: string
+          id: number
           openAiResponce: Json
           text_date: string
           text_url: string
@@ -113,7 +113,7 @@ export interface Database {
           content_tokens: number
           createdAt?: string
           embedding?: string | null
-          id: string
+          id?: number
           openAiResponce: Json
           text_date: string
           text_url: string
@@ -125,7 +125,7 @@ export interface Database {
           content_tokens?: number
           createdAt?: string
           embedding?: string | null
-          id?: string
+          id?: number
           openAiResponce?: Json
           text_date?: string
           text_url?: string
@@ -213,6 +213,22 @@ export interface Database {
           "": unknown
         }
         Returns: unknown
+      }
+      match_page_sections: {
+        Args: {
+          embedding: string
+          match_threshold: number
+          match_count: number
+          min_content_length: number
+        }
+        Returns: {
+          id: number
+          page_id: number
+          slug: string
+          heading: string
+          content: string
+          similarity: number
+        }[]
       }
       vector_avg: {
         Args: {
