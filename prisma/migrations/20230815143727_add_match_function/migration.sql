@@ -9,19 +9,21 @@ begin
   return query
   select
     "Embeddings".id,
-    "Embeddings"."title" ,
-    "Embeddings"."text_url" ,
-    "Embeddings"."text_date" ,
+    "Text"."text_title" ,
+    "Text"."text_url" ,
+    "Text"."text_date" ,
     "Embeddings"."content" ,
+    "Embeddings"."content_length",
+    "Embeddings"."content_tokens"
     ("Embeddings".embedding <#> embedding) * -1 as similarity
-  from "Embeddings"
+  from "Embeddings", "Text"
 
   -- We only care about sections that have a useful amount of content
  -- where length(page_section.content) >= min_content_length
 
   -- The dot product is negative because of a Postgres limitation, so we negate it
   where ("Embeddings".embedding <#> embedding) * -1 > match_threshold
-
+   and "Embeddings"."id" = "Text"."id" 
   -- OpenAI embeddings are normalized to length 1, so
   -- cosine similarity and dot product will produce the same results.
   -- Using dot product which can be computed slightly faster.

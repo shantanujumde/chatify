@@ -16,17 +16,27 @@ datasource db {
     extensions = [vector]
 }
 
+model Text {
+    id         Int    @id @default(autoincrement())
+    text       String
+    text_title String
+    text_url   String
+    text_date  String
+
+    embedding Embeddings[]
+}
+
 model Embeddings {
     id             Int                          @id @default(autoincrement())
-    title          String
-    text_url       String
-    text_date      String
     content        String
     content_length Int
     content_tokens Int
     embedding      Unsupported("vector(1536)")?
     openAiResponce Json
     createdAt      DateTime                     @default(now())
+
+    text   Text @relation(fields: [textId], references: [id])
+    textId Int
 }
 
 // Necessary for Next auth

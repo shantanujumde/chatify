@@ -1,50 +1,91 @@
-import console from "console";
 import { encode } from "gpt-3-encoder";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { openai, supabaseClient } from "./helplers";
+import type { Database } from "./database.types";
+import { openai, supabaseClient } from "./helpers";
 
-export const opeanAiRouter = createTRPCRouter({
+export const openAiRouter = createTRPCRouter({
   createEmbeddings: publicProcedure
-    .input(z.object({ id: z.string(), text: z.string() }))
-    .mutation(({ input }) => {
+    .input(
+      z.object({
+        text: z.string(),
+        text_date: z.string(),
+        text_url: z.string(),
+        text_title: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
       const chunkArray = chunkText({
-        title: input.id,
-        url: input.id,
-        date: input.id,
+        title: input.text_title,
+        url: input.text_date,
+        date: input.text_date,
         content: input.text,
         length: input.text.length,
         tokens: encode(input.text).length,
         chunks: [],
       });
 
-      chunkArray.chunks.map(async (chunk) => {
-        const embeddingResponse = await openai.createEmbedding({
-          model: "text-embedding-ada-002",
-          input: chunk.content,
-        });
+      const { error: insertTextError, data: textResponse } =
+        await supabaseClient
+          .from("Text")
+          .insert({
+            text: input.text,
+            text_date: input.text_date,
+            text_url: input.text_url,
+            text_title: input.text_title,
+          })
+          .select()
+          .limit(1)
+          .single();
 
-        const embedding = embeddingResponse.data.data[0]?.embedding;
-        if (embedding) {
-          const { error: insertPageSectionError, data: pageSection } =
-            await supabaseClient.from("Embeddings").insert({
-              content: chunk.content,
-              content_length: chunk.content_length,
-              content_tokens: chunk.content_tokens,
-              embedding: embedding as unknown as string,
-              openAiResponce: JSON.stringify(embeddingResponse.data.data),
-              text_date: chunk.text_date,
-              text_url: chunk.text_url,
-              title: chunk.title,
-            });
+      if (textResponse) {
+        const embeddingArray: Embeddings[] = [];
+        for (const chunk of chunkArray.chunks) {
+          const embeddingResponse = await openai.createEmbedding({
+            model: "text-embedding-ada-002",
+            input: chunk.content,
+          });
 
-          console.log(
-            "openAi=>error, data",
-            insertPageSectionError,
-            pageSection
-          );
+          const embedding = embeddingResponse.data.data[0]?.embedding;
+
+          const embeddingObject: Embeddings = {
+            content: chunk.content,
+            content_length: chunk.content_length,
+            content_tokens: chunk.content_tokens,
+            embedding: embedding as unknown as string,
+            openAiResponce: JSON.stringify(embeddingResponse.data.data),
+            textId: textResponse.id,
+          };
+
+          embeddingArray.push(embeddingObject);
         }
-      });
+
+        if (!embeddingArray.length)
+          return {
+            status: 404,
+            error: "embeddings are empty",
+          };
+
+        const { error: insertEmbeddingError } = await supabaseClient
+          .from("Embeddings")
+          .insert(embeddingArray);
+
+        console.log("openAi=>embedddingArray-final", embeddingArray.length);
+        if (insertEmbeddingError)
+          return {
+            status: 404,
+            error: insertEmbeddingError,
+          };
+        else
+          return {
+            status: 200,
+            error: null,
+          };
+      }
+      return {
+        status: 404,
+        error: insertTextError,
+      };
     }),
 
   getClosestEmbeddings: publicProcedure
@@ -74,7 +115,17 @@ export const opeanAiRouter = createTRPCRouter({
           min_content_length: 50,
         });
 
-      console.log("openAi=>matchError, pageSections", matchError, pageSections);
+      if (matchError)
+        return {
+          status: 404,
+          error: matchError,
+          data: null,
+        };
+      return {
+        status: 200,
+        error: null,
+        data: pageSections,
+      };
     }),
 });
 
@@ -97,6 +148,8 @@ export type TextChunks = {
   content_tokens: number;
   embedding: number[];
 };
+
+export type Embeddings = Database["public"]["Tables"]["Embeddings"]["Insert"];
 
 const CHUNK_SIZE = 200;
 
