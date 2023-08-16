@@ -2,7 +2,7 @@ import { encode } from "gpt-3-encoder";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import type { Database } from "./database.types";
-import { openai, supabaseClient } from "./helpers";
+import { getHash, openai, supabaseClient } from "./helpers";
 
 export const openAiRouter = createTRPCRouter({
   createEmbeddings: publicProcedure
@@ -24,11 +24,12 @@ export const openAiRouter = createTRPCRouter({
         tokens: encode(input.text).length,
         chunks: [],
       });
-
+      const uniqueIdForText = getHash(input.text);
       const { error: insertTextError, data: textResponse } =
         await supabaseClient
           .from("Text")
           .insert({
+            id: uniqueIdForText,
             text: input.text,
             text_date: input.text_date,
             text_url: input.text_url,
@@ -54,7 +55,7 @@ export const openAiRouter = createTRPCRouter({
             content_tokens: chunk.content_tokens,
             embedding: embedding as unknown as string,
             openAiResponce: JSON.stringify(embeddingResponse.data.data),
-            textId: textResponse.id,
+            textId: uniqueIdForText,
           };
 
           embeddingArray.push(embeddingObject);
@@ -162,10 +163,7 @@ const chunkText = (text: Text) => {
     const split = content.split(". ");
     let chunkText = "";
 
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < split.length; i++) {
-      const sentence = split[i];
-
+    for (const sentence of split) {
       if (typeof sentence === "string") {
         const sentenceTokenLength = encode(sentence);
         const chunkTextTokenLength = encode(chunkText).length;
