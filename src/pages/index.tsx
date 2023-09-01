@@ -1,5 +1,5 @@
+import { api } from "@/utils/api";
 import Head from "next/head";
-import { api } from "~/utils/api";
 // t3- https://www.youtube.com/watch?v=J1gzN1SAhyM
 // embeddings and chatbot- https://www.youtube.com/watch?v=RM-v7zoYQo0
 export default function Home() {

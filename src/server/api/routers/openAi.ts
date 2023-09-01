@@ -1,6 +1,6 @@
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { encode } from "gpt-3-encoder";
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import type { Database } from "./database.types";
 import { getHash, openai, supabaseClient } from "./helpers";
 
