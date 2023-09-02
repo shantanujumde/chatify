@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { api } from "@/utils/api";
 import Head from "next/head";
 // t3- https://www.youtube.com/watch?v=J1gzN1SAhyM
@@ -46,6 +47,7 @@ export default function Home() {
             Test API
           </button>
           {create.isLoading && <>Adding data </>}
+          <Button>hello</Button>
         </div>
       </div>
     </>
