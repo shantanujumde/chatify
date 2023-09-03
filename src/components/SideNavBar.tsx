@@ -24,14 +24,24 @@ const SideNavBar = () => {
           </Link>
         </li>
         {!user ? (
-          <li>
-            <button
-              onClick={() => void signIn()}
-              className="border-none p-4 py-0 text-gray-700"
-            >
-              Login
-            </button>
-          </li>
+          <>
+            <li>
+              <Link
+                href="/auth/register"
+                className="border-none p-4 py-0 text-gray-700"
+              >
+                Sign Up
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={() => void signIn()}
+                className="border-none p-4 py-0 text-gray-700"
+              >
+                Login
+              </button>
+            </li>
+          </>
         ) : (
           <>
             <li>
