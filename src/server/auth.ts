@@ -94,7 +94,6 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isPasswordValid) return null;
-        console.log("auth=>return success", user);
 
         return user;
       },
