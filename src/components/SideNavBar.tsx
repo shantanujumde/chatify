@@ -1,4 +1,4 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 const SideNavBar = () => {
@@ -30,16 +30,25 @@ const SideNavBar = () => {
                 href="/auth/register"
                 className="border-none p-4 py-0 text-gray-700"
               >
-                Sign Up
+                Register
               </Link>
             </li>
             <li>
-              <button
+              {/* built in */}
+              {/* <button 
                 onClick={() => void signIn()}
                 className="border-none p-4 py-0 text-gray-700"
               >
                 Login
-              </button>
+              </button> */}
+
+              {/* custom */}
+              <Link
+                href="/auth/login"
+                className="border-none p-4 py-0 text-gray-700"
+              >
+                Login
+              </Link>
             </li>
           </>
         ) : (

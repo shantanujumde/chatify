@@ -39,6 +39,15 @@ model Embeddings {
     textId Int
 }
 
+model RolesAndPaymentInfo {
+    id             Int     @id @default(autoincrement())
+    userId         String
+    premiumUser    Boolean
+    paymentDetails Json
+    role           String  @default("user")
+    user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -67,14 +76,15 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    password      String?
-    accounts      Account[]
-    sessions      Session[]
+    id                  String                @id @default(cuid())
+    name                String?
+    email               String?               @unique
+    emailVerified       DateTime?
+    image               String?
+    password            String?
+    accounts            Account[]
+    sessions            Session[]
+    RolesAndPaymentInfo RolesAndPaymentInfo[]
 }
 
 model VerificationToken {
