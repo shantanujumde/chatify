@@ -28,8 +28,12 @@ const Profile = ({}) => {
     <div>
       <h2>Welcome {user.name}</h2>
       <p>Email: {user.email}</p>
-      <p> {JSON.stringify(user)}</p>
-      <p> {JSON.stringify(sessionData)}</p>
+      <br />
+      <h2>User Data</h2>
+      <p> {JSON.stringify(user).split(",").join("\n")}</p>
+      <br />
+      <h2>Session Data</h2>
+      <p> {JSON.stringify(sessionData).split(",").join("\n")}</p>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { api } from "@/utils/api";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 import { type AppType } from "next/app";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -11,10 +12,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <div className="flex">
-        <SideNavBar />
-        <Component {...pageProps} />
-      </div>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <div className="flex">
+          <SideNavBar />
+          <Component {...pageProps} />
+        </div>
+      </ThemeProvider>
     </SessionProvider>
   );
 };
