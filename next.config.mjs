@@ -18,6 +18,20 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  webpack: function webpack(config) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    config.resolve.fallback = {
+      // if you miss it, all the other options in fallback, specified
+      // by next.js will be dropped.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      ...config.resolve.fallback,
+
+      fs: false, // the solution
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return config;
+  },
 };
 
 export default config;
