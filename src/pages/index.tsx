@@ -1,4 +1,4 @@
-import PdfParser from "@/components/pdfReader";
+import DocumentReader from "@/components/documentReader";
 import { api } from "@/utils/api";
 import Head from "next/head";
 
@@ -41,7 +41,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
       <div className="grid w-full max-w-sm items-center gap-1.5  ">
-        <PdfParser />
+        <DocumentReader />
       </div>
     </>
   );

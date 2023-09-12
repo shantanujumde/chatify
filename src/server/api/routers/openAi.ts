@@ -24,7 +24,9 @@ export const openAiRouter = createTRPCRouter({
         tokens: encode(input.text).length,
         chunks: [],
       });
+
       const uniqueIdForText = getHash(input.text);
+
       const { error: insertTextError, data: textResponse } =
         await supabaseClient
           .from("Text")
@@ -71,7 +73,6 @@ export const openAiRouter = createTRPCRouter({
           .from("Embeddings")
           .insert(embeddingArray);
 
-        console.log("openAi=>embedddingArray-final", embeddingArray.length);
         if (insertEmbeddingError)
           return {
             status: 404,
@@ -106,7 +107,6 @@ export const openAiRouter = createTRPCRouter({
       if (!embedding) {
         throw new Error("Failed to create embedding for question");
       }
-      console.log("openAi=>embedding", embedding);
 
       const { error: matchError, data: pageSections } =
         await supabaseClient.rpc("match_page_sections", {

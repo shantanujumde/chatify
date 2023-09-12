@@ -1,11 +1,16 @@
 import * as pdfjs from "pdfjs-dist";
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 
+type Text = { text: string; name: string; states: { loading: boolean } };
 export const useReadText = (): [
-  string,
+  Text,
   (e: React.ChangeEvent<HTMLInputElement>) => void
 ] => {
-  const [text, setText] = useState<string>("");
+  const [text, setText] = useState<Text>({
+    text: "",
+    name: "",
+    states: { loading: false },
+  });
 
   return [
     text,
@@ -25,7 +30,9 @@ export const useReadText = (): [
   ];
 };
 
-const readPdf = (file: File, setText: (text: string) => void) => {
+const readPdf = (file: File, setText: Dispatch<SetStateAction<Text>>) => {
+  setText((curr) => ({ ...curr, states: { loading: true } }));
+
   const reader = new FileReader();
 
   reader.onload = async () => {
@@ -47,17 +54,20 @@ const readPdf = (file: File, setText: (text: string) => void) => {
       // Extract text from the page
       const pageTextArray: string[] = [];
       for (const item of pageTextContent.items) {
-        console.log("item,", item);
-
         if ("str" in item) {
           pageTextArray.push(item.str);
         }
       }
       const pageTextString = pageTextArray.join(" ");
 
-      setText(pageTextString);
+      setText({
+        text: pageTextString,
+        name: file.name,
+        states: { loading: false },
+      });
     } catch (error) {
       console.error("Error parsing PDF:", error);
+      setText((curr) => ({ ...curr, states: { loading: false } }));
     }
   };
 
