@@ -50,12 +50,12 @@ const DocumentReader: React.FC = () => {
         <p>{text}</p>
 
         <Button
+          loading={loadingDocument || isCreateEmbeddingLoading}
           disabled={text.length === 0 || loadingDocument}
           onClick={() => handleCreateEmbedding(text, name)}
         >
           Create Embedding
         </Button>
-        {(loadingDocument || isCreateEmbeddingLoading) && <p>Loading...</p>}
         {isCreateEmbeddingError && <p>Error</p>}
       </div>
     </div>
