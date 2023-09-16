@@ -17,23 +17,28 @@ datasource db {
 }
 
 model Text {
-    id         Int    @id @default(autoincrement())
-    text       String
-    text_title String
-    text_url   String
-    text_date  String
+    id        Int    @id @default(autoincrement())
+    text      String
+    textTitle String
+    textUrl   String
+    textDate  String
 
+    userId    String
+    user      User         @relation(fields: [userId], references: [id])
     embedding Embeddings[]
 }
 
 model Embeddings {
     id             Int                          @id @default(autoincrement())
     content        String
-    content_length Int
-    content_tokens Int
+    contentLength  Int
+    contentTokens  Int
     embedding      Unsupported("vector(1536)")?
     openAiResponce Json
     createdAt      DateTime                     @default(now())
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
 
     text   Text @relation(fields: [textId], references: [id])
     textId Int
@@ -85,6 +90,8 @@ model User {
     accounts            Account[]
     sessions            Session[]
     RolesAndPaymentInfo RolesAndPaymentInfo[]
+    Embeddings          Embeddings[]
+    Text                Text[]
 }
 
 model VerificationToken {

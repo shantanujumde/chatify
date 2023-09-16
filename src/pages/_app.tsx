@@ -1,4 +1,5 @@
 import SideNavBar from "@/components/SideNavBar";
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 import { api } from "@/utils/api";
 import { type Session } from "next-auth";
@@ -13,10 +14,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="flex">
-          <SideNavBar />
-          <Component {...pageProps} />
+        <div className="flex h-screen divide-x divide-slate-500">
+          <div className="">
+            <SideNavBar />
+          </div>
+          <div className="p-4">
+            <Component {...pageProps} />
+          </div>
         </div>
+        <Toaster />
       </ThemeProvider>
     </SessionProvider>
   );

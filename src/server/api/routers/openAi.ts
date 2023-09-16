@@ -1,11 +1,12 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 import { encode } from "gpt-3-encoder";
 import { z } from "zod";
 import type { Database } from "./database.types";
 import { getHash, openai, supabaseClient } from "./helpers";
 
 export const openAiRouter = createTRPCRouter({
-  createEmbeddings: publicProcedure
+  createEmbeddings: protectedProcedure
     .input(
       z.object({
         text: z.string(),
@@ -14,7 +15,7 @@ export const openAiRouter = createTRPCRouter({
         text_title: z.string(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const chunkArray = chunkText({
         title: input.text_title,
         url: input.text_date,
@@ -27,70 +28,73 @@ export const openAiRouter = createTRPCRouter({
 
       const uniqueIdForText = getHash(input.text);
 
-      const { error: insertTextError, data: textResponse } =
-        await supabaseClient
-          .from("Text")
-          .insert({
-            id: uniqueIdForText,
-            text: input.text,
-            text_date: input.text_date,
-            text_url: input.text_url,
-            text_title: input.text_title,
-          })
-          .select()
-          .limit(1)
-          .single();
+      const { error: insertTextError } = await supabaseClient
+        .from("Text")
+        .insert({
+          id: uniqueIdForText,
+          text: input.text,
+          textDate: input.text_date,
+          textUrl: input.text_url,
+          textTitle: input.text_title,
+          userId: ctx.session?.user.id,
+        })
+        .select()
+        .limit(1)
+        .single();
 
-      if (textResponse) {
-        const embeddingArray: Embeddings[] = [];
-        for (const chunk of chunkArray.chunks) {
-          const embeddingResponse = await openai.createEmbedding({
-            model: "text-embedding-ada-002",
-            input: chunk.content,
-          });
+      if (insertTextError)
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Text already exists",
+          cause: insertTextError,
+        });
 
-          const embedding = embeddingResponse.data.data[0]?.embedding;
+      const embeddingArray: Embeddings[] = [];
+      for (const chunk of chunkArray.chunks) {
+        const embeddingResponse = await openai.createEmbedding({
+          model: "text-embedding-ada-002",
+          input: chunk.content,
+        });
 
-          const embeddingObject: Embeddings = {
-            content: chunk.content,
-            content_length: chunk.content_length,
-            content_tokens: chunk.content_tokens,
-            embedding: embedding as unknown as string,
-            openAiResponce: JSON.stringify(embeddingResponse.data.data),
-            textId: uniqueIdForText,
-          };
+        const embedding = embeddingResponse.data.data[0]?.embedding;
 
-          embeddingArray.push(embeddingObject);
-        }
+        const embeddingObject: Embeddings = {
+          content: chunk.content,
+          contentLength: chunk.content_length,
+          contentTokens: chunk.content_tokens,
+          embedding: embedding as unknown as string,
+          openAiResponce: JSON.stringify(embeddingResponse.data.data),
+          textId: uniqueIdForText,
+          userId: ctx.session?.user.id,
+        };
 
-        if (!embeddingArray.length)
-          return {
-            status: 404,
-            error: "embeddings are empty",
-          };
-
-        const { error: insertEmbeddingError } = await supabaseClient
-          .from("Embeddings")
-          .insert(embeddingArray);
-
-        if (insertEmbeddingError)
-          return {
-            status: 404,
-            error: insertEmbeddingError,
-          };
-        else
-          return {
-            status: 200,
-            error: null,
-          };
+        embeddingArray.push(embeddingObject);
       }
-      return {
-        status: 404,
-        error: insertTextError,
-      };
+
+      if (!embeddingArray.length)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Embedding array is empty",
+        });
+
+      const { error: insertEmbeddingError } = await supabaseClient
+        .from("Embeddings")
+        .insert(embeddingArray);
+
+      if (insertEmbeddingError)
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Embeddings already exists",
+          cause: insertEmbeddingError,
+        });
+      else
+        return {
+          code: 200,
+          message: "Embeddings created successfully",
+        };
     }),
 
-  getClosestEmbeddings: publicProcedure
+  getClosestEmbeddings: protectedProcedure
     .input(z.object({ text: z.string() }))
     .mutation(async ({ input }) => {
       const embeddingResponse = await openai.createEmbedding({

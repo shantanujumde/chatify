@@ -97,39 +97,79 @@ export interface Database {
       Embeddings: {
         Row: {
           content: string;
-          content_length: number;
-          content_tokens: number;
+          contentLength: number;
+          contentTokens: number;
           createdAt: string;
           embedding: string | null;
           id: number;
           openAiResponce: Json;
           textId: number;
+          userId: string;
         };
         Insert: {
           content: string;
-          content_length: number;
-          content_tokens: number;
+          contentLength: number;
+          contentTokens: number;
           createdAt?: string;
           embedding?: string | null;
           id?: number;
           openAiResponce: Json;
           textId: number;
+          userId: string;
         };
         Update: {
           content?: string;
-          content_length?: number;
-          content_tokens?: number;
+          contentLength?: number;
+          contentTokens?: number;
           createdAt?: string;
           embedding?: string | null;
           id?: number;
           openAiResponce?: Json;
           textId?: number;
+          userId?: string;
         };
         Relationships: [
           {
             foreignKeyName: "Embeddings_textId_fkey";
             columns: ["textId"];
             referencedRelation: "Text";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "Embeddings_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "User";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      RolesAndPaymentInfo: {
+        Row: {
+          id: number;
+          paymentDetails: Json;
+          premiumUser: boolean;
+          role: string;
+          userId: string;
+        };
+        Insert: {
+          id?: number;
+          paymentDetails: Json;
+          premiumUser: boolean;
+          role?: string;
+          userId: string;
+        };
+        Update: {
+          id?: number;
+          paymentDetails?: Json;
+          premiumUser?: boolean;
+          role?: string;
+          userId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "RolesAndPaymentInfo_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "User";
             referencedColumns: ["id"];
           }
         ];
@@ -166,25 +206,35 @@ export interface Database {
         Row: {
           id: number;
           text: string;
-          text_date: string;
-          text_title: string;
-          text_url: string;
+          textDate: string;
+          textTitle: string;
+          textUrl: string;
+          userId: string;
         };
         Insert: {
           id?: number;
           text: string;
-          text_date: string;
-          text_title: string;
-          text_url: string;
+          textDate: string;
+          textTitle: string;
+          textUrl: string;
+          userId: string;
         };
         Update: {
           id?: number;
           text?: string;
-          text_date?: string;
-          text_title?: string;
-          text_url?: string;
+          textDate?: string;
+          textTitle?: string;
+          textUrl?: string;
+          userId?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "Text_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "User";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       User: {
         Row: {
@@ -193,6 +243,7 @@ export interface Database {
           id: string;
           image: string | null;
           name: string | null;
+          password: string | null;
         };
         Insert: {
           email?: string | null;
@@ -200,6 +251,7 @@ export interface Database {
           id: string;
           image?: string | null;
           name?: string | null;
+          password?: string | null;
         };
         Update: {
           email?: string | null;
@@ -207,6 +259,7 @@ export interface Database {
           id?: string;
           image?: string | null;
           name?: string | null;
+          password?: string | null;
         };
         Relationships: [];
       };
