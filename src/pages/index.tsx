@@ -1,3 +1,4 @@
+import Spinner from "@/components/ui/spinner";
 import Head from "next/head";
 
 // t3- https://www.youtube.com/watch?v=J1gzN1SAhyM
@@ -14,6 +15,128 @@ export default function Home() {
       <div>
         <h1>Chatify</h1>
         <p>you can now chat with your documents on the go!</p>
+        <p>
+          Bacon ipsum dolor amet shoulder pastrami fatback doner tongue picanha.
+          Boudin landjaeger strip steak biltong porchetta cow. Shank cupim cow,
+          tenderloin filet mignon jerky porchetta kevin pork loin pork belly.
+          Landjaeger jowl kevin, doner flank tongue ball tip biltong meatloaf
+          sirloin leberkas rump shank spare ribs brisket. Pork pastrami sirloin
+          cow pork belly. Turducken spare ribs hamburger capicola chislic
+          meatloaf kevin beef ribs landjaeger swine shank. T-bone pork belly
+          tail leberkas jerky chicken porchetta strip steak prosciutto ham hock
+        </p>
+        <Spinner />
+        <p>
+          tri-tip drumstick. Chislic biltong ribeye ham hock meatball. Doner
+          pork loin leberkas, buffalo jowl fatback burgdoggen filet mignon ball
+          tip shank ground round beef. Picanha hamburger shank biltong, pastrami
+          jowl beef ribs alcatra flank corned beef frankfurter drumstick fatback
+          tri-tip. Biltong capicola salami pork loin cow cupim jerky bresaola
+          porchetta ribeye ground round kielbasa swine. Prosciutto sirloin
+          leberkas ham hock flank. Chislic cupim burgdoggen beef ribs filet
+          mignon, tri-tip pork loin t-bone capicola drumstick. Ham hamburger
+          sirloin pork loin turducken leberkas. Swine doner sausage, cupim spare
+          ribs buffalo kielbasa turducken ground round meatball corned beef
+          shoulder venison short ribs rump. Bacon flank pig jowl pork loin
+          ground round. Chislic andouille jowl brisket capicola meatball strip
+          steak beef ribs corned beef pork chop shankle meatloaf ham hock.
+          Pastrami shoulder flank capicola shankle, tenderloin alcatra
+          landjaeger pork belly strip steak spare ribs corned beef short ribs.
+          Chuck pork belly chicken bacon bresaola, beef landjaeger hamburger cow
+          meatloaf andouille ground round burgdoggen kevin. Bresaola shoulder
+          ham t-bone, ground round turkey burgdoggen. Cow picanha burgdoggen,
+          kevin tongue salami andouille pork loin porchetta turducken pork short
+          ribs ham jerky turkey. Ribeye shankle sirloin jowl drumstick, short
+          ribs venison chicken tenderloin landjaeger andouille ball tip kielbasa
+          buffalo biltong. Burgdoggen shank filet mignon fatback. Pork chop
+          ribeye frankfurter jowl turducken sausage cow fatback tongue jerky
+          salami picanha hamburger. Sausage rump strip steak buffalo. Pancetta
+          corned beef venison pork loin tongue flank picanha porchetta bresaola
+          shankle capicola frankfurter shank jerky drumstick. Jerky pork chop
+          short loin chuck frankfurter cupim rump ground round burgdoggen
+          buffalo turducken. Pork chop turducken pork belly cow, strip steak
+          leberkas shankle. Filet mignon drumstick swine prosciutto. Sausage
+          alcatra prosciutto cupim pork belly shank boudin meatball venison. Cow
+          rump pork loin doner. Prosciutto tri-tip hamburger, tail bresaola
+          filet mignon t-bone pork belly ground round shank chuck ball tip pork
+          ham hock. Filet mignon corned beef pig buffalo, turkey alcatra brisket
+          t-bone venison tongue chuck. Bacon andouille cow meatloaf pork kevin,
+          short ribs chicken. Short loin porchetta filet mignon hamburger,
+          drumstick alcatra andouille leberkas kevin rump brisket ham tail beef
+          chicken. Short ribs jowl pancetta tongue, prosciutto porchetta ham
+          hock frankfurter andouille tenderloin capicola pig ball tip cow beef
+          ribs. Pork belly pastrami strip steak short ribs rump. Ribeye flank
+          sausage cupim. Pork tenderloin doner, sirloin jerky cow biltong
+          capicola alcatra hamburger. Drumstick andouille fatback turducken,
+          chislic picanha doner tenderloin jowl tongue hamburger beef. Turducken
+          tail leberkas ball tip pork loin. Pork loin ham hock pig fatback. Pork
+          chop pork prosciutto, drumstick jerky sirloin porchetta tongue
+          turducken. Drumstick andouille hamburger meatball. Strip steak
+          bresaola kevin pig ribeye. Boudin tri-tip tail turkey beef ribs jerky
+          landjaeger frankfurter kevin spare ribs sirloin filet mignon. Short
+          ribs picanha frankfurter, ribeye ham hock filet mignon pork. Biltong
+          hamburger chicken filet mignon salami pork loin short ribs ribeye
+          shoulder ham rump kielbasa meatball jerky. Beef bacon alcatra, cow
+          shankle frankfurter ball tip leberkas rump chuck. T-bone short loin
+          spare ribs chuck, tenderloin jowl porchetta tongue leberkas pork chop
+          corned beef tail beef shank. Turducken porchetta pork belly drumstick
+          alcatra jerky capicola shoulder. Burgdoggen capicola porchetta
+          bresaola sirloin swine shank. Ham hock sirloin pork belly tri-tip
+          cupim, alcatra short ribs turducken. Beef spare ribs beef ribs,
+          sausage capicola pastrami pork picanha leberkas buffalo ham ground
+          round kevin short ribs doner. Venison bresaola doner sirloin, tail
+          short ribs salami flank picanha hamburger rump ribeye chicken chuck.
+          Sausage alcatra chicken t-bone shankle capicola brisket pastrami flank
+          corned beef. Kielbasa chicken tongue swine ribeye andouille. Spare
+          ribs chuck filet mignon, salami kevin rump swine ground round.
+          Pastrami jerky ham hock, tongue sausage leberkas turkey biltong
+          picanha pork loin pork belly capicola chuck prosciutto cow. Alcatra
+          meatloaf short ribs frankfurter ham hock ground round. Flank ground
+          round shank rump short ribs. Rump swine pork loin flank ribeye pig
+          pancetta bacon turkey fatback shank. Kielbasa doner ham leberkas
+          ground round. Pork belly landjaeger filet mignon chislic drumstick,
+          pork venison burgdoggen. Turducken buffalo brisket salami ball tip
+          tail ribeye pig fatback doner tongue. Frankfurter rump chicken
+          shoulder tenderloin turducken meatloaf chislic porchetta tongue
+          picanha burgdoggen, brisket cupim. Pig flank biltong, fatback
+          andouille corned beef ham hock chicken. Swine spare ribs burgdoggen
+          rump, cow pastrami landjaeger porchetta tail ground round jowl short
+          ribs fatback. Bacon pork loin porchetta venison, spare ribs kevin tail
+          hamburger pork belly jerky turducken cupim kielbasa ball tip. Bacon
+          cupim ground round sausage biltong cow frankfurter tongue. Drumstick
+          pork belly corned beef ham landjaeger rump tri-tip. Drumstick
+          porchetta alcatra, jerky hamburger fatback tri-tip ribeye. Buffalo
+          tenderloin bacon tri-tip pork corned beef. Flank chislic andouille
+          prosciutto leberkas pork chop. Doner sausage ribeye salami corned beef
+          kielbasa. Ham hock kielbasa brisket prosciutto, cow tongue doner cupim
+          biltong sausage turkey drumstick picanha. Prosciutto t-bone pancetta
+          ham hock kevin pork. Ham biltong filet mignon fatback burgdoggen
+          leberkas shank ground round rump. Venison pork loin prosciutto kevin.
+          Doner sausage alcatra burgdoggen. Picanha corned beef leberkas flank
+          filet mignon pork loin short loin. Swine pork chop tail, ball tip pork
+          loin ground round pig venison short loin pancetta short ribs strip
+          steak bacon pork belly tenderloin. Meatloaf landjaeger andouille
+          ribeye. Short loin pastrami porchetta tail short ribs. Hamburger
+          tongue biltong landjaeger, doner picanha pork loin pastrami jerky.
+          Frankfurter sirloin shankle ham tri-tip chicken short loin doner
+          corned beef. Cupim capicola doner sausage pork chop buffalo tri-tip
+          short loin sirloin. Pork ribeye turkey, bacon sirloin tenderloin
+          frankfurter tail venison salami hamburger kevin pig. Landjaeger
+          chislic jerky meatball shankle. Boudin tail t-bone, filet mignon jerky
+          pork chop shankle short loin tongue bacon pastrami andouille shank.
+          Hamburger short ribs ground round, pork belly tri-tip turkey capicola
+          pork loin ball tip jerky tenderloin landjaeger chicken pastrami
+          ribeye. Ribeye pancetta prosciutto, shank pork chop pork spare ribs
+          andouille jerky filet mignon. Salami beef pork chop, shank ribeye
+          leberkas hamburger corned beef pork loin brisket chuck tail. Chuck
+          short ribs fatback frankfurter salami. Boudin capicola ground round,
+          andouille brisket kevin cupim shoulder. Pork chop chicken beef ribs
+          alcatra jerky, kielbasa ball tip meatloaf turducken. Pork chop pork
+          loin jerky, ribeye turducken andouille venison capicola meatball
+          shoulder drumstick turkey. Brisket andouille venison, rump kielbasa
+          doner ball tip shankle shoulder beef. Short loin filet mignon
+          drumstick leberkas swine. Meatloaf sausage chuck fatback.
+        </p>
       </div>
     </>
   );
