@@ -20,16 +20,15 @@ import Spinner from "./ui/spinner";
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
-    description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+    title: "Add PDFs",
+    href: "/chatify/addDocuments",
+    description: "Add documents to chat with it",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
+    title: "Chat",
+    href: "/chatify/chat",
     description:
-      "For sighted users to preview content available behind a link.",
+      "Type interactive messages to get information form documents you added",
   },
   {
     title: "Progress",
@@ -60,7 +59,7 @@ export function TopNavBar() {
   const { data, status } = useSession();
 
   return (
-    <NavigationMenu className="fixed inset-x-0 top-5 mx-auto w-11/12  justify-between rounded-lg  bg-black  p-2 dark:bg-white">
+    <NavigationMenu className="fixed inset-x-0 top-5 mx-auto w-11/12  justify-between rounded-lg bg-white p-2">
       <NavigationMenuList className="flex flex-row ">
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
@@ -103,29 +102,24 @@ export function TopNavBar() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/docs" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Documentation
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
+        {status === "authenticated" && (
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Utilities</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                {components.map((component) => (
+                  <ListItem
+                    key={component.title}
+                    title={component.title}
+                    href={component.href}
+                  >
+                    {component.description}
+                  </ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        )}
       </NavigationMenuList>
 
       <NavigationMenuList className="flex flex-row gap-1">
@@ -166,9 +160,18 @@ export function TopNavBar() {
           </>
         )}
         {status === "loading" && (
-          <NavigationMenuItem>
-            <Spinner />
-          </NavigationMenuItem>
+          <>
+            <NavigationMenuItem>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <Spinner />
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <Spinner />
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </>
         )}
         <NavigationMenuItem>
           <ModeToggle />

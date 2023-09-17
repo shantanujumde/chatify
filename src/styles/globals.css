@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  body {
+    @apply bg-light;
+    @apply dark:bg-dark;
+    @apply w-11/12;
+    @apply m-auto;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 20 14.3% 4.1%;

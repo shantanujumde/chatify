@@ -14,9 +14,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <TopNavBar />
-        <div className="m-auto mt-4 w-11/12">
-          <Component {...pageProps} />
-        </div>
+        <div className="pt-24" />
+        <Component {...pageProps} />
       </ThemeProvider>
     </SessionProvider>
   );
