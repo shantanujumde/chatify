@@ -2,6 +2,7 @@ import { nextAuthRouter } from "@/server/api/routers/nextauth";
 import { openAiRouter } from "@/server/api/routers/openAi";
 import { profileRouter } from "@/server/api/routers/profile";
 import { createTRPCRouter } from "@/server/api/trpc";
+import { documentsRouter } from "./routers/documents";
 /**
  * This is the primary router for your server.
  *
@@ -11,6 +12,7 @@ export const appRouter = createTRPCRouter({
   profile: profileRouter,
   openAi: openAiRouter,
   nextauth: nextAuthRouter,
+  documents: documentsRouter,
 });
 
 // export type definition of API

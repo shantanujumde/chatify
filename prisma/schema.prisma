@@ -17,11 +17,12 @@ datasource db {
 }
 
 model Text {
-    id        Int    @id @default(autoincrement())
+    id        Int     @id @default(autoincrement())
     text      String
     textTitle String
     textUrl   String
     textDate  String
+    deleted   Boolean @default(false)
 
     userId    String
     user      User         @relation(fields: [userId], references: [id])
