@@ -126,11 +126,12 @@ export const openAiRouter = createTRPCRouter({
         });
 
       if (matchError)
-        return {
-          status: 404,
-          error: matchError,
-          data: null,
-        };
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Embeddings already exists",
+          cause: matchError,
+        });
+
       return {
         status: 200,
         error: null,
