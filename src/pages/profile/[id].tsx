@@ -21,6 +21,7 @@ const Profile = ({}) => {
   if (status === "loading")
     return <div className=" text-gray-700">Loading...</div>;
   // if (isLoading) return <div className=" text-gray-700">Loading...</div>;
+  console.log("isLoading", isLoading);
 
   if (!user)
     return <div className=" text-gray-700">Please login to access</div>;

@@ -32,6 +32,9 @@ const config = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return config;
   },
+  images: {
+    domains: ["images.unsplash.com"],
+  },
 };
 
 export default config;
