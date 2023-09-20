@@ -1,10 +1,23 @@
+import type { Chats } from "@prisma/client";
 import { PlusIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import type { FC } from "react";
+import Spinner from "./ui/spinner";
 
-const ChatMessages: FC = ({}) => {
+interface ChatMessagesProps {
+  chats: Chats[];
+  isLoading: boolean;
+}
+
+const ChatMessages: FC<ChatMessagesProps> = ({ chats, isLoading }) => {
+  if (isLoading) return <Spinner />;
+  if (!chats.length)
+    return (
+      <div className="w-full">Please write something to create history!</div>
+    );
+
   return (
-    <div className="">
+    <>
       <div className="flex flex-row items-center space-y-1.5 p-6">
         <div className="flex items-center space-x-4">
           <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
@@ -30,21 +43,21 @@ const ChatMessages: FC = ({}) => {
       </div>
       <div className="p-6 pt-0">
         <div className="space-y-4">
-          <div className="flex w-max max-w-[75%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-            Hi, how can I help you today?
-          </div>
-          <div className="ml-auto flex w-max max-w-[75%] flex-col gap-2 rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
-            Hey, I&apos;m having trouble with my account.
-          </div>
-          <div className="flex w-max max-w-[75%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-            What seems to be the problem?
-          </div>
-          <div className="ml-auto flex w-max max-w-[75%] flex-col gap-2 rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
-            I can&apos;t log in.
-          </div>
+          {chats.map((chat) => {
+            return (
+              <div key={chat.id}>
+                <div className="ml-auto w-max max-w-[50%] rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
+                  {chat.question}
+                </div>
+                <div className="flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
+                  {chat.response}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

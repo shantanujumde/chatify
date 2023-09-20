@@ -16,6 +16,16 @@ datasource db {
     extensions = [vector]
 }
 
+model Chats {
+    id       Int    @id @default(autoincrement())
+    question String
+    response String
+
+    createdAt DateTime @default(now())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+}
+
 model Text {
     id        Int     @id @default(autoincrement())
     text      String
@@ -93,6 +103,7 @@ model User {
     RolesAndPaymentInfo RolesAndPaymentInfo[]
     Embeddings          Embeddings[]
     Text                Text[]
+    Chats               Chats[]
 }
 
 model VerificationToken {
