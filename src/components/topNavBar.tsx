@@ -57,9 +57,37 @@ const components: { title: string; href: string; description: string }[] = [
 
 export function TopNavBar() {
   const { data, status } = useSession();
+  const [show, setShow] = React.useState(true);
+  const [lastScrollY, setLastScrollY] = React.useState(0);
+
+  const controlNavbar = React.useCallback(() => {
+    if (typeof window !== "undefined") {
+      if (window.scrollY > lastScrollY) {
+        setShow(false);
+      } else {
+        setShow(true);
+      }
+
+      setLastScrollY(window.scrollY);
+    }
+  }, [lastScrollY]);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", controlNavbar);
+
+      return () => {
+        window.removeEventListener("scroll", controlNavbar);
+      };
+    }
+  }, [controlNavbar, lastScrollY]);
 
   return (
-    <NavigationMenu className="fixed inset-x-0 top-5 mx-auto w-11/12  justify-between rounded-lg bg-white p-2">
+    <NavigationMenu
+      className={`active fixed inset-x-0 top-5 mx-auto w-11/12 justify-between rounded-lg bg-white p-2 ${
+        !show && "hidden"
+      }`}
+    >
       <NavigationMenuList className="flex flex-row ">
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
