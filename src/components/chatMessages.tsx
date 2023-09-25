@@ -6,11 +6,16 @@ import Spinner from "./ui/spinner";
 
 interface ChatMessagesProps {
   chats: Chats[];
-  isLoading: boolean;
+  isScreenLoading: boolean;
+  isChatLoading: boolean;
 }
 
-const ChatMessages: FC<ChatMessagesProps> = ({ chats, isLoading }) => {
-  if (isLoading) return <Spinner />;
+const ChatMessages: FC<ChatMessagesProps> = ({
+  chats,
+  isScreenLoading,
+  isChatLoading,
+}) => {
+  if (isScreenLoading) return <Spinner />;
   if (!chats.length)
     return (
       <div className="w-full">Please write something to create history!</div>
@@ -55,6 +60,13 @@ const ChatMessages: FC<ChatMessagesProps> = ({ chats, isLoading }) => {
               </div>
             );
           })}
+          {isChatLoading && (
+            <div className="flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
+              <i className="flex">
+                typing... <Spinner className="h-3 w-3" />
+              </i>
+            </div>
+          )}
         </div>
       </div>
     </>

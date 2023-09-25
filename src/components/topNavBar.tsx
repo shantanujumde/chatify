@@ -84,8 +84,8 @@ export function TopNavBar() {
 
   return (
     <NavigationMenu
-      className={`active fixed inset-x-0 top-5 mx-auto w-11/12 justify-between rounded-lg bg-white p-2 ${
-        !show && "hidden"
+      className={`active fixed inset-x-0 top-5 mx-auto w-11/12 justify-between rounded-lg bg-white p-2  transition-all duration-500 ease-in-out ${
+        !show ? "opacity-0" : "opacity-100"
       }`}
     >
       <NavigationMenuList className="flex flex-row ">

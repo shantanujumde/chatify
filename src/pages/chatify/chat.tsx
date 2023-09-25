@@ -88,9 +88,11 @@ const Chat: FC = ({}) => {
               chats?.length ? Number(currentPage) + 1 : Number(currentPage)
             }`}
           >
-            <DoubleArrowLeftIcon />
+            <Button>
+              <DoubleArrowLeftIcon />
+            </Button>
           </Link>
-          <p>Page {currentPage}</p>
+          <Link href={"?page=1"}>Page {currentPage}</Link>
           <Link
             href={`?page=${
               Number(currentPage) > 1
@@ -98,7 +100,9 @@ const Chat: FC = ({}) => {
                 : Number(currentPage)
             }`}
           >
-            <DoubleArrowRightIcon />
+            <Button>
+              <DoubleArrowRightIcon />
+            </Button>
           </Link>
         </CardFooter>
       </Card>
@@ -111,7 +115,11 @@ const Chat: FC = ({}) => {
           </CardDescription>
         </CardHeader>
         <CardContent className="overflow-y-scroll">
-          <ChatMessages chats={chats!} isLoading={chatsIsLoading} />
+          <ChatMessages
+            chats={chats!}
+            isScreenLoading={chatsIsLoading}
+            isChatLoading={createChat.isLoading}
+          />
         </CardContent>
         <CardFooter className="m-2">
           <form className="flex w-full gap-1" onSubmit={handleSubmit}>
