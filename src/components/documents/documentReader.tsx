@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { useReadText } from "@/hooks/readTextFromDocument";
 import { api } from "@/utils/api";
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 const DocumentReader: React.FC = () => {
   const [textObj, getTextFromDoc] = useReadText();

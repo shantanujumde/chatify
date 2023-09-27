@@ -1,4 +1,4 @@
-import DocumentReader from "@/components/documentReader";
+import DocumentReader from "@/components/documents/documentReader";
 import Spinner from "@/components/ui/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
