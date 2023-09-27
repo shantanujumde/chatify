@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import type { FC } from "react";
 
-const AddDocuments: FC = ({}) => {
+const Documents: FC = ({}) => {
   const { status } = useSession();
   const router = useRouter();
   if (status === "loading") {
@@ -22,4 +22,4 @@ const AddDocuments: FC = ({}) => {
   );
 };
 
-export default AddDocuments;
+export default Documents;

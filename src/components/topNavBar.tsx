@@ -21,7 +21,7 @@ import Spinner from "./ui/spinner";
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Add PDFs",
-    href: "/chatify/addDocuments",
+    href: "/chatify/documents",
     description: "Add documents to chat with it",
   },
   {
