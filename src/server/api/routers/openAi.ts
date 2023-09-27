@@ -14,33 +14,31 @@ export const openAiRouter = createTRPCRouter({
   createEmbeddings: protectedProcedure
     .input(
       z.object({
-        text: z.string(),
-        text_date: z.string(),
-        text_url: z.string(),
-        text_title: z.string(),
+        name: z.string(),
+        extension: z.string(),
+        content: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       const chunkArray = chunkText({
-        title: input.text_title,
-        url: input.text_date,
-        date: input.text_date,
-        content: input.text,
-        length: input.text.length,
-        tokens: encode(input.text).length,
+        name: input.name,
+        extension: input.extension,
+        date: new Date().toISOString(),
+        content: input.content,
+        length: input.content.length,
+        tokens: encode(input.content).length,
         chunks: [],
       });
 
-      const uniqueIdForText = getHash(input.text);
+      const uniqueIdForText = getHash(input.content);
 
       const { error: insertTextError } = await supabaseClient
-        .from("Text")
+        .from("File")
         .insert({
           id: uniqueIdForText,
-          text: input.text,
-          textDate: input.text_date,
-          textUrl: input.text_url,
-          textTitle: input.text_title,
+          content: input.content,
+          extension: input.extension,
+          name: input.name,
           userId: ctx.session?.user.id,
         })
         .select()
@@ -65,11 +63,11 @@ export const openAiRouter = createTRPCRouter({
 
         const embeddingObject: Embeddings = {
           content: chunk.content,
-          contentLength: chunk.content_length,
-          contentTokens: chunk.content_tokens,
+          contentLength: chunk.contentLength,
+          contentTokens: chunk.contentTokens,
           embedding: embedding as unknown as string,
           openAiResponce: JSON.stringify(embeddingResponse.data.data),
-          textId: uniqueIdForText,
+          fileId: uniqueIdForText,
           userId: ctx.session?.user.id,
         };
 

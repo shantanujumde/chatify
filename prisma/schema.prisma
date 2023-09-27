@@ -26,17 +26,19 @@ model Chats {
     user      User     @relation(fields: [userId], references: [id])
 }
 
-model Text {
+model File {
     id        Int     @id @default(autoincrement())
-    text      String
-    textTitle String
-    textUrl   String
-    textDate  String
+    content   String
+    name      String
+    extension String
     deleted   Boolean @default(false)
 
     userId    String
     user      User         @relation(fields: [userId], references: [id])
     embedding Embeddings[]
+
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @default(now())
 }
 
 model Embeddings {
@@ -51,8 +53,8 @@ model Embeddings {
     userId String
     user   User   @relation(fields: [userId], references: [id])
 
-    text   Text @relation(fields: [textId], references: [id])
-    textId Int
+    text   File @relation(fields: [fileId], references: [id])
+    fileId Int
 }
 
 model RolesAndPaymentInfo {
@@ -102,7 +104,7 @@ model User {
     sessions            Session[]
     RolesAndPaymentInfo RolesAndPaymentInfo[]
     Embeddings          Embeddings[]
-    Text                Text[]
+    File                File[]
     Chats               Chats[]
 }
 

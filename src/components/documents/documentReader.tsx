@@ -30,10 +30,9 @@ const DocumentReader: React.FC = () => {
     if (!text || !name) return;
 
     createEmbedding({
-      text,
-      text_date: new Date().toISOString(),
-      text_title: name,
-      text_url: name,
+      content: text,
+      name: name,
+      extension: name.split(".")[1] ?? "NOT_AVAILABLE",
     });
   };
 

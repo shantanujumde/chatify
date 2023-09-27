@@ -1,4 +1,5 @@
 import DocumentReader from "@/components/documents/documentReader";
+import ShowDocuments from "@/components/documents/showDocuments";
 import Spinner from "@/components/ui/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -18,6 +19,7 @@ const Documents: FC = ({}) => {
   return (
     <div className="p-4">
       <DocumentReader />
+      <ShowDocuments />
     </div>
   );
 };

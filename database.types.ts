@@ -94,6 +94,37 @@ export interface Database {
           }
         ]
       }
+      Chats: {
+        Row: {
+          createdAt: string
+          id: number
+          question: string
+          response: string
+          userId: string
+        }
+        Insert: {
+          createdAt?: string
+          id?: number
+          question: string
+          response: string
+          userId: string
+        }
+        Update: {
+          createdAt?: string
+          id?: number
+          question?: string
+          response?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Chats_userId_fkey"
+            columns: ["userId"]
+            referencedRelation: "User"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       Embeddings: {
         Row: {
           content: string
@@ -101,9 +132,9 @@ export interface Database {
           contentTokens: number
           createdAt: string
           embedding: string | null
+          fileId: number
           id: number
           openAiResponce: Json
-          textId: number
           userId: string
         }
         Insert: {
@@ -112,9 +143,9 @@ export interface Database {
           contentTokens: number
           createdAt?: string
           embedding?: string | null
+          fileId: number
           id?: number
           openAiResponce: Json
-          textId: number
           userId: string
         }
         Update: {
@@ -123,20 +154,54 @@ export interface Database {
           contentTokens?: number
           createdAt?: string
           embedding?: string | null
+          fileId?: number
           id?: number
           openAiResponce?: Json
-          textId?: number
           userId?: string
         }
         Relationships: [
           {
-            foreignKeyName: "Embeddings_textId_fkey"
-            columns: ["textId"]
-            referencedRelation: "Text"
+            foreignKeyName: "Embeddings_fileId_fkey"
+            columns: ["fileId"]
+            referencedRelation: "File"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "Embeddings_userId_fkey"
+            columns: ["userId"]
+            referencedRelation: "User"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      File: {
+        Row: {
+          content: string
+          deleted: boolean
+          extension: string
+          id: number
+          name: string
+          userId: string
+        }
+        Insert: {
+          content: string
+          deleted?: boolean
+          extension: string
+          id?: number
+          name: string
+          userId: string
+        }
+        Update: {
+          content?: string
+          deleted?: boolean
+          extension?: string
+          id?: number
+          name?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "File_userId_fkey"
             columns: ["userId"]
             referencedRelation: "User"
             referencedColumns: ["id"]
@@ -196,40 +261,6 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "Session_userId_fkey"
-            columns: ["userId"]
-            referencedRelation: "User"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      Text: {
-        Row: {
-          id: number
-          text: string
-          textDate: string
-          textTitle: string
-          textUrl: string
-          userId: string
-        }
-        Insert: {
-          id?: number
-          text: string
-          textDate: string
-          textTitle: string
-          textUrl: string
-          userId: string
-        }
-        Update: {
-          id?: number
-          text?: string
-          textDate?: string
-          textTitle?: string
-          textUrl?: string
-          userId?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Text_userId_fkey"
             columns: ["userId"]
             referencedRelation: "User"
             referencedColumns: ["id"]

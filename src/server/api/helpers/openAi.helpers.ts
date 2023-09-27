@@ -3,7 +3,7 @@ import type { DefaultArgs } from "@prisma/client/runtime/library";
 import { createClient, type Session } from "@supabase/supabase-js";
 import { encode } from "gpt-3-encoder";
 import { Configuration, OpenAIApi } from "openai";
-import type { Text, TextChunks } from "../types/openAi.types";
+import type { File, FileChunks } from "../types/openAi.types";
 import type { Database } from "../types/supabase.types";
 
 export const supabaseClient = createClient<Database>(
@@ -45,16 +45,15 @@ export const rawQueryEmbeddings = async ({
     session: Session | null;
     prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>;
   };
-  chunk: TextChunks;
+  chunk: FileChunks;
   embedding: Array<number>;
   embeddingResponse: string;
 }) => {
   await ctx.prisma.$executeRaw`
     insert into "Embeddings" ( 
         id,
-        title         , 
-        text_url      , 
-        text_date     , 
+        name         , 
+        extension      , 
         content       , 
         content_length ,
         content_tokens ,
@@ -64,12 +63,11 @@ export const rawQueryEmbeddings = async ({
          values 
         (
           ${Math.random()},
-          ${chunk.title},
-          ${chunk.text_url},
-          ${chunk.text_date},
+          ${chunk.name},
+          ${chunk.extension},
           ${chunk.content},
-          ${chunk.content_length},
-          ${chunk.content_tokens},
+          ${chunk.contentLength},
+          ${chunk.contentTokens},
           ${embedding}::vector,
           ${embeddingResponse}::JSONB
         )
@@ -78,8 +76,8 @@ export const rawQueryEmbeddings = async ({
 
 const CHUNK_SIZE = 200;
 
-export const chunkText = (text: Text) => {
-  const { title, url, date, content } = text;
+export const chunkText = (text: File) => {
+  const { name: title, extension: url, date, content } = text;
 
   const textTextChunks = [];
 
@@ -112,13 +110,13 @@ export const chunkText = (text: Text) => {
   const textChunks = textTextChunks.map((text) => {
     const trimmedText = text.trim();
 
-    const chunk: TextChunks = {
-      title: title,
-      text_url: url,
-      text_date: date,
+    const chunk: FileChunks = {
+      name: title,
+      extension: url,
+      textDate: date,
       content: trimmedText,
-      content_length: trimmedText.length,
-      content_tokens: encode(trimmedText).length,
+      contentLength: trimmedText.length,
+      contentTokens: encode(trimmedText).length,
       embedding: [],
     };
 
@@ -130,17 +128,17 @@ export const chunkText = (text: Text) => {
       const chunk = textChunks[i];
       const prevChunk = textChunks[i - 1];
 
-      if (chunk && chunk.content_tokens < 100 && prevChunk) {
+      if (chunk && chunk.contentTokens < 100 && prevChunk) {
         prevChunk.content += " " + chunk.content;
-        prevChunk.content_length += chunk.content_length;
-        prevChunk.content_tokens += chunk.content_tokens;
+        prevChunk.contentLength += chunk.contentLength;
+        prevChunk.contentTokens += chunk.contentTokens;
         textChunks.splice(i, 1);
         i--;
       }
     }
   }
 
-  const chunkedSection: Text = {
+  const chunkedSection: File = {
     ...text,
     chunks: textChunks,
   };
