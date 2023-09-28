@@ -63,7 +63,7 @@ const Chat: FC = ({}) => {
           <ol>
             {documents.data?.map((document, indx) => (
               <li key={document.id}>
-                {indx + 1}. {document.textTitle}
+                {indx + 1}. {document.name}
               </li>
             ))}
             {documents.isLoading && <Spinner />}
