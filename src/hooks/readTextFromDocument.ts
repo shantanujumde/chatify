@@ -40,7 +40,7 @@ const readPdf = (file: File, setText: Dispatch<SetStateAction<Text>>) => {
 
     try {
       // Initialize PDF.js
-      pdfjs.GlobalWorkerOptions.workerSrc = "./scripts/pdf.worker.min.js";
+      pdfjs.GlobalWorkerOptions.workerSrc = "../scripts/pdf.worker.min.js";
       pdfjs.GlobalWorkerOptions.workerPort = new Worker(
         pdfjs.GlobalWorkerOptions.workerSrc
       );
