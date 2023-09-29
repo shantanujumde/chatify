@@ -84,7 +84,7 @@ export function TopNavBar() {
 
   return (
     <NavigationMenu
-      className={`active fixed inset-x-0 top-5 mx-auto w-11/12 justify-between rounded-lg bg-white p-2  transition-all duration-500 ease-in-out ${
+      className={`fixed inset-x-0 top-5 mx-auto w-11/12 justify-between rounded-lg border border-black/20 bg-white p-2  transition-all duration-500 ease-in-out ${
         !show ? "opacity-0" : "opacity-100"
       }`}
     >
