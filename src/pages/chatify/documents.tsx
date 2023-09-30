@@ -1,4 +1,4 @@
-import DocumentReader from "@/components/documents/documentReader";
+import DocumentReader from "@/components/documents/readDocuments";
 import ShowDocuments from "@/components/documents/showDocuments";
 import {
   Card,
