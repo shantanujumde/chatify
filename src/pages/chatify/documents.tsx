@@ -1,7 +1,6 @@
-import DocumentReader from "@/components/documents/documentReader";
+import ReadDocuments from "@/components/documents/readDocuments";
 import ShowDocuments from "@/components/documents/showDocuments";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -24,22 +23,22 @@ const Documents: FC = ({}) => {
   }
 
   return (
-    <Card className="p-4">
+    <>
       <CardHeader>
-        <CardTitle>Select documents</CardTitle>
+        <CardTitle>Add documents</CardTitle>
         <CardDescription>Select the documents you want to add.</CardDescription>
       </CardHeader>
       <CardContent>
-        <DocumentReader />
+        <ReadDocuments />
       </CardContent>
       <CardHeader>
-        <CardTitle>Show documents</CardTitle>
+        <CardTitle>Your documents</CardTitle>
         <CardDescription>Edit, rename, delete documents here.</CardDescription>
       </CardHeader>
       <CardContent>
         <ShowDocuments />
       </CardContent>
-    </Card>
+    </>
   );
 };
 
