@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Spinner from "../ui/spinner";
 
@@ -27,6 +28,7 @@ const ShowDocuments: FC = () => {
       await getDocuments.refetch();
     },
   });
+
   const deleteDocument = api.documents.deleteDocumentsById.useMutation({
     onSuccess: async () => {
       await getDocuments.refetch();
@@ -52,7 +54,7 @@ const ShowDocuments: FC = () => {
   return (
     <>
       <Accordion type="single" collapsible className="w-full">
-        {getDocuments.data.map((document, indx) => {
+        {getDocuments.data[1].map((document, indx) => {
           return !document.deleted ? (
             <AccordionItem key={document.id} value={document.id.toString()}>
               <div className="m-auto flex">
@@ -97,13 +99,25 @@ const ShowDocuments: FC = () => {
         })}
       </Accordion>
       <div className="mt-4 flex justify-around">
-        <ArrowLeft
-          onClick={() =>
-            setPage((currPage) => (currPage > 0 ? currPage - 1 : 0))
-          }
-        />
-        Page {page}
-        <ArrowRight onClick={() => setPage((currPage) => currPage + 1)} />
+        <Button
+          onClick={() => setPage((currPage) => currPage - 1)}
+          className="w-fit"
+          type="button"
+          disabled={page === 1}
+        >
+          <ArrowLeft />
+        </Button>
+        <Button onClick={() => setPage(1)} variant="ghost" className="m-auto">
+          Page {page}/{getDocuments.data.length}
+        </Button>
+        <Button
+          className="w-fit"
+          type="button"
+          onClick={() => setPage((currPage) => currPage + 1)}
+          disabled={page === getDocuments.data.length}
+        >
+          <ArrowRight />
+        </Button>
       </div>
     </>
   );
