@@ -33,8 +33,10 @@ const Documents: FC = ({}) => {
         <DocumentReader />
       </CardContent>
       <CardHeader>
-        <CardTitle>Show documents</CardTitle>
-        <CardDescription>Edit, rename, delete documents here.</CardDescription>
+        <CardTitle>My documents</CardTitle>
+        <CardDescription>
+          Edit, rename or delete your documents.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ShowDocuments />

@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useReadText } from "@/hooks/readTextFromDocument";
 import { api } from "@/utils/api";
+import { GhostIcon } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 
@@ -41,8 +42,8 @@ const ReadDocuments: React.FC = () => {
   };
 
   return (
-    <div className="flex">
-      <div className="flex w-full max-w-sm flex-col gap-6">
+    <div className="relative flex h-full w-full justify-between">
+      <div className="flex w-1/2 max-w-sm flex-col gap-6">
         <Label htmlFor="pdf">Select pdf</Label>
         <Input id="pdf" type="file" accept=".pdf" onChange={handleFileChange} />
 
@@ -52,17 +53,21 @@ const ReadDocuments: React.FC = () => {
           disabled={text.length === 0 || loadingDocument}
           onClick={() => handleCreateEmbedding(text, name)}
         >
-          Create Embedding
+          Save
         </Button>
         {isCreateEmbeddingError && <p>Error</p>}
       </div>
-      <div className="mx-4 flex flex-col">
-        {text && (
-          <>
-            <p>PDF Text Content:</p>
-            {"\n"}
-            <p>{text}</p>
-          </>
+      <div className="absolute bottom-0 right-0 top-0 mx-4 flex w-1/2 flex-col overflow-auto">
+        <h2 className="flex">
+          <span className="text-xl uppercase underline">Content</span>
+        </h2>
+        {text ? (
+          <p>{text}</p>
+        ) : (
+          <div className="flex w-full flex-col items-center gap-2 ">
+            <GhostIcon className="h-8 w-8" />
+            <p className="">Select file to view it&apos;s content</p>
+          </div>
         )}
       </div>
     </div>

@@ -3,6 +3,7 @@ import {
   ArrowLeft,
   ArrowRight,
   FileSignature,
+  GhostIcon,
   Save,
   Trash2,
 } from "lucide-react";
@@ -23,6 +24,7 @@ const ShowDocuments: FC = () => {
   const [page, setPage] = useState(1);
 
   const getDocuments = api.documents.getMyDocuments.useQuery({ page });
+
   const renameDocument = api.documents.renameDocumentById.useMutation({
     onSuccess: async () => {
       await getDocuments.refetch();
@@ -49,12 +51,19 @@ const ShowDocuments: FC = () => {
   };
   if (getDocuments.isLoading) return <Spinner />;
 
-  if (!getDocuments.data) return <>Empty</>;
+  if (!getDocuments.data?.pageLength)
+    return (
+      <div className="flex w-full flex-col items-center gap-2 ">
+        <GhostIcon className="h-8 w-8" />
+        <p className="text-xl font-semibold">I am lonely here!</p>
+        <p className="">Let&apos;s create history together</p>
+      </div>
+    );
 
   return (
     <>
       <Accordion type="single" collapsible className="w-full">
-        {getDocuments.data[1].map((document, indx) => {
+        {getDocuments.data.documents?.map((document, indx) => {
           return !document.deleted ? (
             <AccordionItem key={document.id} value={document.id.toString()}>
               <div className="m-auto flex">
@@ -108,13 +117,13 @@ const ShowDocuments: FC = () => {
           <ArrowLeft />
         </Button>
         <Button onClick={() => setPage(1)} variant="ghost" className="m-auto">
-          Page {page}/{getDocuments.data.length}
+          Page {page}/{getDocuments.data?.pageLength}
         </Button>
         <Button
           className="w-fit"
           type="button"
           onClick={() => setPage((currPage) => currPage + 1)}
-          disabled={page === getDocuments.data.length}
+          disabled={page === getDocuments.data.documents.length}
         >
           <ArrowRight />
         </Button>

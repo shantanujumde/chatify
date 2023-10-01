@@ -5,7 +5,7 @@ export const documentsRouter = createTRPCRouter({
   getMyDocuments: protectedProcedure
     .input(z.object({ page: z.number().optional().default(1) }))
     .query(async ({ input, ctx }) => {
-      const files = await ctx.prisma.$transaction([
+      const [pageLength, documents] = await ctx.prisma.$transaction([
         ctx.prisma.file.count({
           where: {
             userId: ctx.session.user.id,
@@ -22,7 +22,10 @@ export const documentsRouter = createTRPCRouter({
           take: 10,
         }),
       ]);
-      return files;
+      return {
+        pageLength,
+        documents,
+      };
     }),
 
   renameDocumentById: protectedProcedure
