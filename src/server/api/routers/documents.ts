@@ -23,7 +23,7 @@ export const documentsRouter = createTRPCRouter({
         }),
       ]);
       return {
-        pageLength,
+        pageLength: Math.ceil(pageLength / 10),
         documents,
       };
     }),
