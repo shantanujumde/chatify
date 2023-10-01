@@ -15,8 +15,8 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { Button } from "../ui/button";
+import CustomSkeleton from "../ui/customSkeleton";
 import { Input } from "../ui/input";
-import Spinner from "../ui/spinner";
 
 const ShowDocuments: FC = () => {
   const [edit, setEdit] = useState<number | null>();
@@ -49,7 +49,11 @@ const ShowDocuments: FC = () => {
     if (!documentNewName) return;
     renameDocument.mutate({ id: documentId, name: documentNewName });
   };
-  if (getDocuments.isLoading) return <Spinner />;
+
+  if (getDocuments.isLoading) return <CustomSkeleton lines={3} />;
+
+  if (getDocuments.isError)
+    return <p>Something went wrong please contact admin!</p>;
 
   if (!getDocuments.data?.pageLength)
     return (
