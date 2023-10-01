@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useReadText } from "@/hooks/readTextFromDocument";
 import { api } from "@/utils/api";
-import { GhostIcon } from "lucide-react";
+import { File } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 
@@ -65,7 +65,7 @@ const ReadDocuments: React.FC = () => {
           <p>{text}</p>
         ) : (
           <div className="flex w-full flex-col items-center gap-2 ">
-            <GhostIcon className="h-8 w-8" />
+            <File className="h-8 w-8" />
             <p className="">Select file to view it&apos;s content</p>
           </div>
         )}

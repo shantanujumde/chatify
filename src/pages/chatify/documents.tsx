@@ -1,4 +1,4 @@
-import DocumentReader from "@/components/documents/readDocuments";
+import ReadDocuments from "@/components/documents/readDocuments";
 import ShowDocuments from "@/components/documents/showDocuments";
 import {
   Card,
@@ -30,7 +30,7 @@ const Documents: FC = ({}) => {
         <CardDescription>Select the documents you want to add.</CardDescription>
       </CardHeader>
       <CardContent>
-        <DocumentReader />
+        <ReadDocuments />
       </CardContent>
       <CardHeader>
         <CardTitle>My documents</CardTitle>
