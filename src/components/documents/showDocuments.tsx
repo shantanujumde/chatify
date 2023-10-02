@@ -74,24 +74,27 @@ const ShowDocuments: FC = () => {
               value={document.id.toString()}
               className="border-yellow-700/40"
             >
-              <div className="m-auto flex">
-                <div className="w-1/2">
-                  <AccordionTrigger
-                    showChevronDown={false}
-                    className="flex justify-between"
-                  >
-                    <p className="rounded-sm bg-yellow-400 px-2 text-xl font-semibold text-white dark:text-black">
-                      {indx + 1}
-                    </p>
-                    {edit === document.id ? (
-                      <Input
-                        defaultValue={document.name}
-                        ref={editRef}
-                        className="w-fit"
-                      />
-                    ) : (
-                      <p>{document.name}</p>
-                    )}
+              <div className="flex">
+                <p className="m-auto rounded-sm  bg-yellow-400 p-2 text-xl font-semibold text-white dark:text-black">
+                  {indx + 1}
+                </p>
+                <div className="w-1/2 text-center">
+                  <AccordionTrigger showChevronDown={false} className="w-full">
+                    <div className="w-full">
+                      {edit === document.id ? (
+                        <div className="flex  justify-center ">
+                          <Input
+                            defaultValue={document.name}
+                            ref={editRef}
+                            className="w-fit text-center"
+                          />
+                        </div>
+                      ) : (
+                        <p className="text-center font-semibold">
+                          {document.name}
+                        </p>
+                      )}
+                    </div>
                   </AccordionTrigger>
                 </div>
                 <div className="m-auto flex w-1/2 justify-end gap-4">
