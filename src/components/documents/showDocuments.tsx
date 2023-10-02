@@ -69,11 +69,20 @@ const ShowDocuments: FC = () => {
       <Accordion type="single" collapsible className="w-full">
         {getDocuments.data.documents?.map((document, indx) => {
           return !document.deleted ? (
-            <AccordionItem key={document.id} value={document.id.toString()}>
+            <AccordionItem
+              key={document.id}
+              value={document.id.toString()}
+              className="border-yellow-700/40"
+            >
               <div className="m-auto flex">
                 <div className="w-1/2">
-                  <AccordionTrigger className="flex justify-between">
-                    <p>{indx + 1}.</p>
+                  <AccordionTrigger
+                    showChevronDown={false}
+                    className="flex justify-between"
+                  >
+                    <p className="rounded-sm bg-yellow-400 px-2 text-xl font-semibold text-white dark:text-black">
+                      {indx + 1}
+                    </p>
                     {edit === document.id ? (
                       <Input
                         defaultValue={document.name}
@@ -85,17 +94,17 @@ const ShowDocuments: FC = () => {
                     )}
                   </AccordionTrigger>
                 </div>
-                <div className="m-auto flex w-1/2 justify-around">
+                <div className="m-auto flex w-1/2 justify-end gap-4">
                   {edit === document.id ? (
                     <Save
-                      className="cursor-pointer text-green-400"
+                      className="cursor-pointer  text-green-400"
                       onClick={() =>
                         void handleRename(document.id, editRef.current?.value)
                       }
                     />
                   ) : (
                     <FileSignature
-                      className="cursor-pointer text-blue-400"
+                      className="cursor-pointer text-yellow-400"
                       onClick={() => setEdit(document.id)}
                     />
                   )}

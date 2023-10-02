@@ -57,8 +57,8 @@ const ReadDocuments: React.FC = () => {
         </Button>
         {isCreateEmbeddingError && <p>Error</p>}
       </div>
-      <div className="absolute bottom-0 right-0 top-0 mx-4 flex w-1/2 flex-col overflow-auto">
-        <h2 className="flex">
+      <div className="absolute bottom-0 right-0 top-0 mx-4 flex w-1/2 flex-col gap-6 overflow-auto border-l border-yellow-100/40 py-2 pl-4">
+        <h2 className="flex justify-center">
           <span className="text-xl uppercase underline">Content</span>
         </h2>
         {text ? (
@@ -66,7 +66,7 @@ const ReadDocuments: React.FC = () => {
         ) : (
           <div className="flex w-full flex-col items-center gap-2 ">
             <File className="h-8 w-8" />
-            <p className="">Select file to view it&apos;s content</p>
+            <p className="">Select file to preview content</p>
           </div>
         )}
       </div>

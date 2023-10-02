@@ -1,7 +1,6 @@
 import ReadDocuments from "@/components/documents/readDocuments";
 import ShowDocuments from "@/components/documents/showDocuments";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -24,24 +23,29 @@ const Documents: FC = ({}) => {
   }
 
   return (
-    <Card className="p-4">
+    <>
       <CardHeader>
-        <CardTitle>Select documents</CardTitle>
-        <CardDescription>Select the documents you want to add.</CardDescription>
+        <CardTitle className="text-center">Select documents</CardTitle>
+        <CardDescription className="text-center">
+          Select the documents you want to add to your knowledge base.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ReadDocuments />
+        {/* alternate way to get documents with drag and drop method */}
+        {/* <DragDocuments /> */}
       </CardContent>
+
       <CardHeader>
-        <CardTitle>My documents</CardTitle>
-        <CardDescription>
-          Edit, rename or delete your documents.
+        <CardTitle className="mt-4 text-center">My documents</CardTitle>
+        <CardDescription className="text-center">
+          View, edit, rename or delete your knowledge base.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ShowDocuments />
       </CardContent>
-    </Card>
+    </>
   );
 };
 
