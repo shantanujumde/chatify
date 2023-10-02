@@ -1,4 +1,5 @@
 import { TopNavBar } from "@/components/topNavBar";
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 import { api } from "@/utils/api";
 import { type Session } from "next-auth";
@@ -17,6 +18,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <TopNavBar />
         <div className="pt-24" />
         <Component {...pageProps} />
+        <Toaster />
       </ThemeProvider>
     </SessionProvider>
   );
