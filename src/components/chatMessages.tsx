@@ -16,7 +16,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   isChatLoading,
 }) => {
   if (isScreenLoading) return <Spinner />;
-  if (!chats.length)
+  if (!chats?.length)
     return (
       <div className="w-full">Please write something to create history!</div>
     );

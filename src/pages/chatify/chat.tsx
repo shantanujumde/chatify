@@ -8,23 +8,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import CustomSkeleton from "@/components/ui/customSkeleton";
 import { Input } from "@/components/ui/input";
-import Spinner from "@/components/ui/spinner";
 import { api } from "@/utils/api";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
   PaperPlaneIcon,
 } from "@radix-ui/react-icons";
+import { GhostIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRef, type FC } from "react";
 
 const Chat: FC = ({}) => {
   const searchParams = useSearchParams();
-  const currentPage = searchParams.get("page") ?? "1";
+  const currentChat = searchParams.get("page") ?? "1";
+  const currentFile = searchParams.get("file") ?? "1";
 
-  const documents = api.documents.getMyDocuments.useQuery();
+  console.log("curr", currentChat, currentFile);
+
+  const getDocuments = api.documents.getMyDocuments.useQuery({
+    page: Number(currentFile),
+  });
 
   const createChat = api.chat.createChat.useMutation({
     onSuccess: async () => {
@@ -37,7 +43,7 @@ const Chat: FC = ({}) => {
     data: chats,
     isLoading: chatsIsLoading,
     refetch: refetchChats,
-  } = api.chat.getChats.useQuery({ page: Number(currentPage) });
+  } = api.chat.getChats.useQuery({ page: Number(currentChat) });
 
   const questionRef = useRef<HTMLInputElement>(null);
 
@@ -61,19 +67,43 @@ const Chat: FC = ({}) => {
         </CardHeader>
         <CardContent>
           <ol>
-            {documents.data?.map((document, indx) => (
-              <li key={document.id}>
-                {indx + 1}. {document.name}
-              </li>
-            ))}
-            {documents.isLoading && <Spinner />}
-            {documents.isError && <li>Error, Please contact admin!</li>}
-            {documents.isSuccess && !documents.data?.length && (
+            {getDocuments.isLoading ? (
+              <CustomSkeleton lines={10} />
+            ) : !getDocuments.data?.pageLength ? (
+              <div className="flex w-full flex-col items-center gap-2 ">
+                <GhostIcon className="h-8 w-8" />
+                <p className="text-xl font-semibold">I am lonely here!</p>
+                <p className="">Let&apos;s create history together</p>
+              </div>
+            ) : (
+              getDocuments.data.documents.map((document, indx) => (
+                <li key={document.id}>
+                  {indx + 1}. {document.name}
+                </li>
+              ))
+            )}
+
+            {getDocuments.isError && <li>Error, Please contact admin!</li>}
+            {getDocuments.isSuccess && !getDocuments.data.pageLength && (
               <li>Please add some documents</li>
             )}
           </ol>
         </CardContent>
-        <CardFooter></CardFooter>
+        <CardFooter className="flex justify-between">
+          <Button disabled={Number(currentFile) === 1}>
+            <Link href={`?page=${currentChat}&file=${Number(currentFile) - 1}`}>
+              <DoubleArrowLeftIcon />
+            </Link>
+          </Button>
+          <Link href={"&file=1"}>file {currentFile}</Link>
+          <Button
+            disabled={Number(currentFile) === getDocuments.data?.pageLength}
+          >
+            <Link href={`?page=${currentChat}&file=${Number(currentFile) + 1}`}>
+              <DoubleArrowRightIcon />
+            </Link>
+          </Button>
+        </CardFooter>
         <hr className="w-10/12" />
         <CardHeader>
           <CardTitle>History</CardTitle>
@@ -83,27 +113,28 @@ const Chat: FC = ({}) => {
           <p>Card Content</p>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Link
-            href={`?page=${
-              chats?.length ? Number(currentPage) + 1 : Number(currentPage)
-            }`}
-          >
-            <Button>
+          <Button disabled={Number(currentChat) === 1}>
+            <Link
+              href={`?page=${
+                Number(currentChat) > 1
+                  ? Number(currentChat) - 1
+                  : Number(currentChat)
+              }&file=${currentFile}`}
+            >
               <DoubleArrowLeftIcon />
-            </Button>
-          </Link>
-          <Link href={"?page=1"}>Page {currentPage}</Link>
-          <Link
-            href={`?page=${
-              Number(currentPage) > 1
-                ? Number(currentPage) - 1
-                : Number(currentPage)
-            }`}
-          >
-            <Button>
+            </Link>
+          </Button>
+
+          <Link href={"?page=1"}>Page {currentChat}</Link>
+          <Button disabled={Number(currentChat) === chats?.length}>
+            <Link
+              href={`?page=${
+                chats?.length ? Number(currentChat) + 1 : Number(currentChat)
+              }&file=${currentFile}`}
+            >
               <DoubleArrowRightIcon />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </CardFooter>
       </Card>
 
