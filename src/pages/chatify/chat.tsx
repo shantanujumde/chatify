@@ -8,8 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import CustomSkeleton from "@/components/ui/customSkeleton";
 import { Input } from "@/components/ui/input";
+import Spinner from "@/components/ui/spinner";
 import { api } from "@/utils/api";
 import {
   DoubleArrowLeftIcon,
@@ -68,7 +68,7 @@ const Chat: FC = ({}) => {
         <CardContent>
           <ol>
             {getDocuments.isLoading ? (
-              <CustomSkeleton lines={10} />
+              <Spinner />
             ) : !getDocuments.data?.pageLength ? (
               <div className="flex w-full flex-col items-center gap-2 ">
                 <GhostIcon className="h-8 w-8" />
