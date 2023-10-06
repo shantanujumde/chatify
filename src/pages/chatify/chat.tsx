@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import CustomSkeleton from "@/components/ui/customSkeleton";
 import { Input } from "@/components/ui/input";
 import { api } from "@/utils/api";
 import {
@@ -20,6 +19,7 @@ import { GhostIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRef, type FC } from "react";
+import Skeleton from "react-loading-skeleton";
 
 const Chat: FC = ({}) => {
   const searchParams = useSearchParams();
@@ -62,13 +62,15 @@ const Chat: FC = ({}) => {
     <div className="flex max-h-screen gap-4">
       <Card className="flex w-1/5 flex-col">
         <CardHeader>
-          <CardTitle>Your PDF&apos;s</CardTitle>
-          <CardDescription>Card Description</CardDescription>
+          <CardTitle>Knowledge base</CardTitle>
+          <CardDescription>
+            All your files available to explore via chats.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ol>
             {getDocuments.isLoading ? (
-              <CustomSkeleton lines={10} />
+              <Skeleton count={10} baseColor="#7a7a7a" highlightColor="#fff" />
             ) : !getDocuments.data?.pageLength ? (
               <div className="flex w-full flex-col items-center gap-2 ">
                 <GhostIcon className="h-8 w-8" />
@@ -95,7 +97,9 @@ const Chat: FC = ({}) => {
               <DoubleArrowLeftIcon />
             </Link>
           </Button>
-          <Link href={"&file=1"}>file {currentFile}</Link>
+          <Link href={"&file=1"}>
+            file {currentFile}/ {getDocuments.data?.pageLength}
+          </Link>
           <Button
             disabled={Number(currentFile) === getDocuments.data?.pageLength}
           >
