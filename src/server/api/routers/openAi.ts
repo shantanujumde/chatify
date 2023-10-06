@@ -30,7 +30,7 @@ export const openAiRouter = createTRPCRouter({
         chunks: [],
       });
 
-      const uniqueIdForText = getHash(input.content);
+      const uniqueIdForText = getHash(input.content + ctx.session.user.id);
 
       const { error: insertTextError } = await supabaseClient
         .from("File")
