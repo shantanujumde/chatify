@@ -62,8 +62,10 @@ const Chat: FC = ({}) => {
     <div className="flex max-h-screen gap-4">
       <Card className="flex w-1/5 flex-col">
         <CardHeader>
-          <CardTitle>Your PDF&apos;s</CardTitle>
-          <CardDescription>Card Description</CardDescription>
+          <CardTitle>Knowledge base</CardTitle>
+          <CardDescription>
+            All your files available to explore via chats.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ol>
