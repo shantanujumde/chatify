@@ -96,10 +96,11 @@ export default function Home() {
         <div className="mb-12 px-6 lg:px-8">
           <div className="mx-auto max-w-2xl sm:text-center">
             <h2 className="mt-2 text-4xl font-bold text-gray-900 sm:text-5xl">
-              Start chatting in minutes
+              Explore knowledge base just by asking questions
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Chatting to your PDF files has never been easier than with Quill.
+              Share, Learn, Prompt questions to your knowledge base was never
+              easier before.
             </p>
           </div>
         </div>
@@ -143,7 +144,7 @@ export default function Home() {
                 Start asking questions
               </span>
               <span className="mt-2 text-zinc-700">
-                It&apos;s that simple. Try out Quill today - it really takes
+                It&apos;s that simple. Try out Chatify today - it really takes
                 less than a minute.
               </span>
             </div>
