@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import Spinner from "@/components/ui/spinner";
 import { api } from "@/utils/api";
 import {
   DoubleArrowLeftIcon,
@@ -20,6 +19,7 @@ import { GhostIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRef, type FC } from "react";
+import Skeleton from "react-loading-skeleton";
 
 const Chat: FC = ({}) => {
   const searchParams = useSearchParams();
@@ -68,7 +68,7 @@ const Chat: FC = ({}) => {
         <CardContent>
           <ol>
             {getDocuments.isLoading ? (
-              <Spinner />
+              <Skeleton count={10} baseColor="#7a7a7a" highlightColor="#fff" />
             ) : !getDocuments.data?.pageLength ? (
               <div className="flex w-full flex-col items-center gap-2 ">
                 <GhostIcon className="h-8 w-8" />
@@ -95,7 +95,9 @@ const Chat: FC = ({}) => {
               <DoubleArrowLeftIcon />
             </Link>
           </Button>
-          <Link href={"&file=1"}>file {currentFile}</Link>
+          <Link href={"&file=1"}>
+            file {currentFile}/ {getDocuments.data?.pageLength}
+          </Link>
           <Button
             disabled={Number(currentFile) === getDocuments.data?.pageLength}
           >

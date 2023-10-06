@@ -2,6 +2,7 @@ import type { Chats } from "@prisma/client";
 import { PlusIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import type { FC } from "react";
+import ChatMessagesSkeletion from "./chatMessagesSkeletion";
 import Spinner from "./ui/spinner";
 
 interface ChatMessagesProps {
@@ -15,7 +16,9 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   isScreenLoading,
   isChatLoading,
 }) => {
-  if (isScreenLoading) return <Spinner />;
+  if (isScreenLoading) {
+    return <ChatMessagesSkeletion />;
+  }
   if (!chats?.length)
     return (
       <div className="w-full">Please write something to create history!</div>
