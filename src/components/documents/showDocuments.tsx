@@ -3,11 +3,11 @@ import {
   ArrowLeft,
   ArrowRight,
   FileSignature,
-  GhostIcon,
   Save,
   Trash2,
 } from "lucide-react";
 import { useRef, useState, type FC } from "react";
+import EmptyItems from "../emptyItems";
 import {
   Accordion,
   AccordionContent,
@@ -55,14 +55,7 @@ const ShowDocuments: FC = () => {
   if (getDocuments.isError)
     return <p>Something went wrong please contact admin!</p>;
 
-  if (!getDocuments.data?.pageLength)
-    return (
-      <div className="flex w-full flex-col items-center gap-2 ">
-        <GhostIcon className="h-8 w-8" />
-        <p className="text-xl font-semibold">I am lonely here!</p>
-        <p className="">Let&apos;s create history together</p>
-      </div>
-    );
+  if (!getDocuments.data?.pageLength) return <EmptyItems />;
 
   return (
     <>

@@ -3,6 +3,7 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import type { FC } from "react";
 import ChatMessagesSkeletion from "./chatMessagesSkeletion";
+import EmptyItems from "./emptyItems";
 import Spinner from "./ui/spinner";
 
 interface ChatMessagesProps {
@@ -19,10 +20,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   if (isScreenLoading) {
     return <ChatMessagesSkeletion />;
   }
-  if (!chats?.length)
-    return (
-      <div className="w-full">Please write something to create history!</div>
-    );
+  if (!chats?.length) return <EmptyItems />;
 
   return (
     <>
