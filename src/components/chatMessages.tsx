@@ -27,7 +27,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
 
   return (
     <>
-      <div className="flex flex-row items-center space-y-1.5 p-6">
+      <div className="my-4 flex flex-row items-center space-y-1.5 rounded-2xl border border-gray-500/50 p-2">
         <div className="flex items-center space-x-4">
           {user && (
             <>
@@ -54,7 +54,14 @@ const ChatMessages: FC<ChatMessagesProps> = ({
         </button>
       </div>
       {chats?.length ? (
-        <div className="p-6 pt-0">
+        <div
+          className={`
+          scrollbar-thumb-black scrollbar-track-black-lighter  
+          dark:scrollbar-thumb-white dark:scrollbar-track-white-lighter 
+          scrollbar-thumb-rounded 
+         scrollbar-w-2 scrolling-touch max-h-screen 
+        overflow-y-scroll rounded-xl bg-gray-300/5 p-6`}
+        >
           <div className="space-y-4">
             {chats.map((chat) => {
               return (

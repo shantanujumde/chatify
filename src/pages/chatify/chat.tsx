@@ -58,7 +58,7 @@ const Chat: FC = ({}) => {
   };
 
   return (
-    <div className="flex max-h-screen gap-4">
+    <>
       <div
         aria-hidden="true"
         className="pointer-events-none fixed  inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -71,122 +71,140 @@ const Chat: FC = ({}) => {
           className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
         />
       </div>
-      <Card className="flex w-1/5 flex-col">
-        <CardHeader>
-          <CardTitle>Knowledge base</CardTitle>
-          <CardDescription>
-            All your files available to explore via chats.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ol>
-            {getDocuments.isLoading ? (
-              <Skeleton count={10} baseColor="#7a7a7a" highlightColor="#fff" />
-            ) : !getDocuments.data?.pageLength ? (
-              <div className="flex w-full flex-col items-center gap-2 ">
-                <GhostIcon className="h-8 w-8" />
-                <p className="text-xl font-semibold">I am lonely here!</p>
-                <p className="">Let&apos;s create history together</p>
-              </div>
-            ) : (
-              getDocuments.data.documents.map((document, indx) => (
-                <li key={document.id}>
-                  {indx + 1}. {document.name}
-                </li>
-              ))
-            )}
+      <div className="flex flex-row gap-4 max-sm:flex-col-reverse">
+        <Card className="min-md:max-w-fit flex flex-col max-sm:w-full">
+          <CardHeader>
+            <CardTitle>Knowledge base</CardTitle>
+            <CardDescription>
+              All your files available to explore via chats.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ol>
+              {getDocuments.isLoading ? (
+                <Skeleton
+                  count={10}
+                  baseColor="#7a7a7a"
+                  highlightColor="#fff"
+                />
+              ) : !getDocuments.data?.pageLength ? (
+                <div className="flex w-full flex-col items-center gap-2 ">
+                  <GhostIcon className="h-8 w-8" />
+                  <p className="text-xl font-semibold">I am lonely here!</p>
+                  <p className="">Let&apos;s create history together</p>
+                </div>
+              ) : (
+                getDocuments.data.documents.map((document, indx) => (
+                  <li key={document.id}>
+                    {indx + 1}. {document.name}
+                  </li>
+                ))
+              )}
 
-            {getDocuments.isError && <li>Error, Please contact admin!</li>}
-            {getDocuments.isSuccess && !getDocuments.data.pageLength && (
-              <li>Please add some documents</li>
-            )}
-          </ol>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button disabled={Number(currentFile) === 1}>
-            <Link href={`?page=${currentChat}&file=${Number(currentFile) - 1}`}>
-              <DoubleArrowLeftIcon />
-            </Link>
-          </Button>
-          <Button variant="ghost" className="m-auto">
-            <Link href={`?page=${currentChat}&file=1`}>
-              file {currentFile}/ {getDocuments.data?.pageLength}
-            </Link>
-          </Button>
-
-          <Button
-            disabled={Number(currentFile) === getDocuments.data?.pageLength}
-          >
-            <Link href={`?page=${currentChat}&file=${Number(currentFile) + 1}`}>
-              <DoubleArrowRightIcon />
-            </Link>
-          </Button>
-        </CardFooter>
-        <hr className="w-10/12" />
-        <CardHeader>
-          <CardTitle>History</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button disabled={Number(currentChat) === 1}>
-            <Link
-              href={`?page=${
-                Number(currentChat) > 1
-                  ? Number(currentChat) - 1
-                  : Number(currentChat)
-              }&file=${currentFile}`}
-            >
-              <DoubleArrowLeftIcon />
-            </Link>
-          </Button>
-          <Button variant="ghost" className="m-auto">
-            <Link href={"?page=1&file=${currentFile}"}>Page {currentChat}</Link>
-          </Button>
-          <Button disabled={Number(currentChat) === chats?.length}>
-            <Link
-              href={`?page=${
-                chats?.length ? Number(currentChat) + 1 : Number(currentChat)
-              }&file=${currentFile}`}
-            >
-              <DoubleArrowRightIcon />
-            </Link>
-          </Button>
-        </CardFooter>
-      </Card>
-
-      <Card className="flex w-4/5 flex-col">
-        <CardHeader>
-          <CardTitle>Chat</CardTitle>
-          <CardDescription>
-            Type descriptive messages to get results
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="overflow-y-scroll">
-          <ChatMessages
-            chats={chats!}
-            isScreenLoading={chatsIsLoading}
-            isChatLoading={createChat.isLoading}
-            user={userData?.user}
-          />
-        </CardContent>
-        <CardFooter className="m-2">
-          <form className="flex w-full gap-1" onSubmit={handleSubmit}>
-            <Input
-              ref={questionRef}
-              type="text"
-              name="text"
-              placeholder="Type here..."
-            />
-            <Button>
-              <PaperPlaneIcon />
+              {getDocuments.isError && <li>Error, Please contact admin!</li>}
+              {getDocuments.isSuccess && !getDocuments.data.pageLength && (
+                <li>Please add some documents</li>
+              )}
+            </ol>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Button disabled={Number(currentFile) === 1}>
+              <Link
+                href={`?page=${currentChat}&file=${Number(currentFile) - 1}`}
+              >
+                <DoubleArrowLeftIcon />
+              </Link>
             </Button>
-          </form>
-        </CardFooter>
-      </Card>
-    </div>
+            <Button variant="ghost" className="m-auto">
+              <Link href={`?page=${currentChat}&file=1`}>
+                file {currentFile}/ {getDocuments.data?.pageLength}
+              </Link>
+            </Button>
+
+            <Button
+              disabled={Number(currentFile) === getDocuments.data?.pageLength}
+            >
+              <Link
+                href={`?page=${currentChat}&file=${Number(currentFile) + 1}`}
+              >
+                <DoubleArrowRightIcon />
+              </Link>
+            </Button>
+          </CardFooter>
+          <hr className="w-10/12" />
+          <CardHeader>
+            <CardTitle>History</CardTitle>
+            <CardDescription>Card Description</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>Card Content</p>
+          </CardContent>
+          <CardFooter className="flex justify-between"></CardFooter>
+        </Card>
+
+        <Card className="flex w-4/5 flex-col max-sm:w-full">
+          <CardHeader>
+            <CardTitle>Chat</CardTitle>
+            <CardDescription>
+              Type descriptive messages to get results
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="">
+            <ChatMessages
+              chats={chats!}
+              isScreenLoading={chatsIsLoading}
+              isChatLoading={createChat.isLoading}
+              user={userData?.user}
+            />
+          </CardContent>
+          <CardFooter className="m-2 flex flex-col">
+            <form className="flex w-full gap-1" onSubmit={handleSubmit}>
+              <Input
+                ref={questionRef}
+                type="text"
+                name="text"
+                placeholder="Type here..."
+              />
+              <Button>
+                <PaperPlaneIcon />
+              </Button>
+            </form>
+            <div className="mt-4 flex w-full rounded-xl border border-gray-500/50">
+              <Button
+                variant="ghost"
+                disabled={Number(currentChat) === chats?.length}
+              >
+                <Link
+                  href={`?page=${
+                    chats?.length
+                      ? Number(currentChat) + 1
+                      : Number(currentChat)
+                  }&file=${currentFile}`}
+                >
+                  <DoubleArrowLeftIcon />
+                </Link>
+              </Button>
+              <Button variant="ghost" className="m-auto">
+                <Link href={"?page=1&file=${currentFile}"}>
+                  Page {currentChat}
+                </Link>
+              </Button>
+              <Button variant="ghost" disabled={Number(currentChat) === 1}>
+                <Link
+                  href={`?page=${
+                    Number(currentChat) > 1
+                      ? Number(currentChat) - 1
+                      : Number(currentChat)
+                  }&file=${currentFile}`}
+                >
+                  <DoubleArrowRightIcon />
+                </Link>
+              </Button>
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
+    </>
   );
 };
 
