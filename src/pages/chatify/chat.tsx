@@ -72,7 +72,7 @@ const Chat: FC = ({}) => {
         />
       </div>
       <div className="flex flex-row gap-4 max-sm:flex-col-reverse">
-        <Card className="min-md:max-w-fit flex flex-col max-sm:w-full">
+        <Card className="flex w-1/5 flex-col">
           <CardHeader>
             <CardTitle>Knowledge base</CardTitle>
             <CardDescription>
