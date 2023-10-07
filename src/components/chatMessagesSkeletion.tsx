@@ -1,5 +1,4 @@
-import { PlusIcon } from "lucide-react";
-import Image from "next/image";
+import { PlusIcon, UserCircle2 } from "lucide-react";
 import type { FC } from "react";
 import Skeleton from "react-loading-skeleton";
 
@@ -33,12 +32,7 @@ const ChatMessagesSkeletion: FC = ({}) => {
     <div className="flex flex-col  space-y-1.5 p-6">
       <div className="flex items-center space-x-4">
         <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-          <Image
-            alt="Image"
-            width="40"
-            height="40"
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-          />
+          <UserCircle2 className="h-8 w-8" />
         </span>
         <div>
           <p className="text-sm font-medium leading-none">

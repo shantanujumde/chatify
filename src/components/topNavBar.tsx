@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/utils/utils";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { ModeToggle } from "./mode";
 import Spinner from "./ui/spinner";
 
@@ -56,6 +57,8 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export function TopNavBar() {
+  const router = useRouter();
+
   const { data, status } = useSession();
   const [show, setShow] = React.useState(true);
   const [lastScrollY, setLastScrollY] = React.useState(0);
@@ -180,7 +183,13 @@ export function TopNavBar() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <button onClick={() => void signOut()}>
+              <button
+                onClick={() =>
+                  void signOut({ redirect: false }).then(async () => {
+                    await router.push("/");
+                  })
+                }
+              >
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Logout
                 </NavigationMenuLink>

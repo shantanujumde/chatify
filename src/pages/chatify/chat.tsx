@@ -16,6 +16,7 @@ import {
   PaperPlaneIcon,
 } from "@radix-ui/react-icons";
 import { GhostIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRef, type FC } from "react";
@@ -25,9 +26,7 @@ const Chat: FC = ({}) => {
   const searchParams = useSearchParams();
   const currentChat = searchParams.get("page") ?? "1";
   const currentFile = searchParams.get("file") ?? "1";
-
-  console.log("curr", currentChat, currentFile);
-
+  const { data: userData } = useSession();
   const getDocuments = api.documents.getMyDocuments.useQuery({
     page: Number(currentFile),
   });
@@ -170,6 +169,7 @@ const Chat: FC = ({}) => {
             chats={chats!}
             isScreenLoading={chatsIsLoading}
             isChatLoading={createChat.isLoading}
+            user={userData?.user}
           />
         </CardContent>
         <CardFooter className="m-2">
