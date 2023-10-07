@@ -27,32 +27,30 @@ const ChatMessages: FC<ChatMessagesProps> = ({
 
   return (
     <>
-      <div className="my-4 flex flex-row items-center space-y-1.5 rounded-2xl border border-gray-500/50 p-2">
-        <div className="flex items-center space-x-4">
-          {user && (
-            <>
-              <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                {user.image ? (
-                  <Image alt="Image" width="40" height="40" src={user.image} />
-                ) : (
-                  <UserCircle2 className="h-8 w-8" />
-                )}
-              </span>
-              <div>
-                <p className="text-sm font-medium leading-none">{user.name}</p>
-                <p className="text-sm text-muted-foreground">{user.email}</p>
-              </div>
-            </>
-          )}
+      {user && (
+        <div className="my-4 flex flex-row items-center space-y-1.5 rounded-2xl border border-gray-500/50 p-2">
+          <div className="flex items-center space-x-4">
+            <span className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full">
+              {user.image ? (
+                <Image alt="Image" width="40" height="40" src={user.image} />
+              ) : (
+                <UserCircle2 className="h-8 w-8" />
+              )}
+            </span>
+            <div>
+              <p className="text-sm font-medium leading-none">{user.name}</p>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
+            </div>
+          </div>
+          <button
+            className="ml-auto inline-flex h-9 w-9 items-center justify-center  rounded-full border border-input bg-transparent text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+            data-state="closed"
+          >
+            <PlusIcon className="my-auto" />
+            <span className="sr-only">New message</span>
+          </button>
         </div>
-        <button
-          className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-input bg-transparent text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-          data-state="closed"
-        >
-          <PlusIcon />
-          <span className="sr-only">New message</span>
-        </button>
-      </div>
+      )}
       {chats?.length ? (
         <div
           className={`
@@ -85,7 +83,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
           </div>
         </div>
       ) : (
-        <EmptyItems />
+        <EmptyItems className="py-16" />
       )}
     </>
   );

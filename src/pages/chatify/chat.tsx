@@ -86,6 +86,8 @@ const Chat: FC = ({}) => {
                   count={10}
                   baseColor="#7a7a7a"
                   highlightColor="#fff"
+                  height="2rem"
+                  borderRadius="1rem"
                 />
               ) : !getDocuments.data?.pageLength ? (
                 <EmptyItems />
@@ -93,7 +95,7 @@ const Chat: FC = ({}) => {
                 getDocuments.data.documents.map((document) => (
                   <li
                     key={document.id}
-                    className="cursor-pointer rounded-2xl bg-gray-300/20 py-1 text-center transition duration-300 ease-in-out hover:bg-gray-300/50 "
+                    className="mt-1 cursor-pointer truncate rounded-2xl bg-gray-300/20 p-1 text-center transition duration-300 ease-in-out hover:bg-gray-300/50 "
                   >
                     {document.name}
                   </li>
