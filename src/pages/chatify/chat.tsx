@@ -1,6 +1,6 @@
 import ChatMessages from "@/components/chatMessages";
 import EmptyItems from "@/components/emptyItems";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import Spinner from "@/components/ui/spinner";
 import { api } from "@/utils/api";
 import {
   DoubleArrowLeftIcon,
@@ -118,12 +119,22 @@ const Chat: FC = ({}) => {
               >
                 <DoubleArrowLeftIcon />
               </Link>
-              <Link href={`?page=${currentChat}&file=1`}>
-                File <br />
-                <span className="text-sm font-semibold text-primary">
-                  {currentFile}
+              <Link
+                href={`?page=${currentChat}&file=1`}
+                className="flex flex-col items-center"
+              >
+                File
+                <span>
+                  <span className="text-sm font-semibold text-primary">
+                    {currentFile}
+                  </span>
+                  /{" "}
+                  {getDocuments.data?.pageLength ? (
+                    getDocuments.data.pageLength
+                  ) : (
+                    <Spinner className="h-1 w-1" />
+                  )}
                 </span>
-                / {getDocuments.data?.pageLength}
               </Link>
 
               <Link
@@ -149,46 +160,67 @@ const Chat: FC = ({}) => {
           </CardHeader>
           <CardContent>
             <ChatMessages
-              chats={chats!}
+              chats={chats?.chats}
               isScreenLoading={chatsIsLoading}
               isChatLoading={createChat.isLoading}
               user={userData?.user}
             />
           </CardContent>
-          <CardFooter className="m-2 flex flex-col">
-            <form className="flex w-full" onSubmit={handleSubmit}>
-              <Input
-                ref={questionRef}
-                type="text"
-                name="text"
-                placeholder="Type here..."
-              />
-              <Button className="ml-4">
-                <PaperPlaneIcon />
-              </Button>
-            </form>
-            <div className="mt-4 flex w-full rounded-xl border border-gray-500/50">
-              <Button
-                variant="ghost"
-                disabled={Number(currentChat) === chats?.length}
-              >
+          {chats?.chatLength ? (
+            <CardFooter className="m-2 flex flex-col">
+              <form className="flex w-full" onSubmit={handleSubmit}>
+                <Input
+                  ref={questionRef}
+                  type="text"
+                  name="text"
+                  placeholder="Type here..."
+                />
+                <Button className="ml-4">
+                  <PaperPlaneIcon />
+                </Button>
+              </form>
+              <div className="mt-4 flex w-full justify-between rounded-xl border border-gray-500/50">
                 <Link
+                  className={
+                    buttonVariants({
+                      variant: "ghost",
+                      size: "icon",
+                    }) +
+                    `${
+                      Number(currentChat) === chats.chatLength
+                        ? " pointer-events-none"
+                        : ""
+                    }`
+                  }
                   href={`?page=${
-                    chats?.length
+                    Number(currentChat) < chats.chatLength
                       ? Number(currentChat) + 1
                       : Number(currentChat)
                   }&file=${currentFile}`}
                 >
                   <DoubleArrowLeftIcon />
                 </Link>
-              </Button>
-              <Button variant="ghost" className="m-auto">
-                <Link href={"?page=1&file=${currentFile}"}>
-                  Page {currentChat}
-                </Link>
-              </Button>
-              <Button variant="ghost" disabled={Number(currentChat) === 1}>
                 <Link
+                  className={buttonVariants({
+                    variant: "ghost",
+                  })}
+                  href={`?page=1&file=${currentFile}`}
+                >
+                  Page
+                  <span className="text-sm font-semibold text-primary">
+                    &nbsp;
+                    {currentChat}
+                  </span>
+                  / {chats?.chatLength}
+                </Link>
+                <Link
+                  className={
+                    buttonVariants({
+                      variant: "ghost",
+                      size: "icon",
+                    }) +
+                    `${Number(currentChat) === 1 ? " pointer-events-none" : ""}`
+                  }
                   href={`?page=${
                     Number(currentChat) > 1
                       ? Number(currentChat) - 1
@@ -197,9 +229,9 @@ const Chat: FC = ({}) => {
                 >
                   <DoubleArrowRightIcon />
                 </Link>
-              </Button>
-            </div>
-          </CardFooter>
+              </div>
+            </CardFooter>
+          ) : null}
         </div>
       </Card>
     </>

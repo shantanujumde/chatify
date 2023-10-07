@@ -9,7 +9,7 @@ import EmptyItems from "./emptyItems";
 import Spinner from "./ui/spinner";
 
 interface ChatMessagesProps {
-  chats: Chats[];
+  chats?: Chats[];
   isScreenLoading: boolean;
   isChatLoading: boolean;
   user?: User | null;
