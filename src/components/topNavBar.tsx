@@ -192,12 +192,12 @@ export function TopNavBar() {
           <>
             <NavigationMenuItem>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <Spinner />
+                <Spinner className="h-6 w-6 text-center" />
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <Spinner />
+                <Spinner className="h-6 w-6 text-center" />
               </NavigationMenuLink>
             </NavigationMenuItem>
           </>
