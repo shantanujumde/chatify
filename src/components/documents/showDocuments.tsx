@@ -48,7 +48,7 @@ const ShowDocuments: FC = () => {
     renameDocument.mutate({ id: documentId, name: documentNewName });
   };
 
-  if (getDocuments.isLoading) return <CustomSkeleton lines={3} />;
+  if (getDocuments.isLoading) return <CustomSkeleton lines={10} />;
 
   if (getDocuments.isError)
     return <p>Something went wrong please contact admin!</p>;
@@ -63,7 +63,7 @@ const ShowDocuments: FC = () => {
             <AccordionItem
               key={document.id}
               value={document.id.toString()}
-              className="border-yellow-700/40"
+              className="border-none"
             >
               <div className="flex">
                 <p className="m-auto rounded-sm  bg-primary px-3 py-1 text-xl font-semibold text-white dark:text-black">
@@ -114,7 +114,10 @@ const ShowDocuments: FC = () => {
                   />
                 </div>
               </div>
-              <AccordionContent>{document.content}</AccordionContent>
+              <AccordionContent className="mx-4 rounded-xl bg-gray-300/20 px-4 dark:bg-gray-300/5">
+                <br />
+                {document.content}
+              </AccordionContent>
             </AccordionItem>
           ) : null;
         })}
