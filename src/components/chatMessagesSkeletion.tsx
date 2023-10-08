@@ -3,9 +3,6 @@ import type { FC } from "react";
 import Skeleton from "react-loading-skeleton";
 
 const ChatMessagesSkeletion: FC = ({}) => {
-  const random = (min: number, max: number) =>
-    Math.floor(Math.random() * (max - min)) + min;
-
   const LOADING_SKELETON = [];
   for (let i = 0; i <= 10; i++) {
     LOADING_SKELETON.push(
