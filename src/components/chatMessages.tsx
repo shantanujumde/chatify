@@ -53,6 +53,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       )}
       {chats?.length ? (
         <div
+          id="chatWindow"
           className={`
           scrollbar-thumb-black scrollbar-track-black-lighter  
           dark:scrollbar-thumb-white dark:scrollbar-track-white-lighter 

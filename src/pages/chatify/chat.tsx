@@ -17,8 +17,6 @@ import {
   DoubleArrowRightIcon,
   PaperPlaneIcon,
 } from "@radix-ui/react-icons";
-import { useQueryClient } from "@tanstack/react-query";
-import { getQueryKey } from "@trpc/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -31,8 +29,6 @@ const Chat: FC = ({}) => {
   const currentFile = searchParams.get("file") ?? "1";
   const { data: userData } = useSession();
 
-  const queryClient = useQueryClient();
-
   const getDocuments = api.documents.getMyDocuments.useQuery({
     page: Number(currentFile),
   });
@@ -42,13 +38,16 @@ const Chat: FC = ({}) => {
     { page: Number(currentChat) }
   );
 
-  const getChatsQueryKey = getQueryKey(api.chat);
-
-  console.log("chats", chats);
-
   const createChat = api.chat.createChat.useMutation({
     onMutate: async ({ question, response }) => {
-      await queryClient.cancelQueries(getChatsQueryKey);
+      await utils.chat.getChats.cancel();
+
+      const chatWindow = document.getElementById("chatWindow");
+      if (chatWindow)
+        chatWindow.scroll({
+          top: chatWindow.scrollHeight,
+          behavior: "smooth",
+        });
 
       if (chats && userData) {
         utils.chat.getChats.setData(
@@ -68,6 +67,7 @@ const Chat: FC = ({}) => {
           }
         );
       }
+
       return chats;
     },
     onError: (__, _, context) => {
