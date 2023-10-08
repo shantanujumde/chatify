@@ -88,132 +88,133 @@ export function TopNavBar() {
   return (
     <NavigationMenu
       dropdownLocation="left"
-      className={`active fixed inset-x-0 top-5 mx-auto w-11/12 justify-between rounded-lg bg-white p-2  transition-all duration-500 ease-in-out ${
+      className={`fixed inset-x-0 top-5 mx-auto w-11/12 rounded-lg bg-white p-2 transition-all duration-500  ease-in-out dark:bg-gray-300/5  ${
         !show ? "opacity-0" : "opacity-100"
       }`}
     >
-      <NavigationMenuList className="flex flex-row ">
-        <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Home
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <Link
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
-                  >
-                    <Icons.logo className="h-6 w-6" />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      shadcn/ui
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Beautifully designed components built with Radix UI and
-                      Tailwind CSS.
-                    </p>
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
-              </ListItem>
-              <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
-              </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        {status === "authenticated" && (
+      <NavigationMenuList className="flex w-full justify-between">
+        <div className="flex gap-1">
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Utilities</NavigationMenuTrigger>
+            <Link href="/" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Home
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                {components.map((component) => (
-                  <ListItem
-                    key={component.title}
-                    title={component.title}
-                    href={component.href}
-                  >
-                    {component.description}
-                  </ListItem>
-                ))}
+              <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                <li className="row-span-3">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                      href="/"
+                    >
+                      <Icons.logo className="h-6 w-6" />
+                      <div className="mb-2 mt-4 text-lg font-medium">
+                        shadcn/ui
+                      </div>
+                      <p className="text-sm leading-tight text-muted-foreground">
+                        Beautifully designed components built with Radix UI and
+                        Tailwind CSS.
+                      </p>
+                    </Link>
+                  </NavigationMenuLink>
+                </li>
+                <ListItem href="/docs" title="Introduction">
+                  Re-usable components built using Radix UI and Tailwind CSS.
+                </ListItem>
+                <ListItem href="/docs/installation" title="Installation">
+                  How to install dependencies and structure your app.
+                </ListItem>
+                <ListItem href="/docs/primitives/typography" title="Typography">
+                  Styles for headings, paragraphs, lists...etc
+                </ListItem>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-        )}
-      </NavigationMenuList>
-
-      <NavigationMenuList className="flex flex-row gap-1">
-        {status === "unauthenticated" && (
-          <>
+          {status === "authenticated" && (
             <NavigationMenuItem>
-              <Link href="/auth/register" legacyBehavior passHref>
+              <NavigationMenuTrigger>Utilities</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                  {components.map((component) => (
+                    <ListItem
+                      key={component.title}
+                      title={component.title}
+                      href={component.href}
+                    >
+                      {component.description}
+                    </ListItem>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          )}
+        </div>
+        <div className="flex gap-1">
+          {status === "unauthenticated" && (
+            <>
+              <NavigationMenuItem>
+                <Link href="/auth/register" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Register
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/auth/login" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Login
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </>
+          )}
+          {status === "authenticated" && (
+            <>
+              <NavigationMenuItem>
+                <Link href={`/profile/${data.user.id}`} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Profile
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <button
+                  onClick={() =>
+                    void signOut({ redirect: false }).then(async () => {
+                      await router.push("/");
+                    })
+                  }
+                >
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Logout
+                  </NavigationMenuLink>
+                </button>
+              </NavigationMenuItem>
+            </>
+          )}
+          {status === "loading" && (
+            <>
+              <NavigationMenuItem>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Register
+                  <Spinner className="h-6 w-6 text-center" />
                 </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/auth/login" legacyBehavior passHref>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Login
+                  <Spinner className="h-6 w-6 text-center" />
                 </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          </>
-        )}
-        {status === "authenticated" && (
-          <>
-            <NavigationMenuItem>
-              <Link href={`/profile/${data.user.id}`} legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Profile
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <button
-                onClick={() =>
-                  void signOut({ redirect: false }).then(async () => {
-                    await router.push("/");
-                  })
-                }
-              >
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Logout
-                </NavigationMenuLink>
-              </button>
-            </NavigationMenuItem>
-          </>
-        )}
-        {status === "loading" && (
-          <>
-            <NavigationMenuItem>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <Spinner className="h-6 w-6 text-center" />
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <Spinner className="h-6 w-6 text-center" />
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </>
-        )}
-        <NavigationMenu dropdownLocation="left">
-          <ModeToggle />
-        </NavigationMenu>
+              </NavigationMenuItem>
+            </>
+          )}
+          <NavigationMenu dropdownLocation="left">
+            <ModeToggle />
+          </NavigationMenu>
+        </div>
       </NavigationMenuList>
     </NavigationMenu>
   );
