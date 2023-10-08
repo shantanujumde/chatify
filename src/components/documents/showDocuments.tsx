@@ -1,11 +1,9 @@
 import { api } from "@/utils/api";
 import {
-  ArrowLeft,
-  ArrowRight,
-  FileSignature,
-  Save,
-  Trash2,
-} from "lucide-react";
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
+import { FileSignature, Save, Trash2 } from "lucide-react";
 import { useRef, useState, type FC } from "react";
 import EmptyItems from "../emptyItems";
 import {
@@ -68,11 +66,14 @@ const ShowDocuments: FC = () => {
               className="border-yellow-700/40"
             >
               <div className="flex">
-                <p className="m-auto rounded-sm  bg-yellow-400 p-2 text-xl font-semibold text-white dark:text-black">
+                <p className="m-auto rounded-sm  bg-primary px-3 py-1 text-xl font-semibold text-white dark:text-black">
                   {indx + 1}
                 </p>
                 <div className="w-1/2 text-center">
-                  <AccordionTrigger showChevronDown={false} className="w-full">
+                  <AccordionTrigger
+                    showChevronDown={false}
+                    className="w-full hover:no-underline"
+                  >
                     <div className="w-full">
                       {edit === document.id ? (
                         <div className="flex  justify-center ">
@@ -83,9 +84,11 @@ const ShowDocuments: FC = () => {
                           />
                         </div>
                       ) : (
-                        <p className="text-center font-semibold">
-                          {document.name}
-                        </p>
+                        <div className="flex justify-center">
+                          <p className="cursor-pointer truncate rounded-2xl bg-gray-300/20  px-4 py-2 text-center transition duration-300 ease-in-out hover:bg-gray-300/50 ">
+                            {document.name}
+                          </p>
+                        </div>
                       )}
                     </div>
                   </AccordionTrigger>
@@ -100,7 +103,7 @@ const ShowDocuments: FC = () => {
                     />
                   ) : (
                     <FileSignature
-                      className="cursor-pointer text-yellow-400"
+                      className="cursor-pointer text-primary"
                       onClick={() => setEdit(document.id)}
                     />
                   )}
@@ -116,14 +119,15 @@ const ShowDocuments: FC = () => {
           ) : null;
         })}
       </Accordion>
-      <div className="mt-4 flex justify-around">
+      <div className="mt-4  flex w-full justify-between rounded-xl border border-gray-500/50 p-1">
         <Button
           onClick={() => setPage((currPage) => currPage - 1)}
           className="w-fit"
+          variant="ghost"
           type="button"
           disabled={page === 1}
         >
-          <ArrowLeft />
+          <DoubleArrowLeftIcon />
         </Button>
         <Button onClick={() => setPage(1)} variant="ghost" className="m-auto">
           Page {page}/{getDocuments.data?.pageLength}
@@ -131,10 +135,11 @@ const ShowDocuments: FC = () => {
         <Button
           className="w-fit"
           type="button"
+          variant="ghost"
           onClick={() => setPage((currPage) => currPage + 1)}
           disabled={page === getDocuments.data.documents.length}
         >
-          <ArrowRight />
+          <DoubleArrowRightIcon />
         </Button>
       </div>
     </>

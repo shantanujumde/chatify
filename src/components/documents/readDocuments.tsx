@@ -42,9 +42,13 @@ const ReadDocuments: React.FC = () => {
   };
 
   return (
-    <div className="relative flex h-full w-full justify-between">
-      <div className="flex w-1/2 max-w-sm flex-col gap-6">
-        <Label htmlFor="pdf">Select pdf</Label>
+    <div className="relative flex h-full w-full flex-row justify-between gap-4 max-md:flex-col max-md:items-center">
+      <div className="flex w-1/2 max-w-sm flex-col gap-6 max-md:w-full ">
+        <h2 className="flex ">
+          <span className="text-xl uppercase">
+            <Label htmlFor="pdf">Select pdf</Label>
+          </span>
+        </h2>
         <Input id="pdf" type="file" accept=".pdf" onChange={handleFileChange} />
 
         <Button
@@ -57,7 +61,13 @@ const ReadDocuments: React.FC = () => {
         </Button>
         {isCreateEmbeddingError && <p>Error</p>}
       </div>
-      <div className="absolute bottom-0 right-0 top-0 mx-4 flex w-1/2 flex-col gap-6 overflow-auto border-l border-yellow-100/40 py-2 pl-4">
+
+      <div
+        className="scrollbar-thumb-black scrollbar-track-black-lighter  
+          dark:scrollbar-thumb-white dark:scrollbar-track-white-lighter 
+          scrollbar-thumb-rounded   scrollbar-w-2
+         scrolling-touch flex h-36 max-h-screen w-1/2 flex-col gap-6 overflow-auto overflow-y-scroll rounded-xl bg-gray-300/20 p-6 py-2 pl-4 dark:bg-gray-300/5 max-md:w-full"
+      >
         <h2 className="flex justify-center">
           <span className="text-xl uppercase underline">Content</span>
         </h2>
