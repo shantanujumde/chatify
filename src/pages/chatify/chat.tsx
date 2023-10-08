@@ -124,16 +124,18 @@ const Chat: FC = ({}) => {
                 className="flex flex-col items-center"
               >
                 File
-                <span>
+                <span className="flex items-center">
                   <span className="text-sm font-semibold text-primary">
                     {currentFile}
                   </span>
                   /{" "}
-                  {getDocuments.data?.pageLength ? (
-                    getDocuments.data.pageLength
-                  ) : (
-                    <Spinner className="h-1 w-1" />
-                  )}
+                  <span>
+                    {getDocuments.data?.pageLength ? (
+                      getDocuments.data.pageLength
+                    ) : (
+                      <Spinner className="h-3 w-3" />
+                    )}
+                  </span>
                 </span>
               </Link>
 

@@ -15,43 +15,50 @@ const ChatMessagesSkeletion: FC = ({}) => {
             direction="rtl"
             baseColor="#90310057"
             highlightColor="#903100"
-            width={random(50, 150)}
+            width={130}
           />
         </div>
         <div className="flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-          <Skeleton
-            baseColor="#7a7a7a"
-            highlightColor="#fff"
-            width={random(50, 150)}
-          />
+          <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={150} />
         </div>
       </div>
     );
   }
   return (
-    <div className="flex flex-col  space-y-1.5 p-6">
-      <div className="flex items-center space-x-4">
-        <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-          <UserCircle2 className="h-8 w-8" />
-        </span>
-        <div>
-          <p className="text-sm font-medium leading-none">
-            <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={100} />
-          </p>
-          <p className="text-sm text-muted-foreground">
-            <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={100} />
-          </p>
+    <>
+      <div className="my-4 flex items-center space-y-1.5 rounded-2xl border border-gray-500/50 p-2">
+        <div className="flex items-center space-x-4">
+          <span className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full">
+            <UserCircle2 className="h-8 w-8" />
+          </span>
+          <div>
+            <p className="text-sm font-medium leading-none">
+              <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={100} />
+            </p>
+            <p className="text-sm text-muted-foreground">
+              <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={100} />
+            </p>
+          </div>
         </div>
+        <button
+          className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-input bg-transparent text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+          data-state="closed"
+        >
+          <PlusIcon />
+          <span className="sr-only">New message</span>
+        </button>
       </div>
-      <button
-        className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-input bg-transparent text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-        data-state="closed"
+      <div
+        className={`
+          scrollbar-thumb-black scrollbar-track-black-lighter  
+          dark:scrollbar-thumb-white dark:scrollbar-track-white-lighter 
+          scrollbar-thumb-rounded 
+         scrollbar-w-2 scrolling-touch max-h-screen 
+        overflow-y-scroll rounded-xl bg-gray-300/5 p-6`}
       >
-        <PlusIcon />
-        <span className="sr-only">New message</span>
-      </button>
-      {LOADING_SKELETON}
-    </div>
+        {LOADING_SKELETON}
+      </div>
+    </>
   );
 };
 
