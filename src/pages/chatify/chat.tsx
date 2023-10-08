@@ -17,6 +17,8 @@ import {
   DoubleArrowRightIcon,
   PaperPlaneIcon,
 } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -28,22 +30,53 @@ const Chat: FC = ({}) => {
   const currentChat = searchParams.get("page") ?? "1";
   const currentFile = searchParams.get("file") ?? "1";
   const { data: userData } = useSession();
+
+  const queryClient = useQueryClient();
+
   const getDocuments = api.documents.getMyDocuments.useQuery({
     page: Number(currentFile),
   });
+  const utils = api.useContext();
+
+  const { data: chats, isLoading: chatsIsLoading } = api.chat.getChats.useQuery(
+    { page: Number(currentChat) }
+  );
+
+  const getChatsQueryKey = getQueryKey(api.chat);
+
+  console.log("chats", chats);
 
   const createChat = api.chat.createChat.useMutation({
-    onSuccess: async () => {
-      await refetchChats();
-      if (questionRef.current) questionRef.current.value = "";
+    onMutate: async ({ question, response }) => {
+      await queryClient.cancelQueries(getChatsQueryKey);
+
+      if (chats && userData) {
+        utils.chat.getChats.setData(
+          { page: Number(currentChat) },
+          {
+            chatLength: (chats.chatLength ?? 0) + 1,
+            chats: [
+              ...(chats.chats ?? []),
+              {
+                id: (chats.chats?.length ?? 0) + 1,
+                question,
+                response,
+                createdAt: new Date(),
+                userId: userData.user?.id ?? "",
+              },
+            ],
+          }
+        );
+      }
+      return chats;
+    },
+    onError: (__, _, context) => {
+      utils.chat.getChats.setData({ page: Number(currentChat) }, context);
+    },
+    onSettled: () => {
+      void utils.chat.getChats.invalidate();
     },
   });
-
-  const {
-    data: chats,
-    isLoading: chatsIsLoading,
-    refetch: refetchChats,
-  } = api.chat.getChats.useQuery({ page: Number(currentChat) });
 
   const questionRef = useRef<HTMLInputElement>(null);
 
@@ -168,19 +201,19 @@ const Chat: FC = ({}) => {
               user={userData?.user}
             />
           </CardContent>
-          {chats?.chatLength ? (
-            <CardFooter className="m-2 flex flex-col">
-              <form className="flex w-full" onSubmit={handleSubmit}>
-                <Input
-                  ref={questionRef}
-                  type="text"
-                  name="text"
-                  placeholder="Type here..."
-                />
-                <Button className="ml-4">
-                  <PaperPlaneIcon />
-                </Button>
-              </form>
+          <CardFooter className="m-2 flex flex-col">
+            <form className="flex w-full" onSubmit={handleSubmit}>
+              <Input
+                ref={questionRef}
+                type="text"
+                name="text"
+                placeholder="Type here..."
+              />
+              <Button type="submit" className="ml-4">
+                <PaperPlaneIcon />
+              </Button>
+            </form>
+            {chats?.chatLength ? (
               <div className="mt-4 flex w-full justify-between rounded-xl border border-gray-500/50">
                 <Link
                   className={
@@ -232,8 +265,8 @@ const Chat: FC = ({}) => {
                   <DoubleArrowRightIcon />
                 </Link>
               </div>
-            </CardFooter>
-          ) : null}
+            ) : null}
+          </CardFooter>
         </div>
       </Card>
     </>
