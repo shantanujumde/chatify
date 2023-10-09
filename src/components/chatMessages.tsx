@@ -8,6 +8,7 @@ import ChatMessagesSkeletion from "./chatMessagesSkeletion";
 import EmptyItems from "./emptyItems";
 import Spinner from "./ui/spinner";
 
+// https://versoly.com/taos#fade
 interface ChatMessagesProps {
   chats?: Chats[];
   isScreenLoading: boolean;
@@ -59,7 +60,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
           dark:scrollbar-thumb-white dark:scrollbar-track-white-lighter 
           scrollbar-thumb-rounded 
          scrollbar-w-2 scrolling-touch max-h-screen 
-        overflow-y-scroll rounded-xl bg-gray-300/5 p-6`}
+        overflow-y-scroll scroll-smooth rounded-xl bg-gray-300/5 p-6`}
         >
           <div className="space-y-4">
             {chats.map((chat) => {

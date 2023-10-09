@@ -42,14 +42,14 @@ const Chat: FC = ({}) => {
 
   const createChat = api.chat.createChat.useMutation({
     onMutate: async ({ question, response }) => {
-      await utils.chat.getChats.cancel();
-
       const chatWindow = document.getElementById("chatWindow");
       if (chatWindow)
-        chatWindow.scroll({
+        chatWindow.scrollTo({
           top: chatWindow.scrollHeight,
           behavior: "smooth",
         });
+
+      await utils.chat.getChats.cancel();
 
       if (chats && userData) {
         utils.chat.getChats.setData(
