@@ -27,12 +27,14 @@ const Chat: FC = ({}) => {
   const searchParams = useSearchParams();
   const currentChat = searchParams.get("page") ?? "1";
   const currentFile = searchParams.get("file") ?? "1";
+
   const { data: userData } = useSession();
+
+  const utils = api.useContext();
 
   const getDocuments = api.documents.getMyDocuments.useQuery({
     page: Number(currentFile),
   });
-  const utils = api.useContext();
 
   const { data: chats, isLoading: chatsIsLoading } = api.chat.getChats.useQuery(
     { page: Number(currentChat) }
@@ -73,8 +75,10 @@ const Chat: FC = ({}) => {
     onError: (__, _, context) => {
       utils.chat.getChats.setData({ page: Number(currentChat) }, context);
     },
-    onSettled: () => {
-      void utils.chat.getChats.invalidate();
+    onSettled: async () => {
+      if (questionRef?.current) questionRef.current.value = "";
+
+      await utils.chat.getChats.invalidate();
     },
   });
 
