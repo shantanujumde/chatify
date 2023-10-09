@@ -42,13 +42,6 @@ const Chat: FC = ({}) => {
 
   const createChat = api.chat.createChat.useMutation({
     onMutate: async ({ question, response }) => {
-      const chatWindow = document.getElementById("chatWindow");
-      if (chatWindow)
-        chatWindow.scrollTo({
-          top: chatWindow.scrollHeight,
-          behavior: "smooth",
-        });
-
       await utils.chat.getChats.cancel();
 
       if (chats && userData) {
@@ -77,7 +70,12 @@ const Chat: FC = ({}) => {
     },
     onSettled: async () => {
       if (questionRef?.current) questionRef.current.value = "";
-
+      const chatWindow = document.getElementById("chatWindow");
+      if (chatWindow)
+        chatWindow.scrollTo({
+          top: chatWindow.scrollHeight,
+          behavior: "smooth",
+        });
       await utils.chat.getChats.invalidate();
     },
   });
