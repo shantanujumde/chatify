@@ -10,8 +10,8 @@ const ChatMessagesSkeletion: FC = ({}) => {
         <div className="ml-auto w-max max-w-[50%] rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
           <Skeleton
             direction="rtl"
-            baseColor="#90310057"
-            highlightColor="#903100"
+            baseColor="#00ff5d"
+            highlightColor="#d8ffe6"
             width={130}
           />
         </div>
