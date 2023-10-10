@@ -9,6 +9,7 @@ const RevealOnScroll: FC<RevealOnScrollProps> = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const divRef = ref.current;
     const scrollObserver = new IntersectionObserver(([entry]) => {
       if (entry?.isIntersecting) {
         setIsVisible(true);
@@ -16,11 +17,11 @@ const RevealOnScroll: FC<RevealOnScrollProps> = ({ children }) => {
       }
     });
 
-    if (ref.current) scrollObserver.observe(ref.current);
+    if (divRef) scrollObserver.observe(divRef);
 
     return () => {
-      if (ref.current) {
-        scrollObserver.unobserve(ref.current);
+      if (divRef) {
+        scrollObserver.unobserve(divRef);
       }
     };
   }, []);
