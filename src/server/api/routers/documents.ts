@@ -17,7 +17,9 @@ export const documentsRouter = createTRPCRouter({
             userId: ctx.session.user.id,
             deleted: false,
           },
-
+          orderBy: {
+            createdAt: "desc",
+          },
           skip: (input.page - 1) * 10,
           take: 10,
         }),

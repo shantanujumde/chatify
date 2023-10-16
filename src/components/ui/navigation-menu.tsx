@@ -19,7 +19,7 @@ const NavigationMenu = React.forwardRef<
     )}
     {...props}
   >
-    {children}
+    <div className="w-full">{children}</div>
 
     <NavigationMenuViewport
       className={
