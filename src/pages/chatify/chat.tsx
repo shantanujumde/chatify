@@ -222,12 +222,11 @@ const Chat: FC = ({}) => {
                     buttonVariants({
                       variant: "ghost",
                       size: "icon",
-                    }) +
-                    `${
-                      Number(currentChat) === chats.chatLength
-                        ? " pointer-events-none"
-                        : ""
-                    }`
+                      className:  Number(currentChat) === chats.chatLength
+                          ? " pointer-events-none"
+                          : ""
+                    })
+
                   }
                   href={`?page=${
                     Number(currentChat) < chats.chatLength
@@ -255,10 +254,12 @@ const Chat: FC = ({}) => {
                     buttonVariants({
                       variant: "ghost",
                       size: "icon",
-                    }) +
-                    `${Number(currentChat) === 1 ? " pointer-events-none" : ""}`
-                  }
-                  href={`?page=${
+                      className:  Number(currentChat) === 1
+                          ? " pointer-events-none"
+                          : ""
+                    })
+
+                  }                 href={`?page=${
                     Number(currentChat) > 1
                       ? Number(currentChat) - 1
                       : Number(currentChat)
