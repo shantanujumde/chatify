@@ -13,6 +13,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/utils/utils";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { signOut, useSession } from "next-auth/react";
@@ -59,24 +60,15 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export function TopNavBar() {
+  const isMobile = useMediaQuery(`(max-width: 768px)`);
+
   const router = useRouter();
 
   const { data, status } = useSession();
   const [show, setShow] = React.useState(true);
   const [lastScrollY, setLastScrollY] = React.useState(0);
 
-  const [showMobileView, setShowMobileView] = React.useState(false);
   const [showMenu, setShowMenu] = React.useState(false);
-
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (window.innerWidth < 768) {
-        setShowMobileView(true);
-      } else {
-        setShowMobileView(false);
-      }
-    }
-  }, []);
 
   const controlNavbar = React.useCallback(() => {
     if (typeof window !== "undefined") {
@@ -107,14 +99,16 @@ export function TopNavBar() {
         !show ? "opacity-0" : "opacity-100"
       }`}
     >
-      <Button
-        variant="ghost"
-        className="md:hidden"
-        onClick={() => setShowMenu((curr) => !curr)}
-      >
-        <HamburgerMenuIcon />
-      </Button>
-      {(showMenu || !showMobileView) && (
+      <div className="flex justify-end">
+        <Button
+          variant="ghost"
+          className="md:hidden"
+          onClick={() => setShowMenu((curr) => !curr)}
+        >
+          <HamburgerMenuIcon />
+        </Button>
+      </div>
+      {(showMenu || !isMobile) && (
         <NavigationMenuList className="flex w-full justify-between max-md:flex-col max-md:items-end">
           <div className="flex  gap-1 max-md:flex-col max-md:items-end">
             <NavigationMenuItem>
