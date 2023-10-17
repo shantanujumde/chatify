@@ -218,17 +218,14 @@ const Chat: FC = ({}) => {
             {chats?.chatLength ? (
               <div className="mt-4 flex w-full justify-between rounded-xl border border-gray-500/50">
                 <Link
-                  className={
-                    buttonVariants({
-                      variant: "ghost",
-                      size: "icon",
-                    }) +
-                    `${
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "icon",
+                    className:
                       Number(currentChat) === chats.chatLength
                         ? " pointer-events-none"
-                        : ""
-                    }`
-                  }
+                        : "",
+                  })}
                   href={`?page=${
                     Number(currentChat) < chats.chatLength
                       ? Number(currentChat) + 1
@@ -251,13 +248,12 @@ const Chat: FC = ({}) => {
                   / {chats?.chatLength}
                 </Link>
                 <Link
-                  className={
-                    buttonVariants({
-                      variant: "ghost",
-                      size: "icon",
-                    }) +
-                    `${Number(currentChat) === 1 ? " pointer-events-none" : ""}`
-                  }
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "icon",
+                    className:
+                      Number(currentChat) === 1 ? " pointer-events-none" : "",
+                  })}
                   href={`?page=${
                     Number(currentChat) > 1
                       ? Number(currentChat) - 1

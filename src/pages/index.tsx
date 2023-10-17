@@ -24,71 +24,70 @@ export default function Home() {
           Chatify is proudly open-source on Github ❤️
         </p>
       </div>
-      <h1 className="max-w-4xl text-5xl font-bold md:text-6xl lg:text-7xl">
-        Chat with your <span className="text-blue-600">documents</span> in
-        seconds.
-      </h1>
-      <p className="mt-5 max-w-prose text-zinc-700 sm:text-lg">
-        Chatify allows you to create knowledge base for your company, by which
-        you can understand data easily.
-      </p>
 
-      <Link
-        className={buttonVariants({
-          size: "lg",
-          className: "mt-5",
-        })}
-        href="/dashboard"
-        target="_blank"
-      >
-        Get started <ArrowRight className="ml-2 h-5 w-5" />
-      </Link>
+      <div className="-mt-24 flex h-screen flex-col items-center justify-center">
+        <h1 className="max-w-4xl text-center text-5xl font-bold md:text-6xl lg:text-7xl">
+          Chat with your <span className="text-primary">documents</span> in
+          seconds.
+        </h1>
+        <p className="mt-5 max-w-prose text-center text-zinc-700 sm:text-lg">
+          Chatify allows you to create knowledge base for your company, by which
+          you can understand data easily.
+        </p>
+
+        <Link
+          className={buttonVariants({
+            size: "lg",
+            className: "mt-5",
+          })}
+          href="/chat-preview.webp"
+          target="_blank"
+        >
+          Get started <ArrowRight className="ml-2 h-5 w-5" />
+        </Link>
+      </div>
 
       {/* value proposition section */}
-      <div>
-        <div className="relative isolate">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-          >
-            <div
-              style={{
-                clipPath:
-                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-              }}
-              className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-            />
-          </div>
-          <RevealOnScroll>
-            <div className="mx-auto max-w-6xl px-6 lg:px-8">
-              <div className="mt-16 flow-root sm:mt-24">
-                <div className="rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-                  <Image
-                    src="/chat-preview.webp"
-                    alt="product preview"
-                    quality={100}
-                    width={1000}
-                    height={498}
-                    className="rounded-md bg-white shadow-2xl ring-1 ring-gray-900/10 sm:p-2"
-                  />
-                </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+      >
+        <div
+          style={{
+            clipPath:
+              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+          }}
+          className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+        />
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 left-0 top-[80%] -z-10 transform-gpu overflow-hidden  md:top-[90%] lg:top-3/4 "
+      >
+        <div
+          style={{
+            clipPath: "polygon(0 44%, 100% 0, 100% 100%, 0% 100%)",
+          }}
+          className="relative  aspect-[0.8] w-screen  bg-primary md:aspect-[1155/998] lg:aspect-[1155/798]"
+        />
+      </div>
+      <div className="relative isolate">
+        <RevealOnScroll>
+          <div className="mx-auto max-w-6xl px-6 lg:px-8">
+            <div className="mt-16 flow-root sm:mt-24">
+              <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
+                <Image
+                  src="/chat-preview.webp"
+                  alt="uploading preview"
+                  width={1419}
+                  height={732}
+                  quality={100}
+                  className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
+                />
               </div>
             </div>
-          </RevealOnScroll>
-
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-          >
-            <div
-              style={{
-                clipPath:
-                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-              }}
-              className="relative left-[calc(50%-13rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-36rem)] sm:w-[72.1875rem]"
-            />
           </div>
-        </div>
+        </RevealOnScroll>
       </div>
 
       {/* Feature section */}
@@ -122,7 +121,7 @@ export default function Home() {
                 <span className="mt-2 text-zinc-700">
                   Either starting out with a free plan or choose our{" "}
                   <Link
-                    href="/pricing"
+                    href="/chatify/chat"
                     className="text-blue-700 underline underline-offset-2"
                   >
                     pro plan
@@ -170,12 +169,12 @@ export default function Home() {
             <div className="mt-16 flow-root sm:mt-24">
               <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
                 <Image
-                  src="/file-upload-preview.jpg"
+                  src="/chat-preview.webp"
                   alt="uploading preview"
                   width={1419}
                   height={732}
                   quality={100}
-                  className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10 sm:p-8 md:p-20"
+                  className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
                 />
               </div>
             </div>
