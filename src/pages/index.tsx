@@ -95,7 +95,7 @@ export default function Home() {
         <RevealOnScroll>
           <div className="mb-12 px-6 lg:px-8">
             <div className="mx-auto max-w-2xl sm:text-center">
-              <h2 className="mt-2 text-4xl font-bold text-gray-900 sm:text-5xl">
+              <h2 className="mt-2 text-4xl font-bold sm:text-5xl">
                 Explore knowledge base just by asking questions
               </h2>
               <p className="mt-4 text-lg text-gray-600">
@@ -112,7 +112,7 @@ export default function Home() {
           <RevealOnScroll>
             <li className="md:flex-1">
               <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-                <span className="text-sm font-medium text-blue-600">
+                <span className="text-sm font-medium text-primary/70">
                   Step 1
                 </span>
                 <span className="text-xl font-semibold">
@@ -122,7 +122,7 @@ export default function Home() {
                   Either starting out with a free plan or choose our{" "}
                   <Link
                     href="/chatify/chat"
-                    className="text-blue-700 underline underline-offset-2"
+                    className="text-primary underline underline-offset-2"
                   >
                     pro plan
                   </Link>
@@ -134,7 +134,7 @@ export default function Home() {
           <RevealOnScroll>
             <li className="md:flex-1">
               <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-                <span className="text-sm font-medium text-blue-600">
+                <span className="text-sm font-medium text-primary/70">
                   Step 2
                 </span>
                 <span className="text-xl font-semibold">
@@ -150,7 +150,7 @@ export default function Home() {
           <RevealOnScroll>
             <li className="md:flex-1">
               <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-                <span className="text-sm font-medium text-blue-600">
+                <span className="text-sm font-medium text-primary/70">
                   Step 3
                 </span>
                 <span className="text-xl font-semibold">

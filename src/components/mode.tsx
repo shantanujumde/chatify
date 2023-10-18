@@ -14,7 +14,7 @@ export function ModeToggle() {
   const { setTheme } = useTheme();
 
   return (
-    <NavigationMenuItem>
+    <NavigationMenuItem className="rounded-xl border border-gray-400/50">
       <NavigationMenuTrigger showChevronDown={false}>
         <>
           <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

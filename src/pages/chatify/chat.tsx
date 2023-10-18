@@ -240,7 +240,7 @@ const Chat: FC = ({}) => {
                   })}
                   href={`?page=1&file=${currentFile}`}
                 >
-                  Page
+                  Chat
                   <span className="text-sm font-semibold text-primary">
                     &nbsp;
                     {currentChat}
