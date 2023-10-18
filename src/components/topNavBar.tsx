@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/utils/utils";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { ChatBubbleIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ModeToggle } from "./mode";
@@ -95,7 +95,7 @@ export function TopNavBar() {
   return (
     <NavigationMenu
       dropdownLocation="left"
-      className={`fixed inset-x-0 top-5 mx-auto w-11/12 rounded-lg bg-white p-2 transition-all duration-500  ease-in-out dark:bg-gray-300/5  ${
+      className={`fixed inset-x-0 top-5 mx-auto w-11/12 rounded-lg border border-secondary bg-secondary/60 p-2 transition-all duration-500 ease-in-out  ${
         !show ? "opacity-0" : "opacity-100"
       }`}
     >
@@ -111,15 +111,15 @@ export function TopNavBar() {
       {(showMenu || !isMobile) && (
         <NavigationMenuList className="flex w-full justify-between max-md:flex-col max-md:items-end">
           <div className="flex  gap-1 max-md:flex-col max-md:items-end">
-            <NavigationMenuItem>
+            <NavigationMenuItem className="rounded-xl border border-gray-400/50">
               <Link href="/" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Home
+                  <ChatBubbleIcon />
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
 
-            <NavigationMenuItem>
+            <NavigationMenuItem className="rounded-xl border border-gray-400/50">
               <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -156,7 +156,7 @@ export function TopNavBar() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             {status === "authenticated" && (
-              <NavigationMenuItem>
+              <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                 <NavigationMenuTrigger>Utilities</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
@@ -177,7 +177,7 @@ export function TopNavBar() {
           <div className="flex gap-1 max-md:flex-col max-md:items-end">
             {status === "unauthenticated" && (
               <>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                   <Link href="/auth/register" legacyBehavior passHref>
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
@@ -186,7 +186,7 @@ export function TopNavBar() {
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                   <Link href="/auth/login" legacyBehavior passHref>
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
@@ -199,7 +199,7 @@ export function TopNavBar() {
             )}
             {status === "authenticated" && (
               <>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                   <Link
                     href={`/profile/${data.user.id}`}
                     legacyBehavior
@@ -212,7 +212,7 @@ export function TopNavBar() {
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                   <button
                     onClick={() =>
                       void signOut({ redirect: false }).then(async () => {
@@ -231,12 +231,12 @@ export function TopNavBar() {
             )}
             {status === "loading" && (
               <>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     <Spinner className="h-6 w-6 text-center" />
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     <Spinner className="h-6 w-6 text-center" />
                   </NavigationMenuLink>
