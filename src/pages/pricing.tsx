@@ -112,7 +112,7 @@ const Page = () => {
 
       <div className="grid grid-cols-1 gap-10 pt-12 md:grid-cols-2 lg:grid-cols-3">
         <TooltipProvider>
-          {pricingItems.map(({ plan, tagline, quota, features, highlight }) => {
+          {pricingItems.map(({ plan, tagline, features, highlight }) => {
             const price =
               PLANS.find((p) => p.slug === plan.toLowerCase())?.price.amount ??
               0;
@@ -146,7 +146,7 @@ const Page = () => {
                   <p className="text-gray-500 dark:text-gray-300">per month</p>
                 </div>
 
-                <div className="flex h-20 items-center justify-center border-b border-t border-gray-200 bg-gray-50 dark:border-gray-600/50 dark:bg-secondary/50">
+                {/* <div className="flex h-20 items-center justify-center border-b border-t border-gray-200 bg-gray-50 dark:border-gray-600/50 dark:bg-secondary/50">
                   <div className="flex items-center space-x-1">
                     <p>{quota.toLocaleString()} PDFs/mo included</p>
 
@@ -159,7 +159,7 @@ const Page = () => {
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                </div>
+                </div> */}
 
                 <ul className="my-10 space-y-5 px-8">
                   {features.map(({ text, footnote, negative }) => (

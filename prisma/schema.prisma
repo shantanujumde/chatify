@@ -106,6 +106,18 @@ model User {
     Embeddings          Embeddings[]
     File                File[]
     Chats               Chats[]
+    Payment             Payment?
+}
+
+model Payment {
+    id                     Int       @id @default(autoincrement())
+    stripeCustomerId       String?   @unique
+    stripeSubscriptionId   String?   @unique
+    stripePriceId          String?
+    stripeCurrentPeriodEnd DateTime?
+
+    userId String? @unique
+    User   User?   @relation(fields: [userId], references: [id])
 }
 
 model VerificationToken {
