@@ -220,7 +220,7 @@ const Pricing = () => {
                 </ul>
                 <div className="border-t border-gray-200" />
                 <div className="p-5">
-                  {plan === "Free" ? (
+                  {slug === "TIER-I" ? (
                     <Link
                       href={user ? "/dashboard" : "/auth/login"}
                       className={buttonVariants({
