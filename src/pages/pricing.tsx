@@ -19,7 +19,8 @@ const Page = () => {
 
   const pricingItems = [
     {
-      plan: "Free",
+      plan: "Intelligent",
+
       slug: "TIER-I" as TiersType,
       tagline: "For small side projects.",
       characters: PLANS.find((plan) => plan.slug === "TIER-I")?.characters,
@@ -28,6 +29,10 @@ const Page = () => {
           text: "300 characters of knowledge base",
           footnote:
             "Maximum amount of characters allowed in your knowledge base.",
+        },
+        {
+          text: "1 individual user",
+          footnote: "Users that can access knowledge base.",
         },
         {
           text: "4MB file size limit",
@@ -48,7 +53,7 @@ const Page = () => {
       ],
     },
     {
-      plan: "Pro",
+      plan: "Bright",
       slug: "TIER-II" as TiersType,
       tagline: "For larger projects with higher needs.",
       characters: PLANS.find((plan) => plan.slug === "TIER-II")?.characters,
@@ -57,6 +62,11 @@ const Page = () => {
           text: "3000 characters of knowledge base",
           footnote:
             "Maximum amount of characters allowed in your knowledge base.",
+        },
+        {
+          text: "10 collaborators",
+          footnote:
+            "Users that can access knowledge base (You can assign them roles, individuals that controls knowledge base & individuals that can only chat, etc.).",
         },
         {
           text: "No file size limit",
@@ -75,7 +85,7 @@ const Page = () => {
       ],
     },
     {
-      plan: "Company",
+      plan: "Profound",
       slug: "TIER-III" as TiersType,
       tagline: "For companies to create knowledge base.",
       characters: PLANS.find((plan) => plan.slug === "TIER-III")?.characters,
@@ -84,6 +94,11 @@ const Page = () => {
           text: "30000 characters of knowledge base",
           footnote:
             "Maximum amount of characters allowed in your knowledge base.",
+        },
+        {
+          text: "50 collaborators",
+          footnote:
+            "Users that can access knowledge base (You can assign them roles, individuals that controls knowledge base & individuals that can only chat, etc.).",
         },
         {
           text: "No file size limit",
