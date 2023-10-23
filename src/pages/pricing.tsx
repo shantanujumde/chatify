@@ -20,6 +20,7 @@ const Page = () => {
   const pricingItems = [
     {
       plan: "Intelligent",
+
       slug: "TIER-I" as TiersType,
       tagline: "For small side projects.",
       characters: PLANS.find((plan) => plan.slug === "TIER-I")?.characters,
