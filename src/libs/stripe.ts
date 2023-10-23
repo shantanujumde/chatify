@@ -42,7 +42,7 @@ export async function getUserSubscriptionPlan(user: User) {
       dbUser.Payment.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now()
   );
 
-  const plan = isSubscribed
+  const plan = isSubscribed // @todo: modify logic
     ? PLANS.find(
         (plan) => plan.price.priceIds.test === dbUser.Payment?.stripePriceId
       )
@@ -57,7 +57,7 @@ export async function getUserSubscriptionPlan(user: User) {
   }
 
   return {
-    ...plan,
+    plan,
     stripeSubscriptionId: dbUser.Payment?.stripeSubscriptionId,
     stripeCurrentPeriodEnd: dbUser.Payment?.stripeCurrentPeriodEnd,
     stripeCustomerId: dbUser.Payment?.stripeCustomerId,
