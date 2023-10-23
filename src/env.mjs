@@ -32,6 +32,7 @@ export const env = createEnv({
     STRIPE_TIER_I: z.string().nonempty(),
     STRIPE_TIER_II: z.string().nonempty(),
     STRIPE_TIER_III: z.string().nonempty(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
   },
 
   /**
@@ -65,6 +66,7 @@ export const env = createEnv({
     STRIPE_TIER_I: process.env.STRIPE_TIER_I,
     STRIPE_TIER_II: process.env.STRIPE_TIER_II,
     STRIPE_TIER_III: process.env.STRIPE_TIER_III,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

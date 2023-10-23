@@ -12,7 +12,7 @@ import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-const Page = () => {
+const Pricing = () => {
   const { data } = useSession();
 
   const user = data?.user;
@@ -220,7 +220,7 @@ const Page = () => {
                 </ul>
                 <div className="border-t border-gray-200" />
                 <div className="p-5">
-                  {plan === "Free" ? (
+                  {slug === "TIER-I" ? (
                     <Link
                       href={user ? "/dashboard" : "/auth/login"}
                       className={buttonVariants({
@@ -254,4 +254,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Pricing;

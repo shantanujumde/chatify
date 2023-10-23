@@ -40,7 +40,7 @@ export default function Home() {
             size: "lg",
             className: "mt-5",
           })}
-          href="/chat-preview.webp"
+          href="/billing/pricing"
           target="_blank"
         >
           Get started <ArrowRight className="ml-2 h-5 w-5" />
@@ -121,7 +121,7 @@ export default function Home() {
                 <span className="mt-2 text-zinc-700">
                   Either starting out with a free plan or choose our{" "}
                   <Link
-                    href="/chatify/chat"
+                    href="billing/pricing"
                     className="text-primary underline underline-offset-2"
                   >
                     pro plan
