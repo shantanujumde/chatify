@@ -72,6 +72,11 @@ export function TopNavBar() {
 
   const controlNavbar = React.useCallback(() => {
     if (typeof window !== "undefined") {
+      if (window.scrollY <= 20) {
+        setShow(true);
+        return;
+      }
+
       if (window.scrollY > lastScrollY) {
         setShow(false);
       } else {
