@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
 
 const UpgradeButton = ({ tier }: { tier: TiersType }) => {
-  const { mutate: createStripeSession } =
+  const { mutate: createStripeSession, isLoading: stripeLoading } =
     api.payments.createStripeSession.useMutation({
       onSuccess: ({ url }) => {
         window.location.href = url ?? "/dashboard/billing";
@@ -14,7 +14,11 @@ const UpgradeButton = ({ tier }: { tier: TiersType }) => {
     });
 
   return (
-    <Button onClick={() => createStripeSession({ tier })} className="w-full">
+    <Button
+      onClick={() => createStripeSession({ tier })}
+      loading={stripeLoading}
+      className="w-full"
+    >
       Upgrade now <ArrowRight className="ml-1.5 h-5 w-5" />
     </Button>
   );
