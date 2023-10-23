@@ -6,7 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { PLANS } from "@/config/stripe";
+import { PLANS, type TiersType } from "@/config/stripe";
 import { cn } from "@/utils/utils";
 import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -20,17 +20,18 @@ const Page = () => {
   const pricingItems = [
     {
       plan: "Free",
-      highlight: false,
+      slug: "TIER-I" as TiersType,
       tagline: "For small side projects.",
-      quota: 10,
+      characters: PLANS.find((plan) => plan.slug === "TIER-I")?.characters,
       features: [
         {
-          text: "5 pages per PDF",
-          footnote: "The maximum amount of pages per PDF-file.",
+          text: "300 characters of knowledge base",
+          footnote:
+            "Maximum amount of characters allowed in your knowledge base.",
         },
         {
           text: "4MB file size limit",
-          footnote: "The maximum file size of a single PDF file.",
+          footnote: "The maximum file size of a single document.",
         },
         {
           text: "Mobile-friendly interface",
@@ -48,17 +49,18 @@ const Page = () => {
     },
     {
       plan: "Pro",
-      highlight: true,
+      slug: "TIER-II" as TiersType,
       tagline: "For larger projects with higher needs.",
-      quota: PLANS.find((p) => p.slug === "pro")?.quota ?? 0,
+      characters: PLANS.find((plan) => plan.slug === "TIER-II")?.characters,
       features: [
         {
-          text: "25 pages per PDF",
-          footnote: "The maximum amount of pages per PDF-file.",
+          text: "3000 characters of knowledge base",
+          footnote:
+            "Maximum amount of characters allowed in your knowledge base.",
         },
         {
-          text: "16MB file size limit",
-          footnote: "The maximum file size of a single PDF file.",
+          text: "No file size limit",
+          footnote: "The maximum file size of a single document.",
         },
         {
           text: "Mobile-friendly interface",
@@ -74,17 +76,18 @@ const Page = () => {
     },
     {
       plan: "Company",
-      highlight: true,
+      slug: "TIER-III" as TiersType,
       tagline: "For companies to create knowledge base.",
-      quota: PLANS.find((p) => p.slug === "pro")?.quota ?? 0,
+      characters: PLANS.find((plan) => plan.slug === "TIER-III")?.characters,
       features: [
         {
-          text: "25 pages per PDF",
-          footnote: "The maximum amount of pages per PDF-file.",
+          text: "30000 characters of knowledge base",
+          footnote:
+            "Maximum amount of characters allowed in your knowledge base.",
         },
         {
-          text: "16MB file size limit",
-          footnote: "The maximum file size of a single PDF file.",
+          text: "No file size limit",
+          footnote: "The maximum file size of a single document.",
         },
         {
           text: "Mobile-friendly interface",
@@ -112,24 +115,23 @@ const Page = () => {
 
       <div className="grid grid-cols-1 gap-10 pt-12 md:grid-cols-2 lg:grid-cols-3">
         <TooltipProvider>
-          {pricingItems.map(({ plan, tagline, features, highlight }) => {
-            const price =
-              PLANS.find((p) => p.slug === plan.toLowerCase())?.price.amount ??
-              0;
+          {pricingItems.map(({ plan, slug, tagline, features }) => {
+            const price = PLANS.find((p) => p.slug === slug)?.price.amount ?? 0;
 
             return (
               <div
-                key={plan}
+                key={slug}
                 className={cn(
-                  "relative rounded-2xl bg-white shadow-lg dark:bg-secondary",
+                  "relative rounded-2xl border border-gray-200 bg-white shadow-lg dark:bg-secondary",
                   {
-                    "border-2 border-primary shadow-blue-200 dark:shadow-primary":
-                      highlight,
-                    "border border-gray-200": !highlight,
+                    "border-2 border-primary/80 shadow-blue-200 dark:shadow-primary":
+                      slug === "TIER-II",
+                    "border-2 border-primary shadow-blue-300 dark:shadow-primary":
+                      slug === "TIER-III",
                   }
                 )}
               >
-                {highlight && (
+                {(slug === "TIER-II" || slug === "TIER-III") && (
                   <div className="absolute -top-5 left-0 right-0 mx-auto w-32 rounded-full bg-gradient-to-r from-primary to-cyan-600 px-3 py-2 text-sm font-medium text-white">
                     Upgrade now
                   </div>
@@ -215,7 +217,7 @@ const Page = () => {
                       <ArrowRight className="ml-1.5 h-5 w-5" />
                     </Link>
                   ) : user ? (
-                    <UpgradeButton />
+                    <UpgradeButton tier={slug} />
                   ) : (
                     <Link
                       href="/auth/login"

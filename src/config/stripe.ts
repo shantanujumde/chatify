@@ -1,41 +1,44 @@
-export const PLANS = [
+import { z } from "zod";
+
+export const PLANS: Plans[] = [
   {
     name: "Free",
-    slug: "free",
-    quota: 10,
-    pagesPerPdf: 5,
+    slug: "TIER-I",
+    characters: 300,
     price: {
       amount: 0,
-      priceIds: {
-        test: "",
-        production: "",
-      },
+      priceId: process.env.STRIPE_TIER_I ?? "",
     },
   },
   {
-    name: "Pro",
-    slug: "pro",
-    quota: 50,
-    pagesPerPdf: 25,
+    name: "Individual",
+    slug: "TIER-II",
+    characters: 3000,
     price: {
-      amount: 14,
-      priceIds: {
-        test: "price_1O3apdSBtUgiGZpp52ZjqA5r",
-        production: "",
-      },
+      amount: 30,
+      priceId: process.env.STRIPE_TIER_II ?? "",
     },
   },
   {
-    name: "User",
-    slug: "User",
-    quota: 50,
-    pagesPerPdf: 25,
+    name: "Company",
+    slug: "TIER-III",
+    characters: 30000,
     price: {
-      amount: 14,
-      priceIds: {
-        test: "price_1NuEwTA19umTXGu8MeS3hN8L",
-        production: "",
-      },
+      amount: 50,
+      priceId: process.env.STRIPE_TIER_III ?? "",
     },
   },
-] as const;
+];
+
+export type Plans = {
+  name: string;
+  slug: TiersType;
+  characters: number;
+  price: {
+    amount: number;
+    priceId: string;
+  };
+};
+
+export const Tiers = z.enum(["TIER-I", "TIER-II", "TIER-III"]);
+export type TiersType = z.infer<typeof Tiers>;

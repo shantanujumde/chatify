@@ -1,10 +1,11 @@
 "use client";
 
+import { type TiersType } from "@/config/stripe";
 import { api } from "@/utils/api";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
 
-const UpgradeButton = () => {
+const UpgradeButton = ({ tier }: { tier: TiersType }) => {
   const { mutate: createStripeSession } =
     api.payments.createStripeSession.useMutation({
       onSuccess: ({ url }) => {
@@ -13,7 +14,7 @@ const UpgradeButton = () => {
     });
 
   return (
-    <Button onClick={() => createStripeSession()} className="w-full">
+    <Button onClick={() => createStripeSession({ tier })} className="w-full">
       Upgrade now <ArrowRight className="ml-1.5 h-5 w-5" />
     </Button>
   );
