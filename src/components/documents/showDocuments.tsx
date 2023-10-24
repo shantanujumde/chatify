@@ -124,7 +124,7 @@ const ShowDocuments: FC = () => {
       </Accordion>
       <div className="mt-4  flex w-full justify-between rounded-xl border border-gray-500/50 p-1">
         <Button
-          onClick={() => setPage((currPage) => currPage - 1)}
+          onClick={() => page !== 1 && setPage((currPage) => currPage - 1)}
           className="w-fit"
           variant="ghost"
           type="button"
@@ -133,14 +133,21 @@ const ShowDocuments: FC = () => {
           <DoubleArrowLeftIcon />
         </Button>
         <Button onClick={() => setPage(1)} variant="ghost" className="m-auto">
-          Page {page}/{getDocuments.data?.pageLength}
+          Page
+          <span className="text-sm font-semibold text-primary">
+            &nbsp;{page}
+          </span>
+          /{getDocuments.data?.pageLength}
         </Button>
         <Button
           className="w-fit"
           type="button"
           variant="ghost"
-          onClick={() => setPage((currPage) => currPage + 1)}
-          disabled={page === getDocuments.data.documents.length}
+          onClick={() =>
+            page !== getDocuments.data.pageLength &&
+            setPage((currPage) => currPage + 1)
+          }
+          disabled={page === getDocuments.data.pageLength}
         >
           <DoubleArrowRightIcon />
         </Button>
