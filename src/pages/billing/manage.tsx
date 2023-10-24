@@ -45,7 +45,7 @@ const Manage = ({ subscriptionPlan }: ManageFormProps) => {
           <CardTitle>Subscription Plan</CardTitle>
           <CardDescription>
             You are currently on the{" "}
-            <strong>{subscriptionPlan.isCanceled}</strong> plan.
+            <strong>{"subscriptionPlan.isCanceled"}</strong> plan.
           </CardDescription>
         </CardHeader>
 
@@ -54,17 +54,17 @@ const Manage = ({ subscriptionPlan }: ManageFormProps) => {
             {isLoading ? (
               <Loader2 className="mr-4 h-4 w-4 animate-spin" />
             ) : null}
-            {subscriptionPlan.isSubscribed
+            {"subscriptionPlan.isSubscribed"
               ? "Manage Subscription"
               : "Upgrade to PRO"}
           </Button>
 
-          {subscriptionPlan.isSubscribed ? (
+          {"subscriptionPlan.isSubscribed" ? (
             <p className="rounded-full text-xs font-medium">
-              {subscriptionPlan.isCanceled
+              {"subscriptionPlan.isCanceled"
                 ? "Your plan will be canceled on "
                 : "Your plan renews on"}
-              {format(subscriptionPlan.stripeCurrentPeriodEnd!, "dd.MM.yyyy")}.
+              {format(new Date(), "dd.MM.yyyy")}.
             </p>
           ) : null}
         </CardFooter>
