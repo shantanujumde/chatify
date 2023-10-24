@@ -167,8 +167,10 @@ const Chat: FC = ({}) => {
                   <span>
                     {getDocuments.data?.pageLength ? (
                       getDocuments.data.pageLength
-                    ) : (
+                    ) : getDocuments.isLoading ? (
                       <Spinner className="h-3 w-3" />
+                    ) : (
+                      1
                     )}
                   </span>
                 </span>
@@ -177,9 +179,10 @@ const Chat: FC = ({}) => {
               <Link
                 className="px-2 py-4"
                 href={`?page=${currentChat}&file=${
-                  Number(currentFile) === getDocuments.data?.pageLength
-                    ? getDocuments.data?.pageLength
-                    : Number(currentFile) + 1
+                  getDocuments.data?.pageLength &&
+                  getDocuments.data?.pageLength <= Number(currentFile)
+                    ? Number(currentFile) + 1
+                    : 1
                 }`}
               >
                 <DoubleArrowRightIcon />
@@ -187,7 +190,7 @@ const Chat: FC = ({}) => {
             </div>
           </CardFooter>
         </div>
-
+        2
         <div className="flex w-4/5 flex-col max-md:w-full">
           <CardHeader>
             <CardTitle>Chat</CardTitle>
