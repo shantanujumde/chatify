@@ -25,8 +25,8 @@ import Skeleton from "react-loading-skeleton";
 
 const Chat: FC = ({}) => {
   const searchParams = useSearchParams();
-  const currentChat = searchParams.get("page") ?? "1";
-  const currentFile = searchParams.get("file") ?? "1";
+  const currentChat = searchParams?.get("page") ?? "1";
+  const currentFile = searchParams?.get("file") ?? "1";
 
   const { data: userData } = useSession();
 
