@@ -1,6 +1,7 @@
 import { stripe } from "@/libs/stripe";
 import { prisma } from "@/server/db";
 import { headers } from "next/headers";
+import { NextResponse, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 
 export async function POST(request: Request) {
@@ -70,4 +71,11 @@ export async function POST(request: Request) {
   }
 
   return new Response(null, { status: 200 });
+}
+
+export function GET(request: NextRequest) {
+  return NextResponse.json({
+    message: "health check success",
+    body: request.body,
+  });
 }
