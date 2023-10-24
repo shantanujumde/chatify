@@ -190,7 +190,6 @@ const Chat: FC = ({}) => {
             </div>
           </CardFooter>
         </div>
-        2
         <div className="flex w-4/5 flex-col max-md:w-full">
           <CardHeader>
             <CardTitle>Chat</CardTitle>
