@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -7,21 +7,33 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { type Plans } from "@/config/stripe";
 import { getUserSubscriptionPlan } from "@/libs/stripe";
+import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/utils/api";
 import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
-import { type GetServerSideProps } from "next";
-import { useRouter } from "next/router";
+import type { GetServerSideProps, GetServerSidePropsResult } from "next";
+import Link from "next/link";
 
-interface ManageFormProps {
-  subscription: Awaited<ReturnType<typeof getUserSubscriptionPlan>>;
-}
+type ManageFormProps =
+  | {
+      subscription: {
+        isCanceled: boolean;
+        isSubscribed: boolean;
+        stripeCurrentPeriodEnd: string;
+        plan: Plans | undefined | null;
+      };
+    }
+  | {
+      subscription: null;
+    };
 
-const Manage = (props: ManageFormProps | null) => {
+const Manage = (props: ManageFormProps) => {
   const { toast } = useToast();
-  const router = useRouter();
-  if (props === null) return router.back();
+
+  if (props.subscription === null)
+    return <>You are not authorized to view this page</>;
 
   const { subscription: subscriptionPlan } = props;
 
@@ -39,7 +51,7 @@ const Manage = (props: ManageFormProps | null) => {
       },
     });
 
-  if (!subscriptionPlan) return <>something went wrong</>;
+  if (!subscriptionPlan) return <>You do not have a subscription yet</>;
 
   return (
     <form
@@ -53,29 +65,42 @@ const Manage = (props: ManageFormProps | null) => {
         <CardHeader>
           <CardTitle>Subscription Plan</CardTitle>
           <CardDescription>
-            You are currently on the{" "}
-            <strong>{subscriptionPlan?.isCanceled}</strong> plan.
+            {!subscriptionPlan.isSubscribed ? (
+              "You do not have any active plan"
+            ) : subscriptionPlan.plan?.slug ? (
+              <>
+                You are currently on the
+                <strong> {subscriptionPlan.plan?.name}</strong> plan.
+              </>
+            ) : null}
           </CardDescription>
         </CardHeader>
 
         <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
-          <Button type="submit">
-            {isLoading ? (
-              <Loader2 className="mr-4 h-4 w-4 animate-spin" />
-            ) : null}
-            {subscriptionPlan.isSubscribed
-              ? "Manage Subscription"
-              : "Upgrade to PRO"}
-          </Button>
+          {subscriptionPlan.isSubscribed ? (
+            <Button type="submit">
+              {isLoading ? (
+                <Loader2 className="mr-4 h-4 w-4 animate-spin" />
+              ) : null}
+              Manage Subscription
+            </Button>
+          ) : (
+            <Link href="/billing/pricing" className={buttonVariants()}>
+              {isLoading ? (
+                <Loader2 className="mr-4 h-4 w-4 animate-spin" />
+              ) : null}
+              Upgrade to PRO
+            </Link>
+          )}
 
           {subscriptionPlan.isSubscribed ? (
             <p className="rounded-full text-xs font-medium">
               {subscriptionPlan.isCanceled
                 ? "Your plan will be canceled on "
-                : "Your plan renews on"}
+                : "Your plan renews on "}
               {format(
-                new Date(subscriptionPlan.stripeCurrentPeriodEnd!),
-                "dd.MM.yyyy"
+                new Date(subscriptionPlan.stripeCurrentPeriodEnd),
+                "dd MMM yyyy"
               )}
               .
             </p>
@@ -87,20 +112,29 @@ const Manage = (props: ManageFormProps | null) => {
 };
 export default Manage;
 
-export const getServerSideProps = (async (context) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context
+): Promise<GetServerSidePropsResult<ManageFormProps>> => {
   const userId = context.query.userId;
+
+  const session = await getServerAuthSession(context);
+  console.log("session?.user.id !== userId", session?.user.id, userId);
+  if (session?.user.id !== userId) return { props: { subscription: null } };
 
   const user = { id: String(userId) };
 
   const subscriptionPlan = await getUserSubscriptionPlan(user);
+  console.log("plan", subscriptionPlan.plan);
 
   return {
     props: {
       subscription: {
-        ...subscriptionPlan,
+        isCanceled: subscriptionPlan.isCanceled,
+        isSubscribed: subscriptionPlan.isSubscribed,
         stripeCurrentPeriodEnd:
-          subscriptionPlan.stripeCurrentPeriodEnd?.toISOString(),
+          subscriptionPlan.stripeCurrentPeriodEnd?.toISOString() ?? "",
+        plan: subscriptionPlan.plan,
       },
     },
   };
-}) satisfies GetServerSideProps;
+};

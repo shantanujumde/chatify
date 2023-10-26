@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const PLANS: Plans[] = [
   {
-    name: "Free",
+    name: "Intelligent",
     slug: "TIER-I",
     characters: 300,
     price: {
@@ -11,7 +11,7 @@ export const PLANS: Plans[] = [
     },
   },
   {
-    name: "Individual",
+    name: "Bright",
     slug: "TIER-II",
     characters: 3000,
     price: {
@@ -20,7 +20,7 @@ export const PLANS: Plans[] = [
     },
   },
   {
-    name: "Company",
+    name: "Profound",
     slug: "TIER-III",
     characters: 30000,
     price: {
