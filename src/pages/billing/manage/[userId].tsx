@@ -55,7 +55,6 @@ const Manage = (props: ManageFormProps) => {
 
   return (
     <form
-      className="mt-12"
       onSubmit={(e) => {
         e.preventDefault();
         createStripeSession({ tier: "TIER-II" });
