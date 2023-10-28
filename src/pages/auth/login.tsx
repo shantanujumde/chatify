@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,44 +61,57 @@ export default function LoginAccount({
   };
 
   return (
-    <div className="relative m-auto flex flex-col items-center justify-center overflow-hidden">
-      <div className="m-auto w-full lg:max-w-lg">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-center text-2xl">Sign in</CardTitle>
-          <CardDescription className="text-center">
-            Enter your email and password to login
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="text"
-                placeholder="email"
-                {...register("email", { required: true })}
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                {...register("password", { required: true })}
-              />
-              {errors.password && (
-                <p className="text-sm text-destructive">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-            <div className="flex items-center space-x-2">
+    <>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+      >
+        <div
+          style={{
+            clipPath:
+              "polygon(67.56% 94.52%, 89.76% 80.39%, 100% 100%, 89.79% 70.05%, 83.47% 93.18%, 85.8% 68.75%, 88.44% 58.88%, 77.33% 94.5%, 90.14% 100%, 54.66% 89%, 72.21% 84.69%, 100% 59.15%, 21.05% 100%, 100% 0%, 0% 100%, 60.6% 0.1%, 0.7% 65.93%, 27.34% 0.1%, 0% 31.5%, 100% 44.4%, 5.85% 100%, 70.09% 70.65%)",
+          }}
+          className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+        />
+      </div>
+      <div className="relative m-auto flex h-[85vh] flex-col items-center justify-center overflow-hidden align-middle">
+        <div className="m-auto w-full lg:max-w-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-center text-2xl">Sign in</CardTitle>
+            <CardDescription className="text-center">
+              Enter your email and password to login
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CardContent className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="text"
+                  placeholder="email"
+                  {...register("email", { required: true })}
+                />
+                {errors.email && (
+                  <p className="text-sm text-destructive">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  {...register("password", { required: true })}
+                />
+                {errors.password && (
+                  <p className="text-sm text-destructive">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+              {/* <div className="flex items-center space-x-2">
               <Checkbox id="terms" />
               <label
                 htmlFor="terms"
@@ -107,56 +119,57 @@ export default function LoginAccount({
               >
                 Remember me
               </label>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col">
-            <Button disabled={!isValid} type="submit" className="w-full">
-              Login
-            </Button>
-          </CardFooter>
-        </form>
-        <div className="relative mb-2">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-        </div>
-        <div className="m-2 grid grid-cols-2 gap-6">
-          {Object.values(providers).map((provider) => {
-            if (provider.id === "credentials") return;
-            return (
-              <Button
-                key={provider.name}
-                variant="outline"
-                onClick={() => signIn(provider.name.toLowerCase())}
-              >
-                {provider.id === "discord" ? (
-                  <Icons.twitter className="mr-2 h-4 w-4" />
-                ) : provider.id === "google" ? (
-                  <Icons.google className="mr-2 h-4 w-4" />
-                ) : (
-                  <Icons.logo className="mr-2 h-4 w-4" />
-                )}
-                {provider.name}
+            </div> */}
+            </CardContent>
+            <CardFooter className="flex flex-col">
+              <Button disabled={!isValid} type="submit" className="w-full">
+                Login
               </Button>
-            );
-          })}
+            </CardFooter>
+          </form>
+          <div className="relative mb-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+          <div className="m-2 mx-6 grid grid-cols-2 gap-6">
+            {Object.values(providers).map((provider) => {
+              if (provider.id === "credentials") return;
+              return (
+                <Button
+                  key={provider.name}
+                  variant="outline"
+                  onClick={() => signIn(provider.name.toLowerCase())}
+                >
+                  {provider.id === "discord" ? (
+                    <Icons.twitter className="mr-2 h-4 w-4" />
+                  ) : provider.id === "google" ? (
+                    <Icons.google className="mr-2 h-4 w-4" />
+                  ) : (
+                    <Icons.logo className="mr-2 h-4 w-4" />
+                  )}
+                  {provider.name}
+                </Button>
+              );
+            })}
+          </div>
+          <p className="mb-2 mt-2 text-center text-xs text-gray-700">
+            Don&apos;t have an account?{" "}
+            <span
+              className=" text-blue-600 hover:underline"
+              onClick={() => router.push("/auth/register")}
+            >
+              Sign up
+            </span>
+          </p>
         </div>
-        <p className="mb-2 mt-2 text-center text-xs text-gray-700">
-          Don&apos;t have an account?{" "}
-          <span
-            className=" text-blue-600 hover:underline"
-            onClick={() => router.push("/auth/register")}
-          >
-            Sign up
-          </span>
-        </p>
       </div>
-    </div>
+    </>
   );
 }
 
