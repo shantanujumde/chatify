@@ -9,18 +9,15 @@ import {
 } from "@/components/ui/card";
 import Spinner from "@/components/ui/spinner";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import type { FC } from "react";
 
 const Documents: FC = ({}) => {
-  const { status } = useSession();
-  const router = useRouter();
+  const { status } = useSession({
+    required: true,
+  });
+
   if (status === "loading") {
     return <Spinner />;
-  }
-
-  if (status === "unauthenticated") {
-    void router.push("/auth/login");
   }
 
   return (
