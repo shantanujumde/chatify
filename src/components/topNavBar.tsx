@@ -22,49 +22,49 @@ import { ModeToggle } from "./mode";
 import { Button } from "./ui/button";
 import Spinner from "./ui/spinner";
 
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: "Add PDFs",
-    href: "/chatify/documents",
-    description: "Add documents to chat with it",
-  },
-  {
-    title: "Chat",
-    href: "/chatify/chat",
-    description:
-      "Type interactive messages to get information form documents you added",
-  },
-  {
-    title: "Progress",
-    href: "/docs/primitives/progress",
-    description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-  },
-  {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
-  },
-  {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  },
-  {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-  },
-];
-
 export function TopNavBar() {
+  const { data, status } = useSession();
+
+  const components: { title: string; href: string; description: string }[] = [
+    {
+      title: "Add PDFs",
+      href: "/chatify/documents",
+      description: "Add documents to chat with it",
+    },
+    {
+      title: "Chat",
+      href: "/chatify/chat",
+      description:
+        "Type interactive messages to get information form documents you added",
+    },
+    {
+      title: "Manage Subscription",
+      href: `/billing/manage/${data?.user.id}`,
+      description:
+        "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+    },
+    {
+      title: "Scroll-area",
+      href: "/docs/primitives/scroll-area",
+      description: "Visually or semantically separates content.",
+    },
+    {
+      title: "Tabs",
+      href: "/docs/primitives/tabs",
+      description:
+        "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+    },
+    {
+      title: "Tooltip",
+      href: "/docs/primitives/tooltip",
+      description:
+        "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    },
+  ];
   const isMobile = useMediaQuery(`(max-width: 768px)`);
 
   const router = useRouter();
 
-  const { data, status } = useSession();
   const [show, setShow] = React.useState(true);
   const [lastScrollY, setLastScrollY] = React.useState(0);
 
