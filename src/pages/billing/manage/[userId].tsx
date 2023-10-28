@@ -106,6 +106,18 @@ const Manage = (props: ManageFormProps) => {
           ) : null}
         </CardFooter>
       </Card>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+      >
+        <div
+          style={{
+            clipPath:
+              "polygon(67.56% 94.52%, 89.76% 80.39%, 100% 100%, 89.79% 70.05%, 83.47% 93.18%, 85.8% 68.75%, 88.44% 58.88%, 77.33% 94.5%, 90.14% 100%, 54.66% 89%, 72.21% 84.69%, 100% 59.15%, 21.05% 100%, 100% 0%, 0% 100%, 60.6% 0.1%, 0.7% 65.93%, 27.34% 0.1%, 0% 31.5%, 100% 44.4%, 5.85% 100%, 70.09% 70.65%)",
+          }}
+          className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+        />
+      </div>{" "}
     </form>
   );
 };
