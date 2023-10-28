@@ -22,6 +22,7 @@ import {
 import { getServerSession } from "next-auth";
 import { getProviders, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,6 +33,8 @@ export default function LoginAccount({
     email: z.string().email("Invalid email"),
     password: z.string().min(6, "Password must be at least 6 characters"),
   });
+
+  const [signInLoading, setSignInLoading] = useState(false);
 
   type LoginFormType = z.infer<typeof LoginFormSchema>;
 
@@ -45,6 +48,7 @@ export default function LoginAccount({
   });
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
+    setSignInLoading(true);
     const res = await signIn("credentials", {
       ...data,
       redirect: false,
@@ -52,12 +56,13 @@ export default function LoginAccount({
 
     if (res?.ok) {
       await router.push("/");
-    } else {
+    } else if (res?.error) {
       toast({
         variant: "destructive",
         description: "Invalid email or password",
       });
     }
+    setSignInLoading(false);
   };
 
   return (
@@ -122,7 +127,12 @@ export default function LoginAccount({
             </div> */}
             </CardContent>
             <CardFooter className="flex flex-col">
-              <Button disabled={!isValid} type="submit" className="w-full">
+              <Button
+                disabled={!isValid}
+                loading={signInLoading}
+                type="submit"
+                className="w-full"
+              >
                 Login
               </Button>
             </CardFooter>
