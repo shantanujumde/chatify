@@ -59,6 +59,8 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
+
+    // async signIn({ user }) {}, // callback called after each signIn
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -70,6 +72,16 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
+    // EmailProvider({
+    //   server: {
+    //     service: "Gmail",
+    //     auth: {
+    //       user: env.EMAIL_USER,
+    //       pass: env.EMAIL_PASS,
+    //     },
+    //   },
+    //   from: "noreply@example.com",
+    // }),
 
     CredentialsProvider({
       name: "Credentials",
