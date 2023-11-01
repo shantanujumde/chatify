@@ -17,7 +17,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/utils/utils";
 import { ChatBubbleIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ModeToggle } from "./mode";
 import { Button } from "./ui/button";
 import Spinner from "./ui/spinner";
@@ -220,8 +220,8 @@ export function TopNavBar() {
                 <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                   <button
                     onClick={() =>
-                      void signOut({ redirect: false }).then(async () => {
-                        await router.push("/");
+                      void signOut({ redirect: false }).then(() => {
+                        router.push("/");
                       })
                     }
                   >
