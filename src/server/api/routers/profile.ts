@@ -58,7 +58,7 @@ export const profileRouter = createTRPCRouter({
       return role;
     }),
 
-  sendEmail: protectedProcedure
+  inviteUser: protectedProcedure
     .input(z.object({ email: z.string().email() }))
     .mutation(async ({ input, ctx }) => {
       const currentUser = await ctx.prisma.user.findFirst({

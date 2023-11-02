@@ -8,7 +8,7 @@ import { useRef, type FC } from "react";
 const Page: FC = ({}) => {
   const email = useRef<HTMLTextAreaElement | null>(null);
   const { mutate: sendEmail, isLoading: sendEmailIsLoading } =
-    api.profile.sendEmail.useMutation({
+    api.profile.inviteUser.useMutation({
       onSuccess() {
         if (email.current?.value) email.current.value = "";
 
