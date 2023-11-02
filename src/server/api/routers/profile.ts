@@ -59,7 +59,7 @@ export const profileRouter = createTRPCRouter({
     }),
 
   sendEmail: protectedProcedure
-    .input(z.object({ email: z.string() }))
+    .input(z.object({ email: z.string().email() }))
     .mutation(async ({ input, ctx }) => {
       const currentUser = await ctx.prisma.user.findFirst({
         where: {
