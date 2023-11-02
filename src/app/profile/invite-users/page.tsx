@@ -30,8 +30,6 @@ const Page: FC = ({}) => {
   const handleEmailSend = () => {
     if (email.current?.value) {
       email.current.value.split(",").map((email) => {
-        console.log("email", email.trim());
-
         sendEmail({ email: email.trim() });
       });
     }
