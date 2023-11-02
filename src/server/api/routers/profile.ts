@@ -10,11 +10,29 @@ export const profileRouter = createTRPCRouter({
   getUserProfile: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      return await ctx.prisma.user.findFirst({
+      const user = await ctx.prisma.user.findFirst({
         where: {
           id: input.id,
         },
       });
+
+      const [organization, documentsCount, chatsCount] =
+        await ctx.prisma.$transaction([
+          ctx.prisma.organization.findFirst({
+            where: {
+              id: user?.organizationId ?? "",
+            },
+            select: {
+              name: true,
+              users: true,
+            },
+          }),
+
+          ctx.prisma.file.count(),
+          ctx.prisma.chats.count(),
+        ]);
+
+      return { user, organization, documentsCount, chatsCount };
     }),
 
   purchase: protectedProcedure
