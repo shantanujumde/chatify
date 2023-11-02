@@ -42,8 +42,36 @@ export const profileRouter = createTRPCRouter({
 
   sendEmail: protectedProcedure
     .input(z.object({ email: z.string() }))
-    .mutation(async ({ input }) => {
-      const { email, password } = await createUser(input.email);
+    .mutation(async ({ input, ctx }) => {
+      const currentUser = await ctx.prisma.user.findFirst({
+        where: {
+          id: ctx.session.user.id,
+        },
+      });
+
+      let organizationId: string;
+      if (!currentUser?.organizationId) {
+        const organization = await ctx.prisma.organization.create({
+          data: {
+            name: "",
+          },
+        });
+
+        await ctx.prisma.user.update({
+          where: {
+            id: ctx.session.user.id,
+          },
+          data: {
+            organizationId: organization.id,
+          },
+        });
+
+        organizationId = organization.id;
+      } else {
+        organizationId = currentUser.organizationId;
+      }
+
+      const { email, password } = await createUser(input.email, organizationId);
       sendEmail(
         "Welcome to Chatify",
         "here is your username & password " + email + " " + password,
@@ -52,7 +80,7 @@ export const profileRouter = createTRPCRouter({
     }),
 });
 
-export const createUser = async (email: string) => {
+export const createUser = async (email: string, organizationId: string) => {
   const password = randomUUID();
   const hashedPassword = await hash(password, 10);
 
@@ -60,6 +88,7 @@ export const createUser = async (email: string) => {
     data: {
       email,
       password: hashedPassword,
+      organizationId,
     },
   });
 
@@ -87,11 +116,11 @@ export const sendEmail = (
     text,
   };
 
-  mailer.sendMail(mailDetails, function (err, data) {
+  mailer.sendMail(mailDetails, function (err) {
     if (err) {
-      console.log("Error Occurs");
+      console.error("Error occurred while sending email");
     } else {
-      console.log("Email sent successfully", data);
+      console.info("Email sent successfully");
     }
   });
 };
