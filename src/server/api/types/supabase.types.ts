@@ -89,6 +89,7 @@ export interface Database {
           {
             foreignKeyName: "Account_userId_fkey";
             columns: ["userId"];
+            isOneToOne: false;
             referencedRelation: "User";
             referencedColumns: ["id"];
           }
@@ -120,6 +121,7 @@ export interface Database {
           {
             foreignKeyName: "Chats_userId_fkey";
             columns: ["userId"];
+            isOneToOne: false;
             referencedRelation: "User";
             referencedColumns: ["id"];
           }
@@ -135,7 +137,7 @@ export interface Database {
           fileId: number;
           id: number;
           openAiResponce: Json;
-          userId: string;
+          organizationId: string | null;
         };
         Insert: {
           content: string;
@@ -146,7 +148,7 @@ export interface Database {
           fileId: number;
           id?: number;
           openAiResponce: Json;
-          userId: string;
+          organizationId?: string | null;
         };
         Update: {
           content?: string;
@@ -157,19 +159,21 @@ export interface Database {
           fileId?: number;
           id?: number;
           openAiResponce?: Json;
-          userId?: string;
+          organizationId?: string | null;
         };
         Relationships: [
           {
             foreignKeyName: "Embeddings_fileId_fkey";
             columns: ["fileId"];
+            isOneToOne: false;
             referencedRelation: "File";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "Embeddings_userId_fkey";
-            columns: ["userId"];
-            referencedRelation: "User";
+            foreignKeyName: "Embeddings_organizationId_fkey";
+            columns: ["organizationId"];
+            isOneToOne: false;
+            referencedRelation: "Organization";
             referencedColumns: ["id"];
           }
         ];
@@ -177,32 +181,89 @@ export interface Database {
       File: {
         Row: {
           content: string;
+          createdAt: string | null;
           deleted: boolean;
           extension: string;
           id: number;
           name: string;
-          userId: string;
+          organizationId: string | null;
+          updatedAt: string | null;
         };
         Insert: {
           content: string;
+          createdAt?: string | null;
           deleted?: boolean;
           extension: string;
           id?: number;
           name: string;
-          userId: string;
+          organizationId?: string | null;
+          updatedAt?: string | null;
         };
         Update: {
           content?: string;
+          createdAt?: string | null;
           deleted?: boolean;
           extension?: string;
           id?: number;
           name?: string;
-          userId?: string;
+          organizationId?: string | null;
+          updatedAt?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "File_userId_fkey";
+            foreignKeyName: "File_organizationId_fkey";
+            columns: ["organizationId"];
+            isOneToOne: false;
+            referencedRelation: "Organization";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      Organization: {
+        Row: {
+          id: string;
+          name: string | null;
+        };
+        Insert: {
+          id: string;
+          name?: string | null;
+        };
+        Update: {
+          id?: string;
+          name?: string | null;
+        };
+        Relationships: [];
+      };
+      Payment: {
+        Row: {
+          id: number;
+          stripeCurrentPeriodEnd: string | null;
+          stripeCustomerId: string | null;
+          stripePriceId: string | null;
+          stripeSubscriptionId: string | null;
+          userId: string | null;
+        };
+        Insert: {
+          id?: number;
+          stripeCurrentPeriodEnd?: string | null;
+          stripeCustomerId?: string | null;
+          stripePriceId?: string | null;
+          stripeSubscriptionId?: string | null;
+          userId?: string | null;
+        };
+        Update: {
+          id?: number;
+          stripeCurrentPeriodEnd?: string | null;
+          stripeCustomerId?: string | null;
+          stripePriceId?: string | null;
+          stripeSubscriptionId?: string | null;
+          userId?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "Payment_userId_fkey";
             columns: ["userId"];
+            isOneToOne: false;
             referencedRelation: "User";
             referencedColumns: ["id"];
           }
@@ -234,6 +295,7 @@ export interface Database {
           {
             foreignKeyName: "RolesAndPaymentInfo_userId_fkey";
             columns: ["userId"];
+            isOneToOne: false;
             referencedRelation: "User";
             referencedColumns: ["id"];
           }
@@ -262,6 +324,7 @@ export interface Database {
           {
             foreignKeyName: "Session_userId_fkey";
             columns: ["userId"];
+            isOneToOne: false;
             referencedRelation: "User";
             referencedColumns: ["id"];
           }
@@ -269,30 +332,50 @@ export interface Database {
       };
       User: {
         Row: {
+          createdAt: string | null;
           email: string | null;
           emailVerified: string | null;
           id: string;
           image: string | null;
           name: string | null;
+          organizationId: string | null;
           password: string | null;
+          role: Database["public"]["Enums"]["Role"] | null;
+          updatedAt: string | null;
         };
         Insert: {
+          createdAt?: string | null;
           email?: string | null;
           emailVerified?: string | null;
           id: string;
           image?: string | null;
           name?: string | null;
+          organizationId?: string | null;
           password?: string | null;
+          role?: Database["public"]["Enums"]["Role"] | null;
+          updatedAt?: string | null;
         };
         Update: {
+          createdAt?: string | null;
           email?: string | null;
           emailVerified?: string | null;
           id?: string;
           image?: string | null;
           name?: string | null;
+          organizationId?: string | null;
           password?: string | null;
+          role?: Database["public"]["Enums"]["Role"] | null;
+          updatedAt?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "User_organizationId_fkey";
+            columns: ["organizationId"];
+            isOneToOne: false;
+            referencedRelation: "Organization";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       VerificationToken: {
         Row: {
@@ -377,7 +460,7 @@ export interface Database {
       };
     };
     Enums: {
-      [_ in never]: never;
+      Role: "ADMIN" | "USER";
     };
     CompositeTypes: {
       [_ in never]: never;

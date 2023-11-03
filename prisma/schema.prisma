@@ -33,12 +33,12 @@ model File {
     extension String
     deleted   Boolean @default(false)
 
-    userId    String
-    user      User         @relation(fields: [userId], references: [id])
     embedding Embeddings[]
 
-    createdAt DateTime? @default(now())
-    updatedAt DateTime? @default(now())
+    createdAt      DateTime?     @default(now())
+    updatedAt      DateTime?     @default(now())
+    Organization   Organization? @relation(fields: [organizationId], references: [id])
+    organizationId String?
 }
 
 model Embeddings {
@@ -50,11 +50,10 @@ model Embeddings {
     openAiResponce Json
     createdAt      DateTime                     @default(now())
 
-    userId String
-    user   User   @relation(fields: [userId], references: [id])
-
-    text   File @relation(fields: [fileId], references: [id])
-    fileId Int
+    text           File          @relation(fields: [fileId], references: [id])
+    fileId         Int
+    Organization   Organization? @relation(fields: [organizationId], references: [id])
+    organizationId String?
 }
 
 model RolesAndPaymentInfo {
@@ -67,8 +66,11 @@ model RolesAndPaymentInfo {
 }
 
 model Organization {
-    id    String  @id @default(cuid())
-    name  String?
+    id         String       @id @default(cuid())
+    name       String?
+    Embeddings Embeddings[]
+    File       File[]
+
     users User[]
 }
 
@@ -88,8 +90,6 @@ model User {
     accounts            Account[]
     sessions            Session[]
     RolesAndPaymentInfo RolesAndPaymentInfo[]
-    Embeddings          Embeddings[] // @todo: move embeddings to orginization
-    File                File[]
     Chats               Chats[]
     Payment             Payment?
     organizationId      String?

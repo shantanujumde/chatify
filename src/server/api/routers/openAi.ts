@@ -30,7 +30,9 @@ export const openAiRouter = createTRPCRouter({
         chunks: [],
       });
 
-      const uniqueIdForText = getHash(input.content + ctx.session.user.id);
+      const uniqueIdForText = getHash(
+        input.content + ctx.session.user.organizationId
+      );
 
       const { error: insertTextError } = await supabaseClient
         .from("File")
@@ -39,7 +41,7 @@ export const openAiRouter = createTRPCRouter({
           content: input.content,
           extension: input.extension,
           name: input.name,
-          userId: ctx.session?.user.id,
+          organizationId: ctx.session.user.organizationId,
         })
         .select()
         .limit(1)
@@ -68,7 +70,7 @@ export const openAiRouter = createTRPCRouter({
           embedding: embedding as unknown as string,
           openAiResponce: JSON.stringify(embeddingResponse.data.data),
           fileId: uniqueIdForText,
-          userId: ctx.session?.user.id,
+          organizationId: ctx.session.user.organizationId,
         };
 
         embeddingArray.push(embeddingObject);

@@ -8,13 +8,13 @@ export const documentsRouter = createTRPCRouter({
       const [pageLength, documents] = await ctx.prisma.$transaction([
         ctx.prisma.file.count({
           where: {
-            userId: ctx.session.user.id,
+            organizationId: ctx.session.user.organizationId,
             deleted: false,
           },
         }),
         ctx.prisma.file.findMany({
           where: {
-            userId: ctx.session.user.id,
+            organizationId: ctx.session.user.organizationId,
             deleted: false,
           },
           orderBy: {
