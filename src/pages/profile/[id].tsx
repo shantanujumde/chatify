@@ -151,7 +151,7 @@ const Profile = ({}) => {
                       To know about your current plans and offers please click
                     </p>
                     <Link
-                      href={`billing/manage/${profile.user?.id}`}
+                      href={`/billing/manage/${profile.user?.id}`}
                       className="font-normal text-primary"
                     >
                       Manage
