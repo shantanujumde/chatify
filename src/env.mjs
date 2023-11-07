@@ -28,11 +28,13 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     OPEN_AI_API_KEY: z.string(),
-    STRIPE_SECRET_KEY: z.string().nonempty(),
-    STRIPE_TIER_I: z.string().nonempty(),
-    STRIPE_TIER_II: z.string().nonempty(),
-    STRIPE_TIER_III: z.string().nonempty(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_TIER_I: z.string(),
+    STRIPE_TIER_II: z.string(),
+    STRIPE_TIER_III: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
+    EMAIL_USER: z.string(),
+    EMAIL_PASS: z.string(),
   },
 
   /**
@@ -67,6 +69,9 @@ export const env = createEnv({
     STRIPE_TIER_II: process.env.STRIPE_TIER_II,
     STRIPE_TIER_III: process.env.STRIPE_TIER_III,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASS: process.env.EMAIL_PASS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

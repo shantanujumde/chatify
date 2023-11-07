@@ -17,7 +17,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/utils/utils";
 import { ChatBubbleIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ModeToggle } from "./mode";
 import { Button } from "./ui/button";
 import Spinner from "./ui/spinner";
@@ -44,21 +44,9 @@ export function TopNavBar() {
         "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
     },
     {
-      title: "Scroll-area",
-      href: "/docs/primitives/scroll-area",
-      description: "Visually or semantically separates content.",
-    },
-    {
-      title: "Tabs",
-      href: "/docs/primitives/tabs",
-      description:
-        "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-    },
-    {
-      title: "Tooltip",
-      href: "/docs/primitives/tooltip",
-      description:
-        "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+      title: "Invite Users",
+      href: "/profile/invite-users",
+      description: "Invite users to who can access knowledge base",
     },
   ];
   const isMobile = useMediaQuery(`(max-width: 768px)`);
@@ -220,8 +208,8 @@ export function TopNavBar() {
                 <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                   <button
                     onClick={() =>
-                      void signOut({ redirect: false }).then(async () => {
-                        await router.push("/");
+                      void signOut({ redirect: false }).then(() => {
+                        router.push("/");
                       })
                     }
                   >

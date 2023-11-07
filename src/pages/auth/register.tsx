@@ -35,19 +35,30 @@ const Register = ({}) => {
       },
     });
 
-  const RegisterFormSchema = z.object({
-    name: z.string().nonempty("Please enter your name"),
-    email: z.string().email("Invalid email"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-  });
+  const RegisterFormSchema = z
+    .object({
+      name: z.string().nonempty("Please enter your name"),
+      email: z.string().email("Invalid email"),
+      password: z.string().min(6, "Password must be at least 6 characters"),
+      confirmPassword: z
+        .string()
+        .min(1, { message: "Confirm Password is required" }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ["confirmPassword"],
+      message: "Password don't match",
+    });
+
   type RegisterFormType = z.infer<typeof RegisterFormSchema>;
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isValid },
   } = useForm<RegisterFormType>({
     resolver: zodResolver(RegisterFormSchema),
+    mode: "onBlur",
   });
 
   const onSubmit: SubmitHandler<RegisterFormType> = (data): void => {
@@ -116,6 +127,28 @@ const Register = ({}) => {
                 {errors.password && (
                   <p className="text-sm text-destructive">
                     {errors.password.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="confirm-password">Confirm password</Label>
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  {...register("confirmPassword", {
+                    required: true,
+                    validate: (val: string) => {
+                      console.log("val, ", val);
+
+                      if (watch("password") != val) {
+                        return "Your passwords do no match";
+                      }
+                    },
+                  })}
+                />
+                {errors.confirmPassword && (
+                  <p className="text-sm text-destructive">
+                    {errors.confirmPassword.message}
                   </p>
                 )}
               </div>

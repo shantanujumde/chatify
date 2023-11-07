@@ -28,7 +28,9 @@ const Chat: FC = ({}) => {
   const currentChat = searchParams?.get("page") ?? "1";
   const currentFile = searchParams?.get("file") ?? "1";
 
-  const { data: userData } = useSession();
+  const { data: userData } = useSession({
+    required: true,
+  });
 
   const utils = api.useContext();
 

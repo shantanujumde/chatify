@@ -1,6 +1,7 @@
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import type { Role, User } from "@prisma/client";
 import { compare } from "bcrypt";
 import { type GetServerSidePropsContext } from "next";
 import {
@@ -22,8 +23,9 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      organizationId: string;
       // ...other properties
-      // role: UserRole;
+      role: Role;
     };
   }
 
@@ -49,6 +51,7 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id,
+          organizationId: token.organizationId,
         },
       };
     },
@@ -56,9 +59,12 @@ export const authOptions: NextAuthOptions = {
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.organizationId = (user as User).organizationId;
       }
       return token;
     },
+
+    // async signIn({ user }) {}, // callback called after each signIn
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -70,6 +76,16 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
+    // EmailProvider({
+    //   server: {
+    //     service: "Gmail",
+    //     auth: {
+    //       user: env.EMAIL_USER,
+    //       pass: env.EMAIL_PASS,
+    //     },
+    //   },
+    //   from: "noreply@example.com",
+    // }),
 
     CredentialsProvider({
       name: "Credentials",

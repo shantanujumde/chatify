@@ -33,12 +33,12 @@ model File {
     extension String
     deleted   Boolean @default(false)
 
-    userId    String
-    user      User         @relation(fields: [userId], references: [id])
     embedding Embeddings[]
 
-    createdAt DateTime? @default(now())
-    updatedAt DateTime? @default(now())
+    createdAt      DateTime?     @default(now())
+    updatedAt      DateTime?     @default(now())
+    Organization   Organization? @relation(fields: [organizationId], references: [id])
+    organizationId String?
 }
 
 model Embeddings {
@@ -50,11 +50,10 @@ model Embeddings {
     openAiResponce Json
     createdAt      DateTime                     @default(now())
 
-    userId String
-    user   User   @relation(fields: [userId], references: [id])
-
-    text   File @relation(fields: [fileId], references: [id])
-    fileId Int
+    text           File          @relation(fields: [fileId], references: [id])
+    fileId         Int
+    Organization   Organization? @relation(fields: [organizationId], references: [id])
+    organizationId String?
 }
 
 model RolesAndPaymentInfo {
@@ -64,6 +63,51 @@ model RolesAndPaymentInfo {
     paymentDetails Json
     role           String  @default("user")
     user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Organization {
+    id         String       @id @default(cuid())
+    name       String?
+    Embeddings Embeddings[]
+    File       File[]
+
+    users User[]
+}
+
+enum Role {
+    ADMIN
+    USER
+}
+
+model User {
+    id                  String                @id @default(cuid())
+    name                String?
+    email               String?               @unique
+    emailVerified       DateTime?
+    image               String?
+    password            String?
+    role                Role?                 @default(ADMIN)
+    accounts            Account[]
+    sessions            Session[]
+    RolesAndPaymentInfo RolesAndPaymentInfo[]
+    Chats               Chats[]
+    Payment             Payment?
+    organizationId      String?
+    Organization        Organization?         @relation(fields: [organizationId], references: [id])
+
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @default(now())
+}
+
+model Payment {
+    id                     Int       @id @default(autoincrement())
+    stripeCustomerId       String?   @unique
+    stripeSubscriptionId   String?   @unique
+    stripePriceId          String?
+    stripeCurrentPeriodEnd DateTime?
+
+    userId String? @unique
+    User   User?   @relation(fields: [userId], references: [id])
 }
 
 // Necessary for Next auth
@@ -85,45 +129,18 @@ model Account {
     @@unique([provider, providerAccountId])
 }
 
-model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-    id                  String                @id @default(cuid())
-    name                String?
-    email               String?               @unique
-    emailVerified       DateTime?
-    image               String?
-    password            String?
-    accounts            Account[]
-    sessions            Session[]
-    RolesAndPaymentInfo RolesAndPaymentInfo[]
-    Embeddings          Embeddings[]
-    File                File[]
-    Chats               Chats[]
-    Payment             Payment?
-}
-
-model Payment {
-    id                     Int       @id @default(autoincrement())
-    stripeCustomerId       String?   @unique
-    stripeSubscriptionId   String?   @unique
-    stripePriceId          String?
-    stripeCurrentPeriodEnd DateTime?
-
-    userId String? @unique
-    User   User?   @relation(fields: [userId], references: [id])
-}
-
 model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
