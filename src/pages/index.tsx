@@ -27,12 +27,12 @@ export default function Home() {
 
       <div className="-mt-24 flex h-screen flex-col items-center justify-center">
         <h1 className="max-w-4xl text-center text-5xl font-bold md:text-6xl lg:text-7xl">
-          Chat with your <span className="text-primary">documents</span> in
-          seconds.
+          Understand complex
+          <span className="text-primary"> data</span> in seconds.
         </h1>
-        <p className="mt-5 max-w-prose text-center text-zinc-700 sm:text-lg">
-          Chatify allows you to create knowledge base for your company, by which
-          you can understand data easily.
+        <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-500 sm:text-lg">
+          Chatify allows you to ask questions directly to your knowledge base
+          generated from your data.
         </p>
 
         <Link
@@ -41,7 +41,6 @@ export default function Home() {
             className: "mt-5",
           })}
           href="/billing/pricing"
-          target="_blank"
         >
           Get started <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
@@ -119,7 +118,7 @@ export default function Home() {
                   Sign up for an account
                 </span>
                 <span className="mt-2 text-zinc-700">
-                  Either starting out with a free plan or choose our{" "}
+                  Either starting out with a base plan or choose our{" "}
                   <Link
                     href="billing/pricing"
                     className="text-primary underline underline-offset-2"
@@ -138,11 +137,11 @@ export default function Home() {
                   Step 2
                 </span>
                 <span className="text-xl font-semibold">
-                  Upload your files.
+                  Create your knowledge base.
                 </span>
                 <span className="mt-2 text-zinc-700">
-                  We&apos;ll process your file and make it ready for you to chat
-                  with.
+                  Upload files, text, etc. we&apos;ll process the text and make
+                  them available for questioning!
                 </span>
               </div>
             </li>
