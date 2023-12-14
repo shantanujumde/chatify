@@ -111,40 +111,25 @@ export const openAiRouter = createTRPCRouter({
         input: input.text.replaceAll("\n", " "),
       });
 
-      console.log("openAi=embeddingResponse>", embeddingResponse);
-
-      if (!embeddingResponse) {
+      if (!embeddingResponse)
         throw new Error("Failed to create embedding for question");
-      }
 
       const embedding = embeddingResponse.data[0]?.embedding;
 
-      console.log("openAi=embedding>", embedding);
-      if (!embedding) {
+      if (!embedding)
         throw new Error("Failed to create embedding for question");
-      }
 
-      // const { error: matchError, data: pageSections } =
-      //   await supabaseClient.rpc("match_page_sections", {
-      //     embedding: embedding as unknown as string,
-      //     match_threshold: 0.5,
-      //     match_count: 10,
-      //     min_content_length: 50,
-      //   });
       const { error: matchError, data: pageSections } =
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         await supabaseClient.rpc("match_documents", {
           query_embedding: embedding as unknown as string,
           match_threshold: 0.5,
           match_count: 10,
         });
-      console.log("openAi=>pageSections, matchError", pageSections, matchError);
 
       if (matchError)
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Embeddings not found",
+          message: "Similar text not found!",
           cause: matchError,
         });
 

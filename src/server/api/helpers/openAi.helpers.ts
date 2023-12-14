@@ -21,8 +21,6 @@ export const openAi = new OpenAI({
   apiKey: process.env.OPEN_AI_API_KEY,
 });
 
-// export const openai = new OpenAI(configuration);
-
 export function getHash(text: string) {
   let hash = 0,
     chr;
