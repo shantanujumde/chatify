@@ -2,7 +2,7 @@ import type { Prisma, PrismaClient } from "@prisma/client";
 import type { DefaultArgs } from "@prisma/client/runtime/library";
 import { createClient, type Session } from "@supabase/supabase-js";
 import { encode } from "gpt-3-encoder";
-import { Configuration, OpenAIApi } from "openai";
+import { OpenAI } from "openai";
 import type { File, FileChunks } from "../types/openAi.types";
 import type { Database } from "../types/supabase.types";
 
@@ -17,11 +17,11 @@ export const supabaseClient = createClient<Database>(
   }
 );
 
-const configuration = new Configuration({
+export const openAi = new OpenAI({
   apiKey: process.env.OPEN_AI_API_KEY,
 });
 
-export const openai = new OpenAIApi(configuration);
+// export const openai = new OpenAI(configuration);
 
 export function getHash(text: string) {
   let hash = 0,

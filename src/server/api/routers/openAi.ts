@@ -5,7 +5,7 @@ import { z } from "zod";
 import {
   chunkText,
   getHash,
-  openai,
+  openAi,
   supabaseClient,
 } from "../helpers/openAi.helpers";
 import type { Embeddings } from "../types/openAi.types";
@@ -56,19 +56,23 @@ export const openAiRouter = createTRPCRouter({
 
       const embeddingArray: Embeddings[] = [];
       for (const chunk of chunkArray.chunks) {
-        const embeddingResponse = await openai.createEmbedding({
+        const embeddingResponse = await openAi.embeddings.create({
           model: "text-embedding-ada-002",
           input: chunk.content,
         });
 
-        const embedding = embeddingResponse.data.data[0]?.embedding;
+        // const embedding = embeddingResponse.data.data[0]?.embedding;
+
+        console.log("openAi=>embeddingResponse", embeddingResponse);
+
+        const embedding = embeddingResponse.data[0]?.embedding;
 
         const embeddingObject: Embeddings = {
           content: chunk.content,
           contentLength: chunk.contentLength,
           contentTokens: chunk.contentTokens,
           embedding: embedding as unknown as string,
-          openAiResponce: JSON.stringify(embeddingResponse.data.data),
+          openAiResponce: JSON.stringify(embeddingResponse),
           fileId: uniqueIdForText,
           organizationId: ctx.session.user.organizationId,
         };
@@ -102,33 +106,45 @@ export const openAiRouter = createTRPCRouter({
   getClosestEmbeddings: protectedProcedure
     .input(z.object({ text: z.string() }))
     .mutation(async ({ input }) => {
-      const embeddingResponse = await openai.createEmbedding({
+      const embeddingResponse = await openAi.embeddings.create({
         model: "text-embedding-ada-002",
         input: input.text.replaceAll("\n", " "),
       });
 
-      if (embeddingResponse.status !== 200) {
+      console.log("openAi=embeddingResponse>", embeddingResponse);
+
+      if (!embeddingResponse) {
         throw new Error("Failed to create embedding for question");
       }
 
-      const embedding = embeddingResponse.data.data[0]?.embedding;
+      const embedding = embeddingResponse.data[0]?.embedding;
 
+      console.log("openAi=embedding>", embedding);
       if (!embedding) {
         throw new Error("Failed to create embedding for question");
       }
 
+      // const { error: matchError, data: pageSections } =
+      //   await supabaseClient.rpc("match_page_sections", {
+      //     embedding: embedding as unknown as string,
+      //     match_threshold: 0.5,
+      //     match_count: 10,
+      //     min_content_length: 50,
+      //   });
       const { error: matchError, data: pageSections } =
-        await supabaseClient.rpc("match_page_sections", {
-          embedding: embedding as unknown as string,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        await supabaseClient.rpc("match_documents", {
+          query_embedding: embedding as unknown as string,
           match_threshold: 0.5,
           match_count: 10,
-          min_content_length: 50,
         });
+      console.log("openAi=>pageSections, matchError", pageSections, matchError);
 
       if (matchError)
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Embeddings already exists",
+          message: "Embeddings not found",
           cause: matchError,
         });
 
