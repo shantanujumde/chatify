@@ -421,6 +421,10 @@ export interface Database {
         Returns: {
           id: number
           content: string
+          fileId: number
+          deleted: boolean
+          name: string
+          fileContent: string
           similarity: number
         }[]
       }

@@ -50,7 +50,7 @@ export const openAiRouter = createTRPCRouter({
       if (insertTextError)
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Text already exists",
+          message: "Text already exists " + JSON.stringify(insertTextError),
           cause: insertTextError,
         });
 
@@ -60,10 +60,6 @@ export const openAiRouter = createTRPCRouter({
           model: "text-embedding-ada-002",
           input: chunk.content,
         });
-
-        // const embedding = embeddingResponse.data.data[0]?.embedding;
-
-        console.log("openAi=>embeddingResponse", embeddingResponse);
 
         const embedding = embeddingResponse.data[0]?.embedding;
 
@@ -93,7 +89,8 @@ export const openAiRouter = createTRPCRouter({
       if (insertEmbeddingError)
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Embeddings already exists",
+          message:
+            "Embeddings already exists" + JSON.stringify(insertEmbeddingError),
           cause: insertEmbeddingError,
         });
       else
@@ -129,7 +126,7 @@ export const openAiRouter = createTRPCRouter({
       if (matchError)
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Similar text not found!",
+          message: "Similar text not found!" + JSON.stringify(matchError),
           cause: matchError,
         });
 
