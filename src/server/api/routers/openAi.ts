@@ -1,10 +1,11 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { randomInt } from "crypto";
 import { encode } from "gpt-3-encoder";
 import { z } from "zod";
 import {
   chunkText,
-  getHash,
+  getClosestEmbeddings,
   openAi,
   supabaseClient,
 } from "../helpers/openAi.helpers";
@@ -30,9 +31,7 @@ export const openAiRouter = createTRPCRouter({
         chunks: [],
       });
 
-      const uniqueIdForText = getHash(
-        input.content + ctx.session.user.organizationId
-      );
+      const uniqueIdForText = randomInt(500000000000);
 
       const { error: insertTextError } = await supabaseClient
         .from("File")
@@ -100,40 +99,30 @@ export const openAiRouter = createTRPCRouter({
         };
     }),
 
-  getClosestEmbeddings: protectedProcedure
+  chat: protectedProcedure
     .input(z.object({ text: z.string() }))
     .mutation(async ({ input }) => {
-      const embeddingResponse = await openAi.embeddings.create({
-        model: "text-embedding-ada-002",
-        input: input.text.replaceAll("\n", " "),
-      });
+      const closestEmbeddings = await getClosestEmbeddings(input.text);
 
-      if (!embeddingResponse)
-        throw new Error("Failed to create embedding for question");
-
-      const embedding = embeddingResponse.data[0]?.embedding;
-
-      if (!embedding)
-        throw new Error("Failed to create embedding for question");
-
-      const { error: matchError, data: pageSections } =
-        await supabaseClient.rpc("match_documents", {
-          query_embedding: embedding as unknown as string,
-          match_threshold: 0.5,
-          match_count: 10,
-        });
-
-      if (matchError)
+      if (!(closestEmbeddings.length && closestEmbeddings[0]?.content))
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Similar text not found!" + JSON.stringify(matchError),
-          cause: matchError,
+          message: "Embeddings length is 0" + JSON.stringify(closestEmbeddings),
         });
 
-      return {
-        status: 200,
-        error: null,
-        data: pageSections,
-      };
+      const stream = await openAi.chat.completions.create({
+        messages: [
+          {
+            role: "user",
+            content: `answer this question ${input.text} using ${closestEmbeddings[0]?.content}`,
+          },
+        ],
+        model: "gpt-3.5-turbo",
+        stream: true,
+      });
+
+      for await (const chunk of stream) {
+        console.log(chunk.choices[0]?.delta?.content ?? "");
+      }
     }),
 });
