@@ -11,12 +11,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
+import { toast } from "@/components/ui/use-toast";
 import { api } from "@/utils/api";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
   PaperPlaneIcon,
 } from "@radix-ui/react-icons";
+import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -86,14 +88,124 @@ const Chat: FC = ({}) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const question = questionRef.current?.value;
-    if (question) {
-      createChat.mutate({
-        question,
-        response: (Math.random() * 100).toString(),
-      });
+    const message = questionRef.current?.value;
+    console.log("message", message);
+
+    if (message) {
+      const data = sendMessage({ message });
+      console.log("data", data);
     }
   };
+  console.log("chats", chats);
+
+  const { mutate: sendMessage } = useMutation({
+    mutationFn: async ({ message }: { message: string }) => {
+      const response = await fetch("/api/message", {
+        method: "POST",
+        body: JSON.stringify({
+          message,
+        }),
+      });
+
+      return response.body;
+    },
+    onMutate: async ({ message }) => {
+      if (questionRef?.current) questionRef.current.value = "";
+      const chatWindow = document.getElementById("chatWindow");
+      if (chatWindow)
+        chatWindow.scrollTo({
+          top: chatWindow.scrollHeight,
+          behavior: "smooth",
+        });
+      await utils.chat.getChats.cancel();
+
+      if (chats && userData) {
+        utils.chat.getChats.setData(
+          { page: Number(currentChat) },
+          {
+            chatLength: (chats.chatLength ?? 0) + 1,
+            chats: [
+              ...(chats.chats ?? []),
+              {
+                id: (chats.chats?.length ?? 0) + 1,
+                question: message,
+                response: "",
+                createdAt: new Date(),
+                userId: userData.user?.id ?? "",
+              },
+            ],
+          }
+        );
+      }
+
+      return chats;
+    },
+    async onSuccess(stream, { message }) {
+      if (!stream) {
+        return toast({
+          title: "There was a problem sending this message",
+          description: "Please refresh this page and try again",
+          variant: "destructive",
+        });
+      }
+
+      const reader = stream.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      // accumulated response
+      let accResponse = "";
+      let i = 0;
+      while (!done) {
+        console.log("i++", i++);
+
+        const { value, done: doneReading } = await reader.read();
+
+        console.log("🚀 ~ file: chat.tsx:153 ~ onSuccess ~ value:", value);
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        console.log(
+          "🚀 ~ file: chat.tsx:157 ~ onSuccess ~ chunkValue:",
+          chunkValue
+        );
+
+        accResponse += chunkValue;
+        console.log("acc", accResponse, chunkValue);
+
+        // append chunk to the actual message
+
+        if (chats && userData) {
+          utils.chat.getChats.setData(
+            { page: Number(currentChat) },
+            {
+              chatLength: (chats.chatLength ?? 0) + 1,
+              chats: [
+                ...(chats.chats ?? []),
+                {
+                  id: (chats.chats?.length ?? 0) + 1,
+                  question: message,
+                  response: accResponse,
+                  createdAt: new Date(),
+                  userId: userData.user?.id ?? "",
+                },
+              ],
+            }
+          );
+        }
+
+        console.log("🚀 ~ file: chat.tsx:191 ~ onSuccess ~ chats:", chats);
+      }
+      return chats;
+    },
+    onError: () => {
+      toast({
+        description: "Error while sending message",
+      });
+    },
+    onSettled: async () => {
+      await utils.chat.getChats.invalidate();
+    },
+  });
 
   return (
     <>
