@@ -3,8 +3,8 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import { UserCircle2 } from "lucide-react";
 import type { User } from "next-auth";
 import Image from "next/image";
-import type { FC } from "react";
-import ChatMessagesSkeletion from "./chatMessagesSkeletion";
+import { useEffect, useRef, type FC } from "react";
+import ChatMessagesSkeleton from "./ChatMessagesSkeleton";
 import EmptyItems from "./emptyItems";
 import Spinner from "./ui/spinner";
 
@@ -22,10 +22,14 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   isChatLoading,
   user,
 }) => {
-  if (isScreenLoading) {
-    return <ChatMessagesSkeletion />;
-  }
+  const chatRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+    }
+  }, [chats]);
 
+  if (isScreenLoading) return <ChatMessagesSkeleton />;
   return (
     <>
       {user && (
@@ -55,12 +59,13 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       {chats?.length ? (
         <div
           id="chatWindow"
+          ref={chatRef}
           className={`
           scrollbar-thumb-black scrollbar-track-black-lighter  
           dark:scrollbar-thumb-white dark:scrollbar-track-white-lighter 
           scrollbar-thumb-rounded 
-         scrollbar-w-2 scrolling-touch max-h-screen 
-        overflow-y-scroll scroll-smooth rounded-xl bg-gray-300/5 p-6`}
+          scrollbar-w-2 scrolling-touch max-h-screen 
+          overflow-y-scroll scroll-smooth rounded-xl bg-gray-300/5 p-6`}
         >
           <div className="space-y-4">
             {chats.map((chat) => {
