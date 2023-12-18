@@ -44,46 +44,6 @@ const Chat: FC = ({}) => {
     { page: Number(currentChat) }
   );
 
-  const createChat = api.chat.createChat.useMutation({
-    onMutate: async ({ question, response }) => {
-      await utils.chat.getChats.cancel();
-
-      if (chats && userData) {
-        utils.chat.getChats.setData(
-          { page: Number(currentChat) },
-          {
-            chatLength: (chats.chatLength ?? 0) + 1,
-            chats: [
-              ...(chats.chats ?? []),
-              {
-                id: (chats.chats?.length ?? 0) + 1,
-                question,
-                response,
-                createdAt: new Date(),
-                userId: userData.user?.id ?? "",
-              },
-            ],
-          }
-        );
-      }
-
-      return chats;
-    },
-    onError: (__, _, context) => {
-      utils.chat.getChats.setData({ page: Number(currentChat) }, context);
-    },
-    onSettled: async () => {
-      if (questionRef?.current) questionRef.current.value = "";
-      const chatWindow = document.getElementById("chatWindow");
-      if (chatWindow)
-        chatWindow.scrollTo({
-          top: chatWindow.scrollHeight,
-          behavior: "smooth",
-        });
-      await utils.chat.getChats.invalidate();
-    },
-  });
-
   const questionRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -109,34 +69,10 @@ const Chat: FC = ({}) => {
 
       return response.body;
     },
-    onMutate: async ({ message }) => {
+    onMutate: async () => {
       if (questionRef?.current) questionRef.current.value = "";
-      const chatWindow = document.getElementById("chatWindow");
-      if (chatWindow)
-        chatWindow.scrollTo({
-          top: chatWindow.scrollHeight,
-          behavior: "smooth",
-        });
-      await utils.chat.getChats.cancel();
 
-      if (chats && userData) {
-        utils.chat.getChats.setData(
-          { page: Number(currentChat) },
-          {
-            chatLength: (chats.chatLength ?? 0) + 1,
-            chats: [
-              ...(chats.chats ?? []),
-              {
-                id: (chats.chats?.length ?? 0) + 1,
-                question: message,
-                response: "",
-                createdAt: new Date(),
-                userId: userData.user?.id ?? "",
-              },
-            ],
-          }
-        );
-      }
+      await utils.chat.getChats.cancel();
 
       return chats;
     },
@@ -315,7 +251,6 @@ const Chat: FC = ({}) => {
             <ChatMessages
               chats={chats?.chats}
               isScreenLoading={chatsIsLoading}
-              isChatLoading={createChat.isLoading}
               user={userData?.user}
             />
           </CardContent>
@@ -326,6 +261,7 @@ const Chat: FC = ({}) => {
                 type="text"
                 name="text"
                 placeholder="Type here..."
+                autoComplete="off"
               />
               <Button type="submit" className="ml-4">
                 <PaperPlaneIcon />

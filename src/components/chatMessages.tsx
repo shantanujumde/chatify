@@ -6,20 +6,17 @@ import Image from "next/image";
 import { useEffect, useRef, type FC } from "react";
 import ChatMessagesSkeleton from "./ChatMessagesSkeleton";
 import EmptyItems from "./emptyItems";
-import Spinner from "./ui/spinner";
 
 // https://versoly.com/taos#fade
 interface ChatMessagesProps {
   chats?: Chats[];
   isScreenLoading: boolean;
-  isChatLoading: boolean;
   user?: User | null;
 }
 
 const ChatMessages: FC<ChatMessagesProps> = ({
   chats,
   isScreenLoading,
-  isChatLoading,
   user,
 }) => {
   const chatRef = useRef<HTMLDivElement>(null);
@@ -80,13 +77,6 @@ const ChatMessages: FC<ChatMessagesProps> = ({
                 </div>
               );
             })}
-            {isChatLoading && (
-              <div className="flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-                <i className="flex">
-                  typing... <Spinner className="h-3 w-3" />
-                </i>
-              </div>
-            )}
           </div>
         </div>
       ) : (
