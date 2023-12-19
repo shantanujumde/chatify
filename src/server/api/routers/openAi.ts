@@ -122,7 +122,7 @@ export const openAiRouter = createTRPCRouter({
       });
 
       for await (const chunk of stream) {
-        console.log(chunk.choices[0]?.delta?.content ?? "");
+        console.info(chunk.choices[0]?.delta?.content ?? "");
       }
     }),
 });

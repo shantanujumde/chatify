@@ -49,14 +49,9 @@ const Chat: FC = ({}) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const message = questionRef.current?.value;
-    console.log("message", message);
 
-    if (message) {
-      const data = sendMessage({ message });
-      console.log("data", data);
-    }
+    if (message) sendMessage({ message });
   };
-  console.log("chats", chats);
 
   const { mutate: sendMessage } = useMutation({
     mutationFn: async ({ message }: { message: string }) => {
@@ -64,6 +59,7 @@ const Chat: FC = ({}) => {
         method: "POST",
         body: JSON.stringify({
           message,
+          chats,
         }),
       });
 
@@ -91,22 +87,13 @@ const Chat: FC = ({}) => {
 
       // accumulated response
       let accResponse = "";
-      let i = 0;
       while (!done) {
-        console.log("i++", i++);
-
         const { value, done: doneReading } = await reader.read();
 
-        console.log("🚀 ~ file: chat.tsx:153 ~ onSuccess ~ value:", value);
         done = doneReading;
         const chunkValue = decoder.decode(value);
-        console.log(
-          "🚀 ~ file: chat.tsx:157 ~ onSuccess ~ chunkValue:",
-          chunkValue
-        );
 
         accResponse += chunkValue;
-        console.log("acc", accResponse, chunkValue);
 
         // append chunk to the actual message
 
@@ -128,8 +115,6 @@ const Chat: FC = ({}) => {
             }
           );
         }
-
-        console.log("🚀 ~ file: chat.tsx:191 ~ onSuccess ~ chats:", chats);
       }
       return chats;
     },

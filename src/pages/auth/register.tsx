@@ -138,8 +138,6 @@ const Register = ({}) => {
                   {...register("confirmPassword", {
                     required: true,
                     validate: (val: string) => {
-                      console.log("val, ", val);
-
                       if (watch("password") != val) {
                         return "Your passwords do no match";
                       }
