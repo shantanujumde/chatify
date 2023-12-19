@@ -1,9 +1,11 @@
+import { cn } from "@/utils/utils";
 import type { Chats } from "@prisma/client";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { UserCircle2 } from "lucide-react";
 import type { User } from "next-auth";
 import Image from "next/image";
 import { useEffect, useRef, type FC } from "react";
+import ReactMarkdown from "react-markdown";
 import ChatMessagesSkeleton from "./ChatMessagesSkeleton";
 import EmptyItems from "./emptyItems";
 
@@ -71,9 +73,13 @@ const ChatMessages: FC<ChatMessagesProps> = ({
                   <div className="ml-auto w-max max-w-[50%] rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
                     {chat.question}
                   </div>
-                  <div className="flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
+                  <ReactMarkdown
+                    className={cn(
+                      "prose flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm text-zinc-50"
+                    )}
+                  >
                     {chat.response}
-                  </div>
+                  </ReactMarkdown>
                 </div>
               );
             })}
