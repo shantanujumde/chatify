@@ -9,7 +9,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import OpenAI from "openai";
 import { type CreateEmbeddingResponse } from "openai/resources";
 import { z } from "zod";
-
 export function GET(request: NextRequest) {
   return NextResponse.json({
     message: "Message route health check success",
@@ -17,7 +16,21 @@ export function GET(request: NextRequest) {
   });
 }
 
-const MessageSchema = z.object({ message: z.string() });
+const MessageSchema = z.object({
+  message: z.string(),
+  chats: z.object({
+    chatLength: z.number(),
+    chats: z.array(
+      z.object({
+        id: z.number(),
+        question: z.string(),
+        response: z.string(),
+        createdAt: z.string(),
+        userId: z.string(),
+      })
+    ),
+  }),
+});
 
 export async function POST(request: NextRequest) {
   const body = MessageSchema.parse(await request.json());
@@ -28,10 +41,18 @@ export async function POST(request: NextRequest) {
 
   if (!user) return new Response("Unauthorized", { status: 401 });
 
-  const { message } = body;
+  const { message, chats } = body;
 
   // 1: get embedding
   const closestEmbeddings = await getClosestEmbeddings(message);
+
+  const previousQuestionsAnswers = chats.chats
+    .map(
+      (message) =>
+        `User: ${message.question} \n
+         Assistant: ${message.response} \n`
+    )
+    .join("\n");
 
   // 2: generate response
   const chatResponse = await openAi.chat.completions.create({
@@ -41,12 +62,30 @@ export async function POST(request: NextRequest) {
     messages: [
       {
         role: "system",
-        content: `Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. Use this data available from the embeddings ${closestEmbeddings[0]?.content}`,
+        content: `Use the following pieces of context (or previous conversation if needed) to answer the users question in markdown format.`,
       },
       {
         role: "user",
-        content: `Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
-    USER INPUT: ${message}`,
+        content: `Use the following pieces of context (or previous conversation if needed) to answer the users question in markdown format. 
+        \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
+        \nYou are having a conversation with a human. 
+        \nYou are not a bot. 
+        \nYou are having access the previous conversation. Please use it. 
+        \nand don't say "but I don't have access to previous conversation history."
+
+        \n----------------\n
+        
+        PREVIOUS CONVERSATION:
+        ${previousQuestionsAnswers}
+        \n----------------\n
+
+        CONTEXT:
+        ${closestEmbeddings.map((section) => section.content).join("\n\n")}
+
+        \n----------------\n
+
+        USER INPUT: ${message}
+    `,
       },
     ],
   });
