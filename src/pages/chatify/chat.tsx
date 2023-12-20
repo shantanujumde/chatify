@@ -53,79 +53,79 @@ const Chat: FC = ({}) => {
     if (message) sendMessage({ message });
   };
 
+  const addMessageToChats = (message: string, response?: string) => {
+    if (chats && userData) {
+      utils.chat.getChats.setData(
+        { page: Number(currentChat) },
+        {
+          chatLength: (chats.chatLength ?? 0) + 1,
+          chats: [
+            ...(chats.chats ?? []),
+            {
+              id: (chats.chats?.length ?? 0) + 1,
+              question: message,
+              response: response ?? "",
+              createdAt: new Date(),
+              userId: userData.user?.id ?? "",
+            },
+          ],
+        }
+      );
+    }
+    return chats;
+  };
+
   const { mutate: sendMessage } = useMutation({
     mutationFn: async ({ message }: { message: string }) => {
       const response = await fetch("/api/message", {
         method: "POST",
-        body: JSON.stringify({
-          message,
-          chats,
-        }),
+        body: JSON.stringify({ message, chats }),
       });
 
       return response.body;
     },
-    onMutate: async () => {
+    onMutate: async ({ message }) => {
       if (questionRef?.current) questionRef.current.value = "";
-
       await utils.chat.getChats.cancel();
 
-      return chats;
+      return addMessageToChats(message);
     },
     async onSuccess(stream, { message }) {
-      if (!stream) {
+      if (!stream)
         return toast({
           title: "There was a problem sending this message",
           description: "Please refresh this page and try again",
           variant: "destructive",
         });
-      }
 
       const reader = stream.getReader();
       const decoder = new TextDecoder();
       let done = false;
 
+      chats?.chats.pop();
+
+      let chatsUpdated = chats;
       // accumulated response
       let accResponse = "";
       while (!done) {
         const { value, done: doneReading } = await reader.read();
-
         done = doneReading;
         const chunkValue = decoder.decode(value);
 
         accResponse += chunkValue;
 
-        // append chunk to the actual message
-
-        if (chats && userData) {
-          utils.chat.getChats.setData(
-            { page: Number(currentChat) },
-            {
-              chatLength: (chats.chatLength ?? 0) + 1,
-              chats: [
-                ...(chats.chats ?? []),
-                {
-                  id: (chats.chats?.length ?? 0) + 1,
-                  question: message,
-                  response: accResponse,
-                  createdAt: new Date(),
-                  userId: userData.user?.id ?? "",
-                },
-              ],
-            }
-          );
-        }
+        chatsUpdated = addMessageToChats(message, accResponse);
       }
-      return chats;
+      return chatsUpdated;
     },
     onError: () => {
       toast({
-        description: "Error while sending message",
+        title: "There was a problem sending this message",
+        description: "Please refresh this page and try again",
+        variant: "destructive",
       });
     },
-    onSettled: async () => {
-      await utils.chat.getChats.invalidate();
-    },
+    onSettled: async () => await utils.chat.getChats.invalidate(),
   });
 
   return (
