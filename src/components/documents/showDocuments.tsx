@@ -25,6 +25,7 @@ import {
 } from "../ui/accordion";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import Spinner from "../ui/spinner";
 import {
   Tooltip,
   TooltipContent,
@@ -65,18 +66,25 @@ const ShowDocuments: FC<ShowDocumentsProps> = ({
   setPage,
 }) => {
   const [edit, setEdit] = useState<number | null>();
+  const [loadingDocumentId, setLoadingDocumentId] = useState<number | null>(
+    null
+  );
   const editRef = useRef<HTMLInputElement>(null);
 
   const renameDocument = api.documents.renameDocumentById.useMutation({
     onSuccess: async () => {
       await getDocuments.refetch();
     },
+    onMutate: ({ id }) => setLoadingDocumentId(id),
+    onSettled: () => setLoadingDocumentId(null),
   });
 
   const deleteDocument = api.documents.deleteDocumentsById.useMutation({
     onSuccess: async () => {
       await getDocuments.refetch();
     },
+    onMutate: (ids) => setLoadingDocumentId(ids[0]!),
+    onSettled: () => setLoadingDocumentId(null),
   });
 
   const handleDeleteDocument = async (ids: Array<number>) => {
@@ -120,9 +128,15 @@ const ShowDocuments: FC<ShowDocumentsProps> = ({
               className="border-none"
             >
               <div className="flex">
-                <p className="m-auto rounded-sm  bg-primary px-3 py-1 text-xl font-semibold text-white dark:text-black">
-                  {indx + 1}
-                </p>
+                {loadingDocumentId === document.id ? (
+                  <div>
+                    <Spinner className="m-auto bg-secondary px-3 py-1 text-xl font-semibold text-red-400" />
+                  </div>
+                ) : (
+                  <p className="m-auto rounded-sm bg-primary px-3 py-1 text-xl font-semibold text-white dark:text-black">
+                    {indx + 1}
+                  </p>
+                )}
                 <div className="w-1/2 text-center">
                   <AccordionTrigger
                     showChevronDown={false}
