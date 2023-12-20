@@ -3,10 +3,12 @@ import { Label } from "@/components/ui/label";
 import { useReadText } from "@/hooks/readTextFromDocument";
 import { api } from "@/utils/api";
 import { File } from "lucide-react";
-import React from "react";
+import React, { type FC } from "react";
 import { Button } from "../ui/button";
 
-const ReadDocuments: React.FC = () => {
+const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
+  refetchDocuments,
+}) => {
   const [textObj, getTextFromDoc] = useReadText();
   const {
     text,
@@ -19,8 +21,8 @@ const ReadDocuments: React.FC = () => {
     isLoading: isCreateEmbeddingLoading,
     isError: isCreateEmbeddingError,
   } = api.openAi.createEmbeddings.useMutation({
-    onSuccess: (data) => {
-      return data;
+    onSuccess: async () => {
+      await refetchDocuments();
     },
     onError: (error) => {
       return error;

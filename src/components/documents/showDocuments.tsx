@@ -1,11 +1,20 @@
+import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
   InfoCircledIcon,
 } from "@radix-ui/react-icons";
+import { type TRPCClientErrorLike } from "@trpc/client";
+import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 import { FileSignature, Save, Trash2 } from "lucide-react";
-import { useRef, useState, type FC } from "react";
+import {
+  useRef,
+  useState,
+  type Dispatch,
+  type FC,
+  type SetStateAction,
+} from "react";
 import EmptyItems from "../emptyItems";
 import {
   Accordion,
@@ -23,12 +32,40 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
-const ShowDocuments: FC = () => {
+type ShowDocumentsProps = {
+  getDocuments: UseTRPCQueryResult<
+    {
+      pageLength: number;
+      totalFiles: number;
+      documents: ({
+        _count: {
+          embedding: number;
+          Organization: number;
+        };
+      } & {
+        id: number;
+        content: string;
+        name: string;
+        extension: string;
+        deleted: boolean;
+        createdAt: Date | null;
+        updatedAt: Date | null;
+        organizationId: string | null;
+      })[];
+    },
+    TRPCClientErrorLike<AppRouter["documents"]["getMyDocuments"]>
+  >;
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
+};
+
+const ShowDocuments: FC<ShowDocumentsProps> = ({
+  getDocuments,
+  page,
+  setPage,
+}) => {
   const [edit, setEdit] = useState<number | null>();
   const editRef = useRef<HTMLInputElement>(null);
-  const [page, setPage] = useState(1);
-
-  const getDocuments = api.documents.getMyDocuments.useQuery({ page });
 
   const renameDocument = api.documents.renameDocumentById.useMutation({
     onSuccess: async () => {
