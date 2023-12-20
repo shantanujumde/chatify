@@ -15,6 +15,7 @@ import {
   type FC,
   type SetStateAction,
 } from "react";
+import Skeleton from "react-loading-skeleton";
 import EmptyItems from "../emptyItems";
 import {
   Accordion,
@@ -23,7 +24,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { Button } from "../ui/button";
-import CustomSkeleton from "../ui/customSkeleton";
 import { Input } from "../ui/input";
 import {
   Tooltip,
@@ -92,7 +92,17 @@ const ShowDocuments: FC<ShowDocumentsProps> = ({
     renameDocument.mutate({ id: documentId, name: documentNewName });
   };
 
-  if (getDocuments.isLoading) return <CustomSkeleton lines={10} />;
+  if (getDocuments.isLoading)
+    return (
+      <Skeleton
+        count={10}
+        baseColor="#7a7a7a"
+        highlightColor="#fff"
+        height="2rem"
+        borderRadius="1rem"
+        className="mb-4"
+      />
+    );
 
   if (getDocuments.isError)
     return <p>Something went wrong please contact admin!</p>;

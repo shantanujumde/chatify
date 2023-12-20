@@ -49,7 +49,7 @@ export const openAiRouter = createTRPCRouter({
       if (insertTextError)
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Text already exists " + JSON.stringify(insertTextError),
+          message: "Indexing Error " + insertTextError.details,
           cause: insertTextError,
         });
 

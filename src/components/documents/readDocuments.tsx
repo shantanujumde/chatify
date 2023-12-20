@@ -5,6 +5,7 @@ import { api } from "@/utils/api";
 import { File } from "lucide-react";
 import React, { type FC } from "react";
 import { Button } from "../ui/button";
+import { toast } from "../ui/use-toast";
 
 const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
   refetchDocuments,
@@ -16,18 +17,19 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
     states: { loading: loadingDocument },
   } = textObj;
 
-  const {
-    mutate: createEmbedding,
-    isLoading: isCreateEmbeddingLoading,
-    isError: isCreateEmbeddingError,
-  } = api.openAi.createEmbeddings.useMutation({
-    onSuccess: async () => {
-      await refetchDocuments();
-    },
-    onError: (error) => {
-      return error;
-    },
-  });
+  const { mutate: createEmbedding, isLoading: isCreateEmbeddingLoading } =
+    api.openAi.createEmbeddings.useMutation({
+      onSuccess: async () => {
+        await refetchDocuments();
+      },
+      onError: (error) => {
+        toast({
+          title: "Error creating embedding",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
+    });
 
   const handleCreateEmbedding = (text: string, name: string) => {
     if (!text || !name) return;
@@ -61,7 +63,6 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
         >
           Save
         </Button>
-        {isCreateEmbeddingError && <p>Error</p>}
       </div>
 
       <div
