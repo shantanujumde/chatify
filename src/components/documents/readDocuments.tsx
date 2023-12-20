@@ -21,6 +21,9 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
     api.openAi.createEmbeddings.useMutation({
       onSuccess: async () => {
         await refetchDocuments();
+        toast({
+          description: "Document added successfully",
+        });
       },
       onError: (error) => {
         toast({
@@ -43,6 +46,7 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     getTextFromDoc(e);
+    e.target.value = "";
   };
 
   return (
