@@ -11,6 +11,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/utils/api";
 import {
@@ -128,6 +134,8 @@ const Chat: FC = ({}) => {
     onSettled: async () => await utils.chat.getChats.invalidate(),
   });
 
+  console.log(" getDocuments.data?.pageLength", getDocuments.data?.pageLength);
+
   return (
     <>
       <div
@@ -166,9 +174,14 @@ const Chat: FC = ({}) => {
                 getDocuments.data.documents.map((document) => (
                   <li
                     key={document.id}
-                    className="mt-1 cursor-pointer truncate rounded-2xl bg-gray-300/20 p-1 text-center transition duration-300 ease-in-out hover:bg-gray-300/50 "
+                    className="mt-1 cursor-pointer truncate rounded-2xl bg-gray-300/20 px-4 py-1 text-center transition duration-300 ease-in-out hover:bg-gray-300/50 "
                   >
-                    {document.name}
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>{document.name}</TooltipTrigger>
+                        <TooltipContent>{document.name}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </li>
                 ))
               )}
@@ -215,9 +228,9 @@ const Chat: FC = ({}) => {
                 className="px-2 py-4"
                 href={`?page=${currentChat}&file=${
                   getDocuments.data?.pageLength &&
-                  getDocuments.data?.pageLength <= Number(currentFile)
+                  Number(currentFile) < getDocuments.data?.pageLength
                     ? Number(currentFile) + 1
-                    : 1
+                    : Number(currentFile)
                 }`}
               >
                 <DoubleArrowRightIcon />
