@@ -22,6 +22,9 @@ export const documentsRouter = createTRPCRouter({
           },
           skip: (input.page - 1) * 10,
           take: 10,
+          include: {
+            _count: true,
+          },
         }),
       ]);
       return {

@@ -31,7 +31,7 @@ export const openAiRouter = createTRPCRouter({
         chunks: [],
       });
 
-      const uniqueIdForText = randomInt(500000000000);
+      const uniqueIdForText = randomInt(5000000);
 
       const { error: insertTextError } = await supabaseClient
         .from("File")
