@@ -9,6 +9,58 @@ import { NextResponse, type NextRequest } from "next/server";
 import OpenAI from "openai";
 import { type CreateEmbeddingResponse } from "openai/resources";
 import { z } from "zod";
+
+const openAi = new OpenAI({
+  apiKey: process.env.OPEN_AI_API_KEY,
+});
+
+const createEmbedding = async (
+  text: string[] | string
+): Promise<CreateEmbeddingResponse> => {
+  return await openAi.embeddings.create({
+    model: "text-embedding-ada-002",
+    input: text,
+  });
+};
+
+const getClosestEmbeddings = async (text: string) => {
+  const embeddingResponse = await createEmbedding(text);
+  if (!embeddingResponse)
+    throw new Error("Failed to create embedding for question");
+
+  const embedding = embeddingResponse.data[0]?.embedding;
+
+  if (!embedding) throw new Error("Failed to create embedding for question");
+
+  const supabaseClient = createClient<Database>(
+    String(process.env.SUPABASE_URL),
+    String(process.env.SUPABASE_SERVICE_ROLE_KEY),
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    }
+  );
+  const { error: matchError, data: pageSections } = await supabaseClient.rpc(
+    "match_documents",
+    {
+      query_embedding: embedding as unknown as string,
+      match_threshold: 0.5,
+      match_count: 10,
+    }
+  );
+
+  if (matchError)
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Similar text not found!" + JSON.stringify(matchError),
+      cause: matchError,
+    });
+
+  return pageSections;
+};
+
 export function GET(request: NextRequest) {
   return NextResponse.json({
     message: "Message route health check success",
@@ -104,54 +156,3 @@ export async function POST(request: NextRequest) {
 
   return new StreamingTextResponse(stream);
 }
-
-export const openAi = new OpenAI({
-  apiKey: process.env.OPEN_AI_API_KEY,
-});
-
-export const createEmbedding = async (
-  text: string[] | string
-): Promise<CreateEmbeddingResponse> => {
-  return await openAi.embeddings.create({
-    model: "text-embedding-ada-002",
-    input: text,
-  });
-};
-
-export const getClosestEmbeddings = async (text: string) => {
-  const embeddingResponse = await createEmbedding(text);
-  if (!embeddingResponse)
-    throw new Error("Failed to create embedding for question");
-
-  const embedding = embeddingResponse.data[0]?.embedding;
-
-  if (!embedding) throw new Error("Failed to create embedding for question");
-
-  const supabaseClient = createClient<Database>(
-    String(process.env.SUPABASE_URL),
-    String(process.env.SUPABASE_SERVICE_ROLE_KEY),
-    {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-    }
-  );
-  const { error: matchError, data: pageSections } = await supabaseClient.rpc(
-    "match_documents",
-    {
-      query_embedding: embedding as unknown as string,
-      match_threshold: 0.5,
-      match_count: 10,
-    }
-  );
-
-  if (matchError)
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Similar text not found!" + JSON.stringify(matchError),
-      cause: matchError,
-    });
-
-  return pageSections;
-};
