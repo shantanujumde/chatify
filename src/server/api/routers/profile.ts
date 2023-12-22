@@ -31,8 +31,10 @@ export const profileRouter = createTRPCRouter({
             },
           }),
 
-          ctx.prisma.file.count(),
-          ctx.prisma.chats.count(),
+          ctx.prisma.file.count({
+            where: { deleted: false, organizationId },
+          }),
+          ctx.prisma.chats.count({ where: { userId: ctx.session.user.id } }),
         ]);
 
       return { user, organization, documentsCount, chatsCount };
