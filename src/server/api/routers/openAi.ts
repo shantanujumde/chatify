@@ -9,6 +9,7 @@ import {
   openAi,
   supabaseClient,
 } from "../helpers/openAi.helpers";
+import { getOrganizationId } from "../helpers/profile.helpers";
 import type { Embeddings } from "../types/openAi.types";
 
 export const openAiRouter = createTRPCRouter({
@@ -33,6 +34,8 @@ export const openAiRouter = createTRPCRouter({
 
       const uniqueIdForText = randomInt(5000000);
 
+      const organizationId = await getOrganizationId(ctx);
+
       const { error: insertTextError } = await supabaseClient
         .from("File")
         .insert({
@@ -40,7 +43,7 @@ export const openAiRouter = createTRPCRouter({
           content: input.content,
           extension: input.extension,
           name: input.name,
-          organizationId: ctx.session.user.organizationId,
+          organizationId,
         })
         .select()
         .limit(1)
@@ -69,7 +72,7 @@ export const openAiRouter = createTRPCRouter({
           embedding: embedding as unknown as string,
           openAiResponce: JSON.stringify(embeddingResponse),
           fileId: uniqueIdForText,
-          organizationId: ctx.session.user.organizationId,
+          organizationId,
         };
 
         embeddingArray.push(embeddingObject);

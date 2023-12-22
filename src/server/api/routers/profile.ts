@@ -5,6 +5,7 @@ import { randomUUID } from "crypto";
 import nodemailer from "nodemailer";
 import { env } from "process";
 import { z } from "zod";
+import { getOrganizationId } from "../helpers/profile.helpers";
 
 export const profileRouter = createTRPCRouter({
   getUserProfile: protectedProcedure
@@ -16,11 +17,13 @@ export const profileRouter = createTRPCRouter({
         },
       });
 
+      const organizationId = await getOrganizationId(ctx);
+
       const [organization, documentsCount, chatsCount] =
         await ctx.prisma.$transaction([
           ctx.prisma.organization.findFirst({
             where: {
-              id: user?.organizationId ?? "",
+              id: organizationId,
             },
             select: {
               name: true,
@@ -61,33 +64,7 @@ export const profileRouter = createTRPCRouter({
   inviteUser: protectedProcedure
     .input(z.object({ email: z.string().email() }))
     .mutation(async ({ input, ctx }) => {
-      const currentUser = await ctx.prisma.user.findFirst({
-        where: {
-          id: ctx.session.user.id,
-        },
-      });
-
-      let organizationId: string;
-      if (!currentUser?.organizationId) {
-        const organization = await ctx.prisma.organization.create({
-          data: {
-            name: "",
-          },
-        });
-
-        await ctx.prisma.user.update({
-          where: {
-            id: ctx.session.user.id,
-          },
-          data: {
-            organizationId: organization.id,
-          },
-        });
-
-        organizationId = organization.id;
-      } else {
-        organizationId = currentUser.organizationId;
-      }
+      const organizationId = await getOrganizationId(ctx);
 
       const { email, password } = await createUser(input.email, organizationId);
       sendEmail(

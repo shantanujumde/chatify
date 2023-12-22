@@ -1,20 +1,22 @@
 import { z } from "zod";
+import { getOrganizationId } from "../helpers/profile.helpers";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const documentsRouter = createTRPCRouter({
   getMyDocuments: protectedProcedure
     .input(z.object({ page: z.number().optional().default(1) }))
     .query(async ({ input, ctx }) => {
+      const organizationId = await getOrganizationId(ctx);
       const [pageLength, documents] = await ctx.prisma.$transaction([
         ctx.prisma.file.count({
           where: {
-            organizationId: ctx.session.user.organizationId,
+            organizationId,
             deleted: false,
           },
         }),
         ctx.prisma.file.findMany({
           where: {
-            organizationId: ctx.session.user.organizationId,
+            organizationId,
             deleted: false,
           },
           orderBy: {
