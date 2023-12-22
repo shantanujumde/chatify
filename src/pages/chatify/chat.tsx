@@ -47,7 +47,19 @@ const Chat: FC = ({}) => {
   });
 
   const { data: chats, isLoading: chatsIsLoading } = api.chat.getChats.useQuery(
-    { page: Number(currentChat) }
+    { page: Number(currentChat) },
+    {
+      onError: (error) => {
+        toast({
+          title: error.message.includes("NOTSUBSCRIBED")
+            ? "Subscribe 😊"
+            : "Error",
+          description:
+            "Please subscribe to use this feature.\n Already subscribed? Please try re-login.",
+          variant: "destructive",
+        });
+      },
+    }
   );
 
   const questionRef = useRef<HTMLInputElement>(null);
@@ -133,8 +145,6 @@ const Chat: FC = ({}) => {
     },
     onSettled: async () => await utils.chat.getChats.invalidate(),
   });
-
-  console.log(" getDocuments.data?.pageLength", getDocuments.data?.pageLength);
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { env } from "@/env.mjs";
+import { getUserSubscriptionPlan } from "@/libs/stripe";
 import { prisma } from "@/server/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import type { Role, User } from "@prisma/client";
@@ -52,14 +53,25 @@ export const authOptions: NextAuthOptions = {
           ...session.user,
           id: token.id,
           organizationId: token.organizationId,
+          plan: token.plan,
         },
       };
     },
 
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
+      // called before session callback
       if (user) {
+        const plan = await getUserSubscriptionPlan(user);
+
         token.id = user.id;
         token.organizationId = (user as User).organizationId;
+        token.plan = {
+          cid: plan.stripeCustomerId,
+          sid: plan.stripeSubscriptionId,
+          plan: plan.plan?.name,
+          exp: plan.stripeCurrentPeriodEnd,
+          active: plan.plan?.price.priceId && plan.isSubscribed,
+        };
       }
       return token;
     },

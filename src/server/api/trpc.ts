@@ -14,6 +14,7 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { PaymentTokenSchema } from "./types/payments.types";
 
 /**
  * 1. CONTEXT
@@ -128,3 +129,39 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+const enforceUserIsSubscribed = t.middleware(({ ctx, next }) => {
+  const parsedData = PaymentTokenSchema.safeParse(ctx.session?.user);
+  if (!parsedData.success) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "User is NOTSUBSCRIBED " + JSON.stringify(parsedData.error),
+    });
+  }
+
+  const user = parsedData.data;
+  const userPlan = parsedData.data.plan;
+
+  if (
+    !(
+      userPlan.cid.includes("cus") &&
+      userPlan.sid.includes("sub") &&
+      userPlan.active === true &&
+      new Date(userPlan.exp) >= new Date()
+    )
+  ) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "User is NOTSUBSCRIBED " + JSON.stringify(userPlan),
+    });
+  }
+
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...ctx.session, user: user },
+    },
+  });
+});
+
+export const subscribedProcedure = t.procedure.use(enforceUserIsSubscribed);
