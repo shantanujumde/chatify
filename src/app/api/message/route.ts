@@ -99,12 +99,16 @@ export async function POST(request: NextRequest) {
   const closestEmbeddings = await getClosestEmbeddings(message);
 
   const previousQuestionsAnswers = chats.chats
-    .map(
-      (message) =>
-        `User: ${message.question} \n
-         Assistant: ${message.response} \n`
-    )
-    .join("\n");
+    .map((message) => [
+      `User: ${message.question}\n`,
+      `Assistant: ${message.response}\n`,
+    ])
+    .flat();
+
+  const context = closestEmbeddings.map((section) => ({
+    context: section.content,
+    similarityToQuestion: section.similarity,
+  }));
 
   // 2: generate response
   const chatResponse = await openAi.chat.completions.create({
@@ -114,30 +118,25 @@ export async function POST(request: NextRequest) {
     messages: [
       {
         role: "system",
-        content: `Use the following pieces of context (or previous conversation if needed) to answer the users question in markdown format.`,
+        content:
+          "Use the following pieces of context (or previous conversation if needed) to answer the users question in markdown format.",
       },
+
       {
         role: "user",
-        content: `Use the following pieces of context (or previous conversation if needed) to answer the users question in markdown format. 
-        \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
-        \nYou are having a conversation with a human. 
-        \nYou are not a bot. 
-        \nYou are having access the previous conversation. Please use it. 
-        \nand don't say "but I don't have access to previous conversation history."
-
-        \n----------------\n
+        content: `Use the following pieces of context (or previous conversation if needed) to answer the users question in markdown format. \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
         
-        PREVIOUS CONVERSATION:
-        ${previousQuestionsAnswers}
-        \n----------------\n
-
-        CONTEXT:
-        ${closestEmbeddings.map((section) => section.content).join("\n\n")}
-
-        \n----------------\n
-
-        USER INPUT: ${message}
-    `,
+  \n----------------\n
+  
+      PREVIOUS CONVERSATION:
+      ${JSON.stringify(previousQuestionsAnswers)}
+  
+  \n----------------\n
+  
+  CONTEXT:
+  ${JSON.stringify(context)}
+  
+  USER INPUT: ${message}`,
       },
     ],
   });
