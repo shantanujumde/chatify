@@ -146,16 +146,13 @@ export function TopNavBar() {
                     </NavigationMenuLink>
                   </li>
                   <ListItem href="/docs" title="Introduction">
-                    Re-usable components built using Radix UI and Tailwind CSS.
+                    Know how to use Chatify. Step by step instruction guide.
                   </ListItem>
-                  <ListItem href="/docs/installation" title="Installation">
-                    How to install dependencies and structure your app.
+                  <ListItem href="/docs/about-us" title="About Us">
+                    Know about chatify team and contributors.
                   </ListItem>
-                  <ListItem
-                    href="/docs/primitives/typography"
-                    title="Typography"
-                  >
-                    Styles for headings, paragraphs, lists...etc
+                  <ListItem href="/docs/privacy-policy" title="Privacy Policy">
+                    Know about chatify privacy policy.
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
