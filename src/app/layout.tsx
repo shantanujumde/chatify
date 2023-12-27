@@ -1,6 +1,7 @@
 import Providers from "@/components/appProviders";
 import "@/styles/globals.css";
 import { TRPCReactProvider } from "@/utils/appRouterTrpc";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import { headers } from "next/headers";
 
