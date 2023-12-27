@@ -6,38 +6,45 @@ import { type FC } from "react";
 const Docs: FC = ({}) => {
   return (
     <div className="flex flex-col gap-80">
-      <h1 className="text-4xl font-bold">How to Use Chatify App</h1>
+      <div>
+        <h1 className="my-32 text-center text-6xl font-bold">
+          How to Use Chatify App
+        </h1>
 
-      <div className="flex justify-center gap-8 align-middle max-md:flex-col md:flex-row">
-        <div className="mt-8 flex flex-col justify-center text-xl">
-          <h2 className="mb-2 text-2xl font-bold">Adding Documents</h2>
-          <ol className="list-inside list-decimal">
-            <li>Go to the &quot;Knowledge Base&quot; page after logging in</li>
-            <li>Click the &quot;Add Document&quot; button</li>
-            <li>Select a file from your computer to upload</li>
-            <li>Add a title and description for the document</li>
-            <li>Click &quot;Upload&quot; and the document will be processed</li>
-            <li>
-              Wait for the processing to complete before the document can be
-              chatted with
-            </li>
-            <li>Repeat to add multiple documents to your knowledge base</li>
-            <li>The documents can be PDFs, Word, Excel, Text files etc</li>
-            <li>There is a limit of 50 documents in the free plan</li>
-            <li>
-              Uploaded documents are only accessible to you in your account
-            </li>
-          </ol>
+        <div className="flex justify-center gap-8 align-middle max-md:flex-col md:flex-row">
+          <div className="mt-8 flex flex-col justify-center text-xl">
+            <h2 className="mb-2 text-2xl font-bold">Adding Documents</h2>
+            <ol className="list-inside list-decimal">
+              <li>
+                Go to the &quot;Knowledge Base&quot; page after logging in
+              </li>
+              <li>Click the &quot;Add Document&quot; button</li>
+              <li>Select a file from your computer to upload</li>
+              <li>Add a title and description for the document</li>
+              <li>
+                Click &quot;Upload&quot; and the document will be processed
+              </li>
+              <li>
+                Wait for the processing to complete before the document can be
+                chatted with
+              </li>
+              <li>Repeat to add multiple documents to your knowledge base</li>
+              <li>The documents can be PDFs, Word, Excel, Text files etc</li>
+              <li>There is a limit of 50 documents in the free plan</li>
+              <li>
+                Uploaded documents are only accessible to you in your account
+              </li>
+            </ol>
+          </div>
+          <Image
+            src="/chat-preview.webp"
+            alt="uploading preview"
+            width={800}
+            height={250}
+            className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
+          />
         </div>
-        <Image
-          src="/chat-preview.webp"
-          alt="uploading preview"
-          width={800}
-          height={250}
-          className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
-        />
       </div>
-
       <div className="flex justify-center gap-8 align-middle max-md:flex-col-reverse md:flex-row">
         <Image
           src="/chat-preview.webp"
@@ -65,6 +72,7 @@ const Docs: FC = ({}) => {
             <li>Switch documents in the left panel to chat with other docs</li>
           </ol>
         </div>
+        d
       </div>
 
       <div className="flex justify-center gap-8 align-middle max-md:flex-col md:flex-row">
