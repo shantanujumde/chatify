@@ -75,7 +75,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
                   </div>
                   <ReactMarkdown
                     className={cn(
-                      "prose flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm text-zinc-50"
+                      "prose flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm dark:text-zinc-50"
                     )}
                   >
                     {chat.response}
