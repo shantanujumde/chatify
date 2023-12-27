@@ -19,7 +19,7 @@ const PrivacyPolicy = ({}) => {
 
   return (
     <div className="text-2xl">
-      <ScrollContainer>
+      <ScrollContainer snap="proximity">
         <ScrollPage>
           <Animator
             className="flex flex-col gap-4"
