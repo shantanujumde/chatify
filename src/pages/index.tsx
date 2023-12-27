@@ -27,12 +27,11 @@ export default function Home() {
 
       <div className="-mt-24 flex h-screen flex-col items-center justify-center">
         <h1 className="max-w-4xl text-center text-5xl font-bold md:text-6xl lg:text-7xl">
-          Chat with your <span className="text-primary">documents</span> in
-          seconds.
+          Chatify makes <span className="text-primary">understand </span>data
+          easy!
         </h1>
-        <p className="mt-5 max-w-prose text-center text-zinc-700 sm:text-lg">
-          Chatify allows you to create knowledge base for your company, by which
-          you can understand data easily.
+        <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
+          Worlds best tool to understand your data easily with chat interface.
         </p>
 
         <Link

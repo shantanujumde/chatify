@@ -1,28 +1,49 @@
-# Create T3 App
+# Chatify App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## Getting Started
 
-## What's next? How do I make an app with this?
+- To use this app, you will need:
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+* Node.js installed
+* A database like PostgreSQL
+* An account with Vercel or other hosting platform to deploy
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Installation
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- Clone the repo: `git clone <repo>`
+- Install dependencies: `npm install`
+- Configure environment variables:
 
-## Learn More
+* Copy `.env.example` to `.env`
+* Add your database connection URL, keys etc
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- Migrate database: `npx prisma migrate dev`
+- Run locally: npm run dev
+- Open http://localhost:3000 to view the app
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Usage
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- The main features are:
 
-## How do I deploy this?
+* User authentication via NextAuth
+* CRUD operations on data via tRPC API routes
+* Tailwind CSS for styling
+* Some key things you can do:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+* Register a new user
+* Log in/out
+* View, add, edit, delete records like posts, comments etc
+* Secure routes and API endpoints
+* The code is documented to understand the implementation.
+
+## Deployment
+
+- To deploy this Next.js app, you can use Vercel or any other platform that supports it.
+
+* Create an account on Vercel
+* Connect your Git repository
+* It will automatically detect the framework and configure deployment
+* Make sure environment variables are set
+* Trigger deploy and your app will be live!
+* And that's it! The T3 stack makes it easy to build and deploy fullstack apps. Let me know if you have any other questions!
+*

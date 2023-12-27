@@ -2,7 +2,7 @@ import { PlusIcon, UserCircle2 } from "lucide-react";
 import type { FC } from "react";
 import Skeleton from "react-loading-skeleton";
 
-const ChatMessagesSkeletion: FC = ({}) => {
+const ChatMessagesSkeleton: FC = ({}) => {
   const LOADING_SKELETON = [];
   for (let i = 0; i <= 10; i++) {
     LOADING_SKELETON.push(
@@ -59,4 +59,4 @@ const ChatMessagesSkeletion: FC = ({}) => {
   );
 };
 
-export default ChatMessagesSkeletion;
+export default ChatMessagesSkeleton;

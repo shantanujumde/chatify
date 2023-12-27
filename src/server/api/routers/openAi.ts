@@ -1,13 +1,15 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { randomInt } from "crypto";
 import { encode } from "gpt-3-encoder";
 import { z } from "zod";
 import {
   chunkText,
-  getHash,
-  openai,
+  getClosestEmbeddings,
+  openAi,
   supabaseClient,
 } from "../helpers/openAi.helpers";
+import { getOrganizationId } from "../helpers/profile.helpers";
 import type { Embeddings } from "../types/openAi.types";
 
 export const openAiRouter = createTRPCRouter({
@@ -30,9 +32,9 @@ export const openAiRouter = createTRPCRouter({
         chunks: [],
       });
 
-      const uniqueIdForText = getHash(
-        input.content + ctx.session.user.organizationId
-      );
+      const uniqueIdForText = randomInt(5000000);
+
+      const organizationId = await getOrganizationId(ctx);
 
       const { error: insertTextError } = await supabaseClient
         .from("File")
@@ -41,7 +43,7 @@ export const openAiRouter = createTRPCRouter({
           content: input.content,
           extension: input.extension,
           name: input.name,
-          organizationId: ctx.session.user.organizationId,
+          organizationId,
         })
         .select()
         .limit(1)
@@ -50,27 +52,27 @@ export const openAiRouter = createTRPCRouter({
       if (insertTextError)
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Text already exists",
+          message: "Indexing Error " + insertTextError.details,
           cause: insertTextError,
         });
 
       const embeddingArray: Embeddings[] = [];
       for (const chunk of chunkArray.chunks) {
-        const embeddingResponse = await openai.createEmbedding({
+        const embeddingResponse = await openAi.embeddings.create({
           model: "text-embedding-ada-002",
           input: chunk.content,
         });
 
-        const embedding = embeddingResponse.data.data[0]?.embedding;
+        const embedding = embeddingResponse.data[0]?.embedding;
 
         const embeddingObject: Embeddings = {
           content: chunk.content,
           contentLength: chunk.contentLength,
           contentTokens: chunk.contentTokens,
           embedding: embedding as unknown as string,
-          openAiResponce: JSON.stringify(embeddingResponse.data.data),
+          openAiResponce: JSON.stringify(embeddingResponse),
           fileId: uniqueIdForText,
-          organizationId: ctx.session.user.organizationId,
+          organizationId,
         };
 
         embeddingArray.push(embeddingObject);
@@ -89,7 +91,8 @@ export const openAiRouter = createTRPCRouter({
       if (insertEmbeddingError)
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Embeddings already exists",
+          message:
+            "Embeddings already exists" + JSON.stringify(insertEmbeddingError),
           cause: insertEmbeddingError,
         });
       else
@@ -99,43 +102,30 @@ export const openAiRouter = createTRPCRouter({
         };
     }),
 
-  getClosestEmbeddings: protectedProcedure
+  chat: protectedProcedure
     .input(z.object({ text: z.string() }))
     .mutation(async ({ input }) => {
-      const embeddingResponse = await openai.createEmbedding({
-        model: "text-embedding-ada-002",
-        input: input.text.replaceAll("\n", " "),
-      });
+      const closestEmbeddings = await getClosestEmbeddings(input.text);
 
-      if (embeddingResponse.status !== 200) {
-        throw new Error("Failed to create embedding for question");
-      }
-
-      const embedding = embeddingResponse.data.data[0]?.embedding;
-
-      if (!embedding) {
-        throw new Error("Failed to create embedding for question");
-      }
-
-      const { error: matchError, data: pageSections } =
-        await supabaseClient.rpc("match_page_sections", {
-          embedding: embedding as unknown as string,
-          match_threshold: 0.5,
-          match_count: 10,
-          min_content_length: 50,
-        });
-
-      if (matchError)
+      if (!(closestEmbeddings.length && closestEmbeddings[0]?.content))
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Embeddings already exists",
-          cause: matchError,
+          message: "Embeddings length is 0" + JSON.stringify(closestEmbeddings),
         });
 
-      return {
-        status: 200,
-        error: null,
-        data: pageSections,
-      };
+      const stream = await openAi.chat.completions.create({
+        messages: [
+          {
+            role: "user",
+            content: `answer this question ${input.text} using ${closestEmbeddings[0]?.content}`,
+          },
+        ],
+        model: "gpt-3.5-turbo",
+        stream: true,
+      });
+
+      for await (const chunk of stream) {
+        console.info(chunk.choices[0]?.delta?.content ?? "");
+      }
     }),
 });

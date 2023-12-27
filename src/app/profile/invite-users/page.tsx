@@ -18,7 +18,7 @@ const Page: FC = ({}) => {
         });
       },
       onError(err) {
-        console.log("err", err);
+        console.error("Email error", err);
 
         toast({
           variant: "destructive",

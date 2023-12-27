@@ -1,5 +1,7 @@
 -- drop function match_page_sections;
 
+DROP FUNCTION match_documents(vector,double precision,integer);
+
 create or replace function match_documents (
   query_embedding vector(1536),
   match_threshold float,
@@ -8,6 +10,10 @@ create or replace function match_documents (
 returns table (
   id bigint,
   content text,
+  "fileId" float,
+  deleted boolean,
+  name text,
+  "fileContent" text,
   similarity float
 )
 language sql stable
@@ -15,9 +21,15 @@ as $$
   select
     "Embeddings".id,
     "Embeddings".content,
+    "Embeddings"."fileId",
+    "File".deleted,
+    "File".name,
+    "File".content as "fileContent",
     1 - ("Embeddings".embedding <=> query_embedding) as similarity
-  from"Embeddings" 
+  from"Embeddings", "File" 
   where "Embeddings".embedding <=> query_embedding < 1 - match_threshold
+  and "Embeddings"."fileId" = "File"."id" 
+
   order by "Embeddings".embedding <=> query_embedding
   limit match_count;
 $$;

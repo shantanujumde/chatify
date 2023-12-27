@@ -1,31 +1,34 @@
+import { cn } from "@/utils/utils";
 import type { Chats } from "@prisma/client";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { UserCircle2 } from "lucide-react";
 import type { User } from "next-auth";
 import Image from "next/image";
-import type { FC } from "react";
-import ChatMessagesSkeletion from "./chatMessagesSkeletion";
+import { useEffect, useRef, type FC } from "react";
+import ReactMarkdown from "react-markdown";
+import ChatMessagesSkeleton from "./ChatMessagesSkeleton";
 import EmptyItems from "./emptyItems";
-import Spinner from "./ui/spinner";
 
 // https://versoly.com/taos#fade
 interface ChatMessagesProps {
   chats?: Chats[];
   isScreenLoading: boolean;
-  isChatLoading: boolean;
   user?: User | null;
 }
 
 const ChatMessages: FC<ChatMessagesProps> = ({
   chats,
   isScreenLoading,
-  isChatLoading,
   user,
 }) => {
-  if (isScreenLoading) {
-    return <ChatMessagesSkeletion />;
-  }
+  const chatRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+    }
+  }, [chats]);
 
+  if (isScreenLoading) return <ChatMessagesSkeleton />;
   return (
     <>
       {user && (
@@ -55,12 +58,13 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       {chats?.length ? (
         <div
           id="chatWindow"
+          ref={chatRef}
           className={`
           scrollbar-thumb-black scrollbar-track-black-lighter  
           dark:scrollbar-thumb-white dark:scrollbar-track-white-lighter 
           scrollbar-thumb-rounded 
-         scrollbar-w-2 scrolling-touch max-h-screen 
-        overflow-y-scroll scroll-smooth rounded-xl bg-gray-300/5 p-6`}
+          scrollbar-w-2 scrolling-touch max-h-screen 
+          overflow-y-scroll scroll-smooth rounded-xl bg-gray-300/5 p-6`}
         >
           <div className="space-y-4">
             {chats.map((chat) => {
@@ -69,19 +73,16 @@ const ChatMessages: FC<ChatMessagesProps> = ({
                   <div className="ml-auto w-max max-w-[50%] rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
                     {chat.question}
                   </div>
-                  <div className="flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
+                  <ReactMarkdown
+                    className={cn(
+                      "prose flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm text-zinc-50"
+                    )}
+                  >
                     {chat.response}
-                  </div>
+                  </ReactMarkdown>
                 </div>
               );
             })}
-            {isChatLoading && (
-              <div className="flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-                <i className="flex">
-                  typing... <Spinner className="h-3 w-3" />
-                </i>
-              </div>
-            )}
           </div>
         </div>
       ) : (

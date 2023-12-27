@@ -8,7 +8,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
   typescript: true,
 });
 
-export async function getUserSubscriptionPlan(user: User) {
+export async function getUserSubscriptionPlan(user: Partial<User>) {
   if (!user.id) {
     return {
       ...PLANS[0],

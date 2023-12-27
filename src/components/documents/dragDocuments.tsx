@@ -7,7 +7,7 @@ const DragDocuments: FC = ({}) => {
     <Dropzone
       multiple={false}
       onDrop={(acceptedFile) => {
-        console.log("acc", acceptedFile);
+        console.info("file accepted", acceptedFile);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (

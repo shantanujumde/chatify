@@ -3,10 +3,13 @@ import { Label } from "@/components/ui/label";
 import { useReadText } from "@/hooks/readTextFromDocument";
 import { api } from "@/utils/api";
 import { File } from "lucide-react";
-import React from "react";
+import React, { type FC } from "react";
 import { Button } from "../ui/button";
+import { toast } from "../ui/use-toast";
 
-const ReadDocuments: React.FC = () => {
+const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
+  refetchDocuments,
+}) => {
   const [textObj, getTextFromDoc] = useReadText();
   const {
     text,
@@ -14,18 +17,22 @@ const ReadDocuments: React.FC = () => {
     states: { loading: loadingDocument },
   } = textObj;
 
-  const {
-    mutate: createEmbedding,
-    isLoading: isCreateEmbeddingLoading,
-    isError: isCreateEmbeddingError,
-  } = api.openAi.createEmbeddings.useMutation({
-    onSuccess: (data) => {
-      return data;
-    },
-    onError: (error) => {
-      return error;
-    },
-  });
+  const { mutate: createEmbedding, isLoading: isCreateEmbeddingLoading } =
+    api.openAi.createEmbeddings.useMutation({
+      onSuccess: async () => {
+        await refetchDocuments();
+        toast({
+          description: "Document added successfully",
+        });
+      },
+      onError: (error) => {
+        toast({
+          title: "Error creating embedding",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
+    });
 
   const handleCreateEmbedding = (text: string, name: string) => {
     if (!text || !name) return;
@@ -39,6 +46,7 @@ const ReadDocuments: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     getTextFromDoc(e);
+    e.target.value = "";
   };
 
   return (
@@ -59,7 +67,6 @@ const ReadDocuments: React.FC = () => {
         >
           Save
         </Button>
-        {isCreateEmbeddingError && <p>Error</p>}
       </div>
 
       <div

@@ -47,21 +47,23 @@ const readPdf = (file: File, setText: Dispatch<SetStateAction<Text>>) => {
 
       const pdf = await pdfjs.getDocument({ data: pdfData }).promise;
 
-      // Read text from the first page (you can iterate through pages if needed)
-      const page = await pdf.getPage(1);
-      const pageTextContent = await page.getTextContent();
+      const numOfPages = pdf.numPages;
 
-      // Extract text from the page
-      const pageTextArray: string[] = [];
-      for (const item of pageTextContent.items) {
-        if ("str" in item) {
-          pageTextArray.push(item.str);
-        }
+      // Read text from the first page (you can iterate through pages if needed)
+      let accText = "";
+      for (let i = 1; i <= numOfPages; i++) {
+        const page = await pdf.getPage(i);
+        const pageTextContent = await page.getTextContent();
+
+        const text = pageTextContent.items
+          .map((item) => "str" in item && item.str)
+          .join(" ");
+
+        accText += text;
       }
-      const pageTextString = pageTextArray.join(" ");
 
       setText({
-        text: pageTextString,
+        text: accText,
         name: file.name,
         states: { loading: false },
       });

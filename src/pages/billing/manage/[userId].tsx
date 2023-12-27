@@ -129,13 +129,11 @@ export const getServerSideProps: GetServerSideProps = async (
   const userId = context.query.userId;
 
   const session = await getServerAuthSession(context);
-  console.log("session?.user.id !== userId", session?.user.id, userId);
   if (session?.user.id !== userId) return { props: { subscription: null } };
 
   const user = { id: String(userId) };
 
   const subscriptionPlan = await getUserSubscriptionPlan(user);
-  console.log("plan", subscriptionPlan.plan);
 
   return {
     props: {

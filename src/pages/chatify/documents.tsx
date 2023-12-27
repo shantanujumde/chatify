@@ -8,10 +8,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Spinner from "@/components/ui/spinner";
+import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
-import type { FC } from "react";
+import { useState, type FC } from "react";
 
 const Documents: FC = ({}) => {
+  const [page, setPage] = useState(1);
+  const getDocuments = api.documents.getMyDocuments.useQuery({ page });
+
   const { status } = useSession({
     required: true,
   });
@@ -19,7 +23,6 @@ const Documents: FC = ({}) => {
   if (status === "loading") {
     return <Spinner />;
   }
-
   return (
     <Card>
       <div
@@ -41,7 +44,9 @@ const Documents: FC = ({}) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ReadDocuments />
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
+        <ReadDocuments refetchDocuments={getDocuments.refetch} />
         {/* alternate way to get documents with drag and drop method */}
         {/* <DragDocuments /> */}
       </CardContent>
@@ -53,7 +58,11 @@ const Documents: FC = ({}) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ShowDocuments />
+        <ShowDocuments
+          getDocuments={getDocuments}
+          setPage={setPage}
+          page={page}
+        />
       </CardContent>
     </Card>
   );

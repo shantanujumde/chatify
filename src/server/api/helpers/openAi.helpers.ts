@@ -1,10 +1,54 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import type { DefaultArgs } from "@prisma/client/runtime/library";
 import { createClient, type Session } from "@supabase/supabase-js";
+import { TRPCError } from "@trpc/server";
 import { encode } from "gpt-3-encoder";
-import { Configuration, OpenAIApi } from "openai";
+import { OpenAI } from "openai";
+import { type CreateEmbeddingResponse } from "openai/resources";
 import type { File, FileChunks } from "../types/openAi.types";
 import type { Database } from "../types/supabase.types";
+
+export const openAi = new OpenAI({
+  apiKey: process.env.OPEN_AI_API_KEY,
+});
+
+export const createEmbedding = async (
+  text: string[] | string
+): Promise<CreateEmbeddingResponse> => {
+  return await openAi.embeddings.create({
+    model: "text-embedding-ada-002",
+    input: text,
+  });
+};
+
+export const getClosestEmbeddings = async (text: string) => {
+  const embeddingResponse = await createEmbedding(text);
+
+  if (!embeddingResponse)
+    throw new Error("Failed to create embedding for question");
+
+  const embedding = embeddingResponse.data[0]?.embedding;
+
+  if (!embedding) throw new Error("Failed to create embedding for question");
+
+  const { error: matchError, data: pageSections } = await supabaseClient.rpc(
+    "match_documents",
+    {
+      query_embedding: embedding as unknown as string,
+      match_threshold: 0.5,
+      match_count: 10,
+    }
+  );
+
+  if (matchError)
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Similar text not found!" + JSON.stringify(matchError),
+      cause: matchError,
+    });
+
+  return pageSections;
+};
 
 export const supabaseClient = createClient<Database>(
   String(process.env.SUPABASE_URL),
@@ -16,12 +60,6 @@ export const supabaseClient = createClient<Database>(
     },
   }
 );
-
-const configuration = new Configuration({
-  apiKey: process.env.OPEN_AI_API_KEY,
-});
-
-export const openai = new OpenAIApi(configuration);
 
 export function getHash(text: string) {
   let hash = 0,

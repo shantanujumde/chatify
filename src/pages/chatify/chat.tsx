@@ -11,12 +11,20 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { toast } from "@/components/ui/use-toast";
 import { api } from "@/utils/api";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
   PaperPlaneIcon,
 } from "@radix-ui/react-icons";
+import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -39,61 +47,104 @@ const Chat: FC = ({}) => {
   });
 
   const { data: chats, isLoading: chatsIsLoading } = api.chat.getChats.useQuery(
-    { page: Number(currentChat) }
-  );
-
-  const createChat = api.chat.createChat.useMutation({
-    onMutate: async ({ question, response }) => {
-      await utils.chat.getChats.cancel();
-
-      if (chats && userData) {
-        utils.chat.getChats.setData(
-          { page: Number(currentChat) },
-          {
-            chatLength: (chats.chatLength ?? 0) + 1,
-            chats: [
-              ...(chats.chats ?? []),
-              {
-                id: (chats.chats?.length ?? 0) + 1,
-                question,
-                response,
-                createdAt: new Date(),
-                userId: userData.user?.id ?? "",
-              },
-            ],
-          }
-        );
-      }
-
-      return chats;
-    },
-    onError: (__, _, context) => {
-      utils.chat.getChats.setData({ page: Number(currentChat) }, context);
-    },
-    onSettled: async () => {
-      if (questionRef?.current) questionRef.current.value = "";
-      const chatWindow = document.getElementById("chatWindow");
-      if (chatWindow)
-        chatWindow.scrollTo({
-          top: chatWindow.scrollHeight,
-          behavior: "smooth",
+    { page: Number(currentChat) },
+    {
+      onError: (error) => {
+        toast({
+          title: error.message.includes("NOTSUBSCRIBED")
+            ? "Subscribe 😊"
+            : "Error",
+          description:
+            "Please subscribe to use this feature.\n Already subscribed? Please try re-login.",
+          variant: "destructive",
         });
-      await utils.chat.getChats.invalidate();
-    },
-  });
+      },
+    }
+  );
 
   const questionRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const question = questionRef.current?.value;
-    if (question) {
-      createChat.mutate({
-        question,
-        response: (Math.random() * 100).toString(),
-      });
-    }
+    const message = questionRef.current?.value;
+
+    if (message) sendMessage({ message });
   };
+
+  const addMessageToChats = (message: string, response?: string) => {
+    if (chats && userData) {
+      utils.chat.getChats.setData(
+        { page: Number(currentChat) },
+        {
+          chatLength: (chats.chatLength ?? 0) + 1,
+          chats: [
+            ...(chats.chats ?? []),
+            {
+              id: (chats.chats?.length ?? 0) + 1,
+              question: message,
+              response: response ?? "",
+              createdAt: new Date(),
+              userId: userData.user?.id ?? "",
+            },
+          ],
+        }
+      );
+    }
+    return chats;
+  };
+
+  const { mutate: sendMessage } = useMutation({
+    mutationFn: async ({ message }: { message: string }) => {
+      const response = await fetch("/api/message", {
+        method: "POST",
+        body: JSON.stringify({ message, chats }),
+      });
+
+      return response.body;
+    },
+    onMutate: async ({ message }) => {
+      if (questionRef?.current) questionRef.current.value = "";
+      await utils.chat.getChats.cancel();
+
+      return addMessageToChats(message);
+    },
+    async onSuccess(stream, { message }) {
+      if (!stream)
+        return toast({
+          title: "There was a problem sending this message",
+          description: "Please refresh this page and try again",
+          variant: "destructive",
+        });
+
+      const reader = stream.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      chats?.chats.pop();
+
+      let chatsUpdated = chats;
+      // accumulated response
+      let accResponse = "";
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+
+        accResponse += chunkValue;
+
+        chatsUpdated = addMessageToChats(message, accResponse);
+      }
+      return chatsUpdated;
+    },
+    onError: () => {
+      toast({
+        title: "There was a problem sending this message",
+        description: "Please refresh this page and try again",
+        variant: "destructive",
+      });
+    },
+    onSettled: async () => await utils.chat.getChats.invalidate(),
+  });
 
   return (
     <>
@@ -133,9 +184,14 @@ const Chat: FC = ({}) => {
                 getDocuments.data.documents.map((document) => (
                   <li
                     key={document.id}
-                    className="mt-1 cursor-pointer truncate rounded-2xl bg-gray-300/20 p-1 text-center transition duration-300 ease-in-out hover:bg-gray-300/50 "
+                    className="mt-1 cursor-pointer truncate rounded-2xl bg-gray-300/20 px-4 py-1 text-center transition duration-300 ease-in-out hover:bg-gray-300/50 "
                   >
-                    {document.name}
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>{document.name}</TooltipTrigger>
+                        <TooltipContent>{document.name}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </li>
                 ))
               )}
@@ -182,9 +238,9 @@ const Chat: FC = ({}) => {
                 className="px-2 py-4"
                 href={`?page=${currentChat}&file=${
                   getDocuments.data?.pageLength &&
-                  getDocuments.data?.pageLength <= Number(currentFile)
+                  Number(currentFile) < getDocuments.data?.pageLength
                     ? Number(currentFile) + 1
-                    : 1
+                    : Number(currentFile)
                 }`}
               >
                 <DoubleArrowRightIcon />
@@ -203,7 +259,6 @@ const Chat: FC = ({}) => {
             <ChatMessages
               chats={chats?.chats}
               isScreenLoading={chatsIsLoading}
-              isChatLoading={createChat.isLoading}
               user={userData?.user}
             />
           </CardContent>
@@ -214,6 +269,7 @@ const Chat: FC = ({}) => {
                 type="text"
                 name="text"
                 placeholder="Type here..."
+                autoComplete="off"
               />
               <Button type="submit" className="ml-4">
                 <PaperPlaneIcon />
