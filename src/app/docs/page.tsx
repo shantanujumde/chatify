@@ -63,7 +63,7 @@ const Docs: FC = ({}) => {
                   </ol>
                 </div>
                 <Image
-                  src="/chat-preview.webp"
+                  src="/addDocuments.webp"
                   alt="uploading preview"
                   width={800}
                   height={250}
@@ -81,7 +81,7 @@ const Docs: FC = ({}) => {
           >
             <div className="flex justify-center gap-8 align-middle max-md:flex-col-reverse md:flex-row">
               <Image
-                src="/chat-preview.webp"
+                src="/chat.webp"
                 alt="uploading preview"
                 width={800}
                 height={250}
@@ -167,7 +167,7 @@ const Docs: FC = ({}) => {
                 </ol>
               </div>
               <Image
-                src="/chat-preview.webp"
+                src="/chat.webp"
                 alt="uploading preview"
                 width={800}
                 height={250}
@@ -184,7 +184,7 @@ const Docs: FC = ({}) => {
           >
             <div className="flex justify-center gap-8 align-middle max-md:flex-col-reverse md:flex-row">
               <Image
-                src="/chat-preview.webp"
+                src="/chat.webp"
                 alt="uploading preview"
                 width={800}
                 height={250}
@@ -261,7 +261,7 @@ const Docs: FC = ({}) => {
                 </ol>
               </div>
               <Image
-                src="/chat-preview.webp"
+                src="/chat.webp"
                 alt="uploading preview"
                 width={800}
                 height={250}
