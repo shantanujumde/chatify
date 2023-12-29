@@ -16,7 +16,7 @@ import EmailProvider from "next-auth/providers/email";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 import { createTransport } from "nodemailer";
-import { html, text } from "./api/helpers/auth.helpers";
+import { inviteUser, signInLink, text } from "./api/helpers/auth.helpers";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -107,12 +107,19 @@ export const authOptions: NextAuthOptions = {
         const { host } = new URL(url);
         // NOTE: You are not required to use `nodemailer`, use whatever you want.
         const transport = createTransport(provider.server as string);
+
+        const user = await prisma.user.findUnique({
+          where: {
+            email: identifier,
+          },
+        });
+
         const result = await transport.sendMail({
           to: identifier,
           from: provider.from,
           subject: `Sign in to Chatify`,
           text: text({ url, host }),
-          html: html({ url }),
+          html: user ? signInLink({ url, user }) : inviteUser({ url, user }),
         });
 
         const failed = result.rejected.concat(result.pending).filter(Boolean);

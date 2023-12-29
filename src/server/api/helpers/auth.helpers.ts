@@ -1,5 +1,7 @@
-export function html(params: { url: string }) {
-  const { url } = params;
+import type { User } from "@prisma/client";
+
+export function inviteUser(params: { url: string; user?: User | null }) {
+  const { url, user } = params;
 
   return `
 <!DOCTYPE html>
@@ -56,13 +58,13 @@ export function html(params: { url: string }) {
       <div class="header">
         <h1>Welcome to Chatify!</h1>
       </div>
-      <p>Dear [User's Name],</p>
+      <p>Dear ${user?.name ?? user?.email?.split("@")[0] ?? "user"},</p><br/>
       <p>Welcome to Chatify! We're thrilled to have you on board and excited for the journey ahead. You've taken the first step toward effortless information retrieval, and we're here to guide you through it.</p>
-      <p>Your Account Details:</p>
-    
-      <p>To get started:</p>
+      <br/><p>Your Account Details:</p>
+      <br/>
+      <p>To get started:</p><br/>
       <ol>
-        <li><strong>Login to Chatify:</strong> Click on the button to login <a href="${url}" class="button">Login Now</a>.</li>
+        <li><strong>Login to Chatify:</strong> Click on the button to login <br/><a href="${url}" class="button">Login Now</a>.</li>
         <li><strong>Explore Chatify:</strong> Add documents or type in information manually, and start chatting with Chatify to retrieve the data you need effortlessly.</li>
         <li><strong>Need Help?</strong> Don't hesitate to reach out to our support team at [Support Email] if you have any questions or need assistance.</li>
       </ol>
@@ -71,6 +73,80 @@ export function html(params: { url: string }) {
       <div class="footer">
         <p>Best regards,<br>Shantanu Jumde<br>CEO<br>Chatify Team</p>
       </div>
+    </div>
+  </body>
+  </html>
+
+  `;
+}
+
+export function signInLink(params: { url: string; user?: User | null }) {
+  const { url, user } = params;
+
+  return `
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Chatify!</title>
+    <style>
+      /* Custom styles with theme colors */
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        text-decoration: none;
+        background-color: #21B357;
+        color: #fff;
+        border-radius: 5px;
+      }
+      .footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #888;
+        text-align: center;
+      }
+      h1, h2 {
+        color: #121212;
+      }
+      ul, ol, p {
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Welcome to Chatify!</h1>
+      </div>
+      <p>Dear ${user?.name ?? user?.email?.split("@")[0] ?? "user"},</p>
+     <br/><p>Your Account Details:</p>
+      <br/>
+      <p>To Login:</p><br/>
+      <ol>
+        <li><strong>Login to Chatify:</strong> Please use the button to login directly <br/><a href="${url}" class="button">Login Now</a>.</li>
+        <li><strong>Dont&apos;s:</strong> Please do not share the contents of the mail with anyone.</li>
+      </ol>
+  
     </div>
   </body>
   </html>

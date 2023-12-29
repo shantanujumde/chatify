@@ -1,10 +1,8 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { prisma } from "@/server/db";
-import { hash } from "bcrypt";
-import { randomUUID } from "crypto";
 import nodemailer from "nodemailer";
 import { env } from "process";
 import { z } from "zod";
+import { inviteUser } from "../helpers/auth.helpers";
 import { getOrganizationId } from "../helpers/profile.helpers";
 
 export const profileRouter = createTRPCRouter({
@@ -68,33 +66,33 @@ export const profileRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const organizationId = await getOrganizationId(ctx);
 
-      const { email, password } = await createUser(input.email, organizationId);
+      const user = await ctx.prisma.user.upsert({
+        update: {
+          email: input.email,
+          organizationId,
+        },
+        where: {
+          email: input.email,
+        },
+        create: {
+          email: input.email,
+          organizationId,
+        },
+      });
+
+      console.info("invited the user by InviteUser functionality", user);
+
       sendEmail(
-        "Welcome to Chatify",
-        "here is your username & password " + email + " " + password,
+        "You are invited to Chatify",
+        inviteUser({ url: "http://localhost:3000/auth/login", user }),
         input.email
       );
     }),
 });
 
-export const createUser = async (email: string, organizationId: string) => {
-  const password = randomUUID();
-  const hashedPassword = await hash(password, 10);
-
-  await prisma.user.create({
-    data: {
-      email,
-      password: hashedPassword,
-      organizationId,
-    },
-  });
-
-  return { email, password };
-};
-
 export const sendEmail = (
   subject: string,
-  text: string,
+  html: string,
   emailTo: string,
   emailFrom = "noreply@chatify.com"
 ) => {
@@ -110,7 +108,7 @@ export const sendEmail = (
     from: emailFrom,
     to: emailTo,
     subject,
-    text,
+    html,
   };
 
   mailer.sendMail(mailDetails, function (err) {
