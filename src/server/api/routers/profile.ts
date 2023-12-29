@@ -2,8 +2,9 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import nodemailer from "nodemailer";
 import { env } from "process";
 import { z } from "zod";
-import { inviteUser } from "../helpers/auth.helpers";
+import { inviteUserEmailHtml } from "../helpers/auth.helpers";
 import { getOrganizationId } from "../helpers/profile.helpers";
+import { type UserMetadataInviteType } from "../types/profile.types";
 
 export const profileRouter = createTRPCRouter({
   getUserProfile: protectedProcedure
@@ -66,25 +67,70 @@ export const profileRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const organizationId = await getOrganizationId(ctx);
 
-      const user = await ctx.prisma.user.upsert({
-        update: {
-          email: input.email,
-          organizationId,
-        },
-        where: {
-          email: input.email,
-        },
-        create: {
-          email: input.email,
-          organizationId,
-        },
+      const user = await ctx.prisma.user.findUnique({
+        where: { email: input.email },
+        include: { Organization: true },
       });
+
+      if (user) {
+        if (user.organizationId) {
+          const metaData: UserMetadataInviteType = {
+            expired: false,
+            invitedBy: ctx.session.user.id,
+            invitedOn: new Date().toISOString(),
+            invitedToOrganization: organizationId,
+          };
+
+          await ctx.prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              metaData,
+            },
+          });
+          return sendEmail(
+            "You are invited to Chatify",
+            inviteUserEmailHtml({
+              url: "http://localhost:3000/auth/login",
+              user,
+              message: {
+                title: "Warning",
+                body: `Your email will be unlinked from the previous organization (${user.organizationId}, ${user.Organization?.name}). (If you don't want this to happen please use different email, contact support for more info)`,
+              },
+            }),
+            input.email
+          );
+        } else {
+          await ctx.prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              organizationId,
+            },
+          });
+        }
+      } else {
+        await ctx.prisma.organization.update({
+          where: {
+            id: organizationId,
+          },
+          data: {
+            users: {
+              create: {
+                email: input.email,
+              },
+            },
+          },
+        });
+      }
 
       console.info("invited the user by InviteUser functionality", user);
 
       sendEmail(
         "You are invited to Chatify",
-        inviteUser({ url: "http://localhost:3000/auth/login", user }),
+        inviteUserEmailHtml({ url: "http://localhost:3000/auth/login", user }),
         input.email
       );
     }),

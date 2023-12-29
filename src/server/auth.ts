@@ -16,7 +16,11 @@ import EmailProvider from "next-auth/providers/email";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 import { createTransport } from "nodemailer";
-import { inviteUser, signInLink, text } from "./api/helpers/auth.helpers";
+import {
+  inviteUserEmailHtml,
+  signInLinkEmailHtml,
+  text,
+} from "./api/helpers/auth.helpers";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -119,7 +123,9 @@ export const authOptions: NextAuthOptions = {
           from: provider.from,
           subject: `Sign in to Chatify`,
           text: text({ url, host }),
-          html: user ? signInLink({ url, user }) : inviteUser({ url, user }),
+          html: user
+            ? signInLinkEmailHtml({ url, user })
+            : inviteUserEmailHtml({ url, user }),
         });
 
         const failed = result.rejected.concat(result.pending).filter(Boolean);
