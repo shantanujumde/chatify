@@ -1,10 +1,14 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 import nodemailer from "nodemailer";
 import { env } from "process";
 import { z } from "zod";
 import { inviteUserEmailHtml } from "../helpers/auth.helpers";
 import { getOrganizationId } from "../helpers/profile.helpers";
-import { type UserMetadataInviteType } from "../types/profile.types";
+import {
+  UserMetadataInviteSchema,
+  type UserMetadataInviteType,
+} from "../types/profile.types";
 
 export const profileRouter = createTRPCRouter({
   getUserProfile: protectedProcedure
@@ -62,6 +66,38 @@ export const profileRouter = createTRPCRouter({
       return role;
     }),
 
+  getInviteUserMetadata: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: {
+        id: ctx.session.user.id,
+      },
+    });
+
+    if (!user)
+      throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+
+    const validationMetaData = UserMetadataInviteSchema.safeParse(
+      user.metaData
+    );
+
+    if (validationMetaData.success) {
+      const inviteeUser = await ctx.prisma.user.findUnique({
+        where: {
+          id: validationMetaData.data.invitedBy,
+        },
+        include: {
+          Organization: true,
+        },
+      });
+
+      return {
+        invitedBy: inviteeUser,
+        invitedOn: validationMetaData.data.invitedOn,
+        invitedToOrganization: validationMetaData.data.invitedToOrganization,
+      };
+    }
+  }),
+
   inviteUser: protectedProcedure
     .input(z.object({ email: z.string().email() }))
     .mutation(async ({ input, ctx }) => {
@@ -82,12 +118,8 @@ export const profileRouter = createTRPCRouter({
           };
 
           await ctx.prisma.user.update({
-            where: {
-              id: user.id,
-            },
-            data: {
-              metaData,
-            },
+            where: { id: user.id },
+            data: { metaData },
           });
           return sendEmail(
             "You are invited to Chatify",
@@ -103,26 +135,14 @@ export const profileRouter = createTRPCRouter({
           );
         } else {
           await ctx.prisma.user.update({
-            where: {
-              id: user.id,
-            },
-            data: {
-              organizationId,
-            },
+            where: { id: user.id },
+            data: { organizationId },
           });
         }
       } else {
         await ctx.prisma.organization.update({
-          where: {
-            id: organizationId,
-          },
-          data: {
-            users: {
-              create: {
-                email: input.email,
-              },
-            },
-          },
+          where: { id: organizationId },
+          data: { users: { create: { email: input.email } } },
         });
       }
 
