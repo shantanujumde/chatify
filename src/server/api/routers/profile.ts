@@ -12,36 +12,31 @@ import {
 } from "../types/profile.types";
 
 export const profileRouter = createTRPCRouter({
-  getUserProfile: protectedProcedure
+  getUser: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       const user = await ctx.prisma.user.findFirst({
-        where: {
-          id: input.id,
+        where: { id: input.id },
+        include: {
+          Organization: {
+            select: {
+              id: true,
+              name: true,
+              File: true,
+              users: true,
+              _count: { select: { File: true } },
+            },
+          },
+          _count: { select: { Chats: true } },
         },
       });
 
-      const organizationId = await getOrganizationId(ctx);
-
-      const [organization, documentsCount, chatsCount] =
-        await ctx.prisma.$transaction([
-          ctx.prisma.organization.findFirst({
-            where: {
-              id: organizationId,
-            },
-            select: {
-              name: true,
-              users: true,
-            },
-          }),
-
-          ctx.prisma.file.count({
-            where: { deleted: false, organizationId },
-          }),
-          ctx.prisma.chats.count({ where: { userId: ctx.session.user.id } }),
-        ]);
-
-      return { user, organization, documentsCount, chatsCount };
+      return {
+        user,
+        organization: user?.Organization,
+        documentsCount: user?.Organization?._count.File,
+        chatsCount: user?._count.Chats,
+      };
     }),
 
   updateUser: protectedProcedure

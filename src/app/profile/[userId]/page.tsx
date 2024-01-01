@@ -22,7 +22,7 @@ const Profile = ({ params }: { params: { userId: string } }) => {
   const id = params.userId;
 
   const { isLoading: profileIsLoading, data: profile } =
-    api.profile.getUserProfile.useQuery(
+    api.profile.getUser.useQuery(
       { id: String(id) },
       { enabled: sessionData?.user !== undefined }
     );
@@ -132,7 +132,7 @@ const Profile = ({ params }: { params: { userId: string } }) => {
                     height="2rem"
                     borderRadius="1rem"
                   />
-                ) : !profile.organization?.users.length ? (
+                ) : !profile.organization?.users?.length ? (
                   <EmptyItems />
                 ) : (
                   profile.organization.users.map((user) => (
