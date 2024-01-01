@@ -39,7 +39,10 @@ const EditProfile = ({}) => {
 
   return (
     <main>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={(event) => void handleSubmit(onSubmit)(event)}
+      >
         {fields.map((field) => (
           <HooksInput<EditFormType>
             key={field.name}
