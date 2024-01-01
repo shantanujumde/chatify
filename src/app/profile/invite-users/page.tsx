@@ -36,7 +36,7 @@ const Page: FC = ({}) => {
   };
 
   return (
-    <div className="flex h-[80vh] w-full items-center justify-center">
+    <main className="flex h-[80vh] w-full items-center justify-center">
       <div
         aria-hidden="true"
         className="pointer-events-none fixed  inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -60,7 +60,7 @@ const Page: FC = ({}) => {
           Invite
         </Button>
       </div>
-    </div>
+    </main>
   );
 };
 
