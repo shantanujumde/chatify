@@ -54,29 +54,6 @@ export const profileRouter = createTRPCRouter({
       return user;
     }),
 
-  purchase: protectedProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-        paymentDetails: z.object({
-          price: z.number(),
-          status: z.string(),
-          planCategory: z.enum(["basic", "premium"]),
-        }),
-        premiumUser: z.boolean(),
-        role: z.enum(["user", "admin"]),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const role = await ctx.prisma.rolesAndPaymentInfo.create({
-        data: {
-          ...input,
-        },
-      });
-
-      return role;
-    }),
-
   getInviteUserMetadata: protectedProcedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findUnique({
       where: {
