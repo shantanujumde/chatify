@@ -13,23 +13,22 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 
-interface InvitationDialogProps {}
-
-const InvitationDialog: FC<InvitationDialogProps> = ({}) => {
+const InvitationDialog: FC = ({}) => {
   const { status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
-
-  console.log("🚀 ~ file: topNavBar.tsx:39 ~ TopNavBar ~ isOpen:", isOpen);
 
   const { data: inviteMetaData } = api.profile.getInviteUserMetadata.useQuery(
     void 0,
     {
       enabled: status === "authenticated",
-      onSuccess: () => {
-        setIsOpen(true);
-      },
+      onSuccess: () => setIsOpen(true),
     }
   );
+
+  const { mutate: updateUser, isLoading: updateUserLoading } =
+    api.profile.updateUser.useMutation({
+      onSettled: () => setIsOpen(false),
+    });
 
   return (
     <Dialog open={isOpen}>
@@ -72,8 +71,24 @@ const InvitationDialog: FC<InvitationDialogProps> = ({}) => {
           </li>
         </ul>
         <DialogFooter className="sm:justify-start">
-          <Button>Accept</Button>
-          <Button variant="secondary">Delete Invitation</Button>
+          <Button
+            loading={updateUserLoading}
+            onClick={() =>
+              updateUser({
+                metaData: null,
+                organizationId: inviteMetaData?.invitedToOrganization,
+              })
+            }
+          >
+            Accept
+          </Button>
+          <Button
+            loading={updateUserLoading}
+            variant="secondary"
+            onClick={() => updateUser({ metaData: null })}
+          >
+            Delete Invitation
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,4 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { type User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import nodemailer from "nodemailer";
 import { env } from "process";
@@ -41,6 +42,21 @@ export const profileRouter = createTRPCRouter({
         ]);
 
       return { user, organization, documentsCount, chatsCount };
+    }),
+
+  updateUser: protectedProcedure
+    .input((input) => input as Partial<User>)
+    .mutation(async ({ input, ctx }) => {
+      const user = await ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          ...input,
+          metaData: JSON.stringify(input.metaData),
+        },
+      });
+      return user;
     }),
 
   purchase: protectedProcedure
