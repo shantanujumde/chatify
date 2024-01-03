@@ -13,38 +13,39 @@ function HooksInput<TReview extends FieldValues>({
   errors,
   label,
   isRequired = false,
+  labelProps,
   ...props
 }: HooksInputProps<TReview>) {
   const isError = errors && errors[name];
 
   return (
-    <div className="">
-      <label htmlFor={name} className="">
+    <>
+      <label htmlFor={name} {...labelProps}>
         {label}
-        {isRequired && <span className="text-red-600">*</span>}
+        {isRequired && <span className="text-red-400">*</span>}
       </label>
 
       {props.field === "input" ? (
         <Input
-          className={isError ? "border-red-600" : ""}
+          className={isError ? "border-red-400" : ""}
           id={name}
           {...props}
           {...register(name, { required: isRequired })}
         />
       ) : (
         <Textarea
-          className={isError ? "border-red-600" : ""}
+          className={isError ? "border-red-400" : ""}
           id={name}
           {...props}
           {...register(name, { required: isRequired })}
         />
       )}
       {isError && (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        <div className="error body-text-small">{errors[name].message}</div>
+        <div className="text-sm font-semibold text-red-400">
+          {String(errors[name]?.message)}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -74,4 +75,5 @@ export type HooksInputPropsSharable<TReview> = (
   name: Path<TReview>;
   placeholder?: string;
   isRequired?: boolean;
+  labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>;
 };
