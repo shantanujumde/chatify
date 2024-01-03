@@ -22,7 +22,6 @@ import { ModeToggle } from "./mode";
 import { Button } from "./ui/button";
 
 import Spinner from "./ui/spinner";
-import InvitationDialog from "./invitationDialog";
 
 export function TopNavBar() {
   const { data, status } = useSession();
@@ -102,7 +101,6 @@ export function TopNavBar() {
         !show ? "opacity-0" : "opacity-100"
       }`}
     >
-      <InvitationDialog />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
