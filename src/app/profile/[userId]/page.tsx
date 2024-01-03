@@ -3,7 +3,7 @@ import EmptyItems from "@/components/emptyItems";
 import Spinner from "@/components/ui/spinner";
 import { api } from "@/utils/api";
 import { format } from "date-fns";
-import { UserCircle2 } from "lucide-react";
+import { UserCircle2Icon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -45,17 +45,19 @@ const Profile = ({ params }: { params: { userId: string } }) => {
             <div className="flex flex-wrap justify-center">
               <div className="flex w-full justify-center px-4">
                 <div className="relative">
-                  {sessionData.user?.image ? (
-                    <Image
-                      alt="profile pic"
-                      src={sessionData.user.image}
-                      width={300}
-                      height={300}
-                      className="-mt-20  max-h-[300px] rounded-full border-none bg-white object-none text-center align-middle shadow-xl dark:bg-gray-800"
-                    />
-                  ) : (
-                    <UserCircle2 className="-mt-20 h-40 w-40 rounded-full border-none bg-white text-center align-middle shadow-xl dark:bg-gray-800" />
-                  )}
+                  <div className="-mt-20 rounded-full border-none bg-white object-none text-center align-middle shadow-xl dark:border dark:border-gray-400 dark:bg-gray-800 dark:text-white dark:shadow-gray-500">
+                    {sessionData.user?.image ? (
+                      <Image
+                        alt="profile pic"
+                        src={sessionData.user.image}
+                        width={240}
+                        height={240}
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <UserCircle2Icon className="h-60 w-60" />
+                    )}
+                  </div>
                 </div>
               </div>
               <Link
