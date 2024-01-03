@@ -3,7 +3,9 @@ import HooksInput, {
   type HooksInputPropsSharable,
 } from "@/components/HooksInput";
 import { Button } from "@/components/ui/button";
+import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 
@@ -13,14 +15,29 @@ const EditProfile = ({}) => {
     // image: z.string().min(1, "Invalid image"),
   });
 
+  const { data: sessionData, status } = useSession({
+    required: true,
+  });
+
+  const userId = sessionData?.user?.id;
+
+  const { data: userProfile } = api.profile.getUser.useQuery(
+    { id: userId! },
+    { enabled: status === "authenticated" }
+  );
+
+  const { mutate: updateUserProfile } = api.profile.updateUser.useMutation();
+
   type EditFormType = z.infer<typeof EditProfileSchema>;
 
   const fields: HooksInputPropsSharable<EditFormType>[] = [
     {
-      label: "Name",
+      label: "Name (first and last name)",
       name: "name",
       field: "input",
       type: "text",
+      placeholder: "e.g. John Doe",
+      value: userProfile?.user?.name ?? "",
     },
   ];
 
@@ -34,13 +51,15 @@ const EditProfile = ({}) => {
   });
 
   const onSubmit: SubmitHandler<EditFormType> = (data) => {
+    updateUserProfile(data);
     console.log(data);
   };
 
   return (
     <main>
+      <h1 className="text-3xl font-bold">Edit Profile</h1>
       <form
-        className="flex flex-col gap-4"
+        className="mt-4 flex flex-col gap-4"
         onSubmit={(event) => void handleSubmit(onSubmit)(event)}
       >
         {fields.map((field) => (
@@ -49,6 +68,9 @@ const EditProfile = ({}) => {
             {...field}
             register={register}
             errors={errors}
+            labelProps={{
+              className: "text-md uppercase font-medium",
+            }}
           />
         ))}
         <Button type="submit" disabled={!isValid}>
