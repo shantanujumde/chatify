@@ -1,5 +1,7 @@
 "use client";
 import EmptyItems from "@/components/emptyItems";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Spinner from "@/components/ui/spinner";
 import { api } from "@/utils/api";
 import { format } from "date-fns";
@@ -8,10 +10,14 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Avatar from "react-avatar-edit";
 import Skeleton from "react-loading-skeleton";
 
 const Profile = ({ params }: { params: { userId: string } }) => {
   const router = useRouter();
+
+  const [imgCrop, setImgCrop] = useState("");
 
   const { data: sessionData, status } = useSession({
     required: true,
@@ -37,6 +43,19 @@ const Profile = ({ params }: { params: { userId: string } }) => {
       />
     );
 
+  const onClose = () => {};
+
+  const onCrop = (view: string) => {
+    setImgCrop(view);
+  };
+
+  const saveImage = () => {
+    console.log(
+      "🚀 ~ file: page.tsx:57 ~ Profile ~ saveImage ~ storeImage",
+      imgCrop
+    );
+  };
+
   return (
     <section className="pt-16 ">
       <div className=" mx-auto w-full px-4 lg:w-1/2">
@@ -46,17 +65,30 @@ const Profile = ({ params }: { params: { userId: string } }) => {
               <div className="flex w-full justify-center px-4">
                 <div className="relative">
                   <div className="-mt-20 rounded-full border-none bg-white object-none text-center align-middle shadow-xl dark:border dark:border-gray-400 dark:bg-gray-800 dark:text-white dark:shadow-gray-500">
-                    {sessionData.user?.image ? (
-                      <Image
-                        alt="profile pic"
-                        src={sessionData.user.image}
-                        width={240}
-                        height={240}
-                        className="rounded-full"
-                      />
-                    ) : (
-                      <UserCircle2Icon className="h-60 w-60" />
-                    )}
+                    <Dialog>
+                      <DialogTrigger>
+                        {sessionData.user?.image ? (
+                          <Image
+                            alt="profile pic"
+                            src={sessionData.user.image}
+                            width={240}
+                            height={240}
+                            className="rounded-full"
+                          />
+                        ) : (
+                          <UserCircle2Icon className="h-60 w-60" />
+                        )}
+                      </DialogTrigger>
+                      <DialogContent className="flex flex-col text-center">
+                        <Avatar
+                          width={240}
+                          height={240}
+                          onClose={onClose}
+                          onCrop={onCrop}
+                        />
+                        <Button onClick={saveImage}>Save</Button>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </div>
               </div>
