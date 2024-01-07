@@ -55,11 +55,6 @@ const Docs: FC = ({}) => {
                     <li>
                       The documents can be PDFs, Word, Excel, Text files etc
                     </li>
-                    <li>There is a limit of 50 documents in the free plan</li>
-                    <li>
-                      Uploaded documents are only accessible to you in your
-                      account
-                    </li>
                   </ol>
                 </div>
                 <Image
@@ -94,7 +89,6 @@ const Docs: FC = ({}) => {
                     Go to the &quot;Chat&quot; page after documents are uploaded
                   </li>
                   <li>The left panel shows all your available documents</li>
-                  <li>Click on a document to select it for chatting</li>
                   <li>Type a question in the chatbox at the bottom</li>
                   <li>
                     The app will process and return an answer from the document
@@ -111,9 +105,6 @@ const Docs: FC = ({}) => {
                   </li>
                   <li>
                     Relevant sections from the document are shown as answers
-                  </li>
-                  <li>
-                    Switch documents in the left panel to chat with other docs
                   </li>
                 </ol>
               </div>
@@ -138,9 +129,6 @@ const Docs: FC = ({}) => {
                   <li>This shows your current subscription plan details</li>
                   <li>
                     You can upgrade, downgrade or cancel your subscription here
-                  </li>
-                  <li>
-                    The free plan allows limited knowledge base size and users
                   </li>
                   <li>
                     Paid plans unlock more features like integrations, priority
@@ -203,10 +191,6 @@ const Docs: FC = ({}) => {
                     The invite email will be sent to them with sign up
                     instructions
                   </li>
-                  <li>
-                    You can see all your team members and their statuses on this
-                    page
-                  </li>
                   <li>Revoke access for members any time by removing them</li>
                   <li>
                     Manage roles like admin, editor, viewer etc for members
@@ -214,10 +198,6 @@ const Docs: FC = ({}) => {
                   <li>
                     Admins can add, edit, delete documents in your knowledge
                     base
-                  </li>
-                  <li>
-                    Editors can add and edit documents while viewers can only
-                    chat
                   </li>
                   <li>Configure permissions as needed for each team member</li>
                 </ol>
@@ -235,26 +215,14 @@ const Docs: FC = ({}) => {
               <div className="mt-8 flex flex-col justify-center text-xl">
                 <h2 className="mb-2 text-2xl font-bold">Using Profile</h2>
                 <ol className="list-inside list-decimal">
-                  <li> Go to your profile page by clicking your avatar</li>
-                  <li>
-                    You can customize your public profile seen by other users
-                  </li>
-                  <li>
-                    Add your name, bio, profile photo and other details here
-                  </li>
-                  <li>
-                    Your account settings like email and password can also be
-                    changed
-                  </li>
+                  <li>Go to your profile page by clicking your avatar</li>
+                  <li>You can customize your profile</li>
+                  <li>Add your name, profile photo and other details here</li>
                   <li>
                     You can view your subscription plan details and status
                   </li>
                   <li>See your knowledge base usage and limits on this page</li>
-                  <li>Lists all the documents you have uploaded</li>
-                  <li>
-                    Monitor your chatbot&apos;s performance from the analytics
-                  </li>
-                  <li>Integrate with other apps you use via the connections</li>
+                  <li>Number of all the documents you have uploaded</li>
                   <li>
                     Customize your experience by modifying your profile settings
                   </li>

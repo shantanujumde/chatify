@@ -45,7 +45,7 @@ export function TopNavBar() {
         "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
     },
     {
-      title: "Invite Users",
+      title: "Team",
       href: "/profile/invite-users",
       description: "Invite users to who can access knowledge base",
     },
