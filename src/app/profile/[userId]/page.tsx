@@ -1,5 +1,7 @@
 "use client";
 import EmptyItems from "@/components/emptyItems";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Spinner from "@/components/ui/spinner";
 import { api } from "@/utils/api";
 import { format } from "date-fns";
@@ -8,10 +10,15 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState, type ChangeEvent } from "react";
+import Avatar from "react-avatar-edit";
 import Skeleton from "react-loading-skeleton";
+import { toast } from "../../../components/ui/use-toast";
 
 const Profile = ({ params }: { params: { userId: string } }) => {
   const router = useRouter();
+
+  const [imgCrop, setImgCrop] = useState("");
 
   const { data: sessionData, status } = useSession({
     required: true,
@@ -19,13 +26,35 @@ const Profile = ({ params }: { params: { userId: string } }) => {
       router.push("/auth/login");
     },
   });
+
   const id = params.userId;
+
+  const utils = api.useContext();
 
   const { isLoading: profileIsLoading, data: profile } =
     api.profile.getUser.useQuery(
       { id: String(id) },
       { enabled: sessionData?.user !== undefined }
     );
+
+  const { mutate: updateUserProfile, isLoading: updateUserProfileIsLoading } =
+    api.profile.updateUser.useMutation({
+      onSuccess: async () => {
+        toast({
+          title: "Avatar Updated",
+          description: "Your avatar has been updated",
+        });
+        await utils.profile.getUser.invalidate();
+      },
+      onError: () => {
+        toast({
+          title: "Error",
+          description:
+            "Something went wrong, please try again, if issue persists please try with smaller image size",
+          variant: "destructive",
+        });
+      },
+    });
 
   if (status === "loading" || profileIsLoading) return <Spinner />;
 
@@ -37,6 +66,22 @@ const Profile = ({ params }: { params: { userId: string } }) => {
       />
     );
 
+  const onCrop = (view: string) => setImgCrop(view);
+
+  const saveImage = () => {
+    updateUserProfile({ image: imgCrop });
+  };
+
+  const onBeforeFileLoad = (elem: ChangeEvent<HTMLInputElement>) => {
+    if (elem.target.files && elem.target.files[0]!.size > 71680) {
+      toast({
+        title: "Error",
+        description: "Image size should be less than 7MB",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <section className="pt-16 ">
       <div className=" mx-auto w-full px-4 lg:w-1/2">
@@ -45,19 +90,43 @@ const Profile = ({ params }: { params: { userId: string } }) => {
             <div className="flex flex-wrap justify-center">
               <div className="flex w-full justify-center px-4">
                 <div className="relative">
-                  <div className="-mt-20 rounded-full border-none bg-white object-none text-center align-middle shadow-xl dark:border dark:border-gray-400 dark:bg-gray-800 dark:text-white dark:shadow-gray-500">
-                    {sessionData.user?.image ? (
-                      <Image
-                        alt="profile pic"
-                        src={sessionData.user.image}
-                        width={240}
-                        height={240}
-                        className="rounded-full"
+                  <Dialog>
+                    <DialogTrigger className="-mt-20 rounded-full border-none bg-white object-none text-center align-middle shadow-xl dark:border dark:border-gray-400 dark:bg-gray-800 dark:text-white dark:shadow-gray-500">
+                      {profile.user?.image ? (
+                        <Image
+                          alt="profile pic"
+                          src={profile.user?.image}
+                          width={240}
+                          height={240}
+                          className="rounded-full"
+                        />
+                      ) : (
+                        <UserCircle2Icon className="h-60 w-60" />
+                      )}
+                    </DialogTrigger>
+                    <DialogContent className="flex flex-col items-center justify-center">
+                      <Avatar
+                        cropColor="green"
+                        backgroundColor="green"
+                        labelStyle={{
+                          color: "rgb(209 213 219 / var(--tw-text-opacity))",
+                          fontSize: "20px",
+                          fontWeight: "bold",
+                        }}
+                        exportQuality={0.5}
+                        width={400}
+                        height={400}
+                        onCrop={onCrop}
+                        onBeforeFileLoad={onBeforeFileLoad}
                       />
-                    ) : (
-                      <UserCircle2Icon className="h-60 w-60" />
-                    )}
-                  </div>
+                      <Button className="w-1/4" onClick={saveImage}>
+                        Save{" "}
+                        {updateUserProfileIsLoading && (
+                          <Spinner className="h-6 w-6" />
+                        )}
+                      </Button>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
               <Link
