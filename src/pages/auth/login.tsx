@@ -31,7 +31,7 @@ export default function LoginAccount({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const LoginFormSchema = z.object({
     email: z.string().email("Invalid email"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    // password: z.string().min(6, "Password must be at least 6 characters"),
   });
 
   const [signInLoading, setSignInLoading] = useState(false);
@@ -49,13 +49,16 @@ export default function LoginAccount({
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     setSignInLoading(true);
-    const res = await signIn("credentials", {
+    const res = await signIn("email", {
       ...data,
       redirect: false,
     });
 
     if (res?.ok) {
-      await router.push("/");
+      toast({
+        description: "We have sent you the magic link to sign in!",
+      });
+      // await router.push("/");
     } else if (res?.error) {
       toast({
         variant: "destructive",
@@ -84,7 +87,7 @@ export default function LoginAccount({
           <CardHeader className="space-y-1">
             <CardTitle className="text-center text-2xl">Sign in</CardTitle>
             <CardDescription className="text-center">
-              Enter your email and password to login
+              Enter your email and sign in with the magic link on your email.
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -103,7 +106,8 @@ export default function LoginAccount({
                   </p>
                 )}
               </div>
-              <div className="grid gap-2">
+              {/**
+               * <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
@@ -115,7 +119,7 @@ export default function LoginAccount({
                     {errors.password.message}
                   </p>
                 )}
-              </div>
+              </div> */}
               {/* <div className="flex items-center space-x-2">
               <Checkbox id="terms" />
               <label
@@ -149,7 +153,8 @@ export default function LoginAccount({
           </div>
           <div className="m-2 mx-6 grid grid-cols-2 gap-6">
             {Object.values(providers).map((provider) => {
-              if (provider.id === "credentials") return;
+              if (provider.id === "credentials" || provider.id === "email")
+                return;
               return (
                 <Button
                   key={provider.name}

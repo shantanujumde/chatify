@@ -20,6 +20,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "./mode";
 import { Button } from "./ui/button";
+
 import Spinner from "./ui/spinner";
 
 export function TopNavBar() {
@@ -84,6 +85,14 @@ export function TopNavBar() {
       };
     }
   }, [controlNavbar, lastScrollY]);
+
+  const buttonLoader = (
+    <NavigationMenuItem className="rounded-xl border border-gray-400/50">
+      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+        <Spinner className="h-6 w-6 text-center" />
+      </NavigationMenuLink>
+    </NavigationMenuItem>
+  );
 
   return (
     <NavigationMenu
@@ -157,6 +166,7 @@ export function TopNavBar() {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
+            {status === "loading" && buttonLoader}
             {status === "authenticated" && (
               <NavigationMenuItem className="rounded-xl border border-gray-400/50">
                 <NavigationMenuTrigger>Utilities</NavigationMenuTrigger>
@@ -233,16 +243,8 @@ export function TopNavBar() {
             )}
             {status === "loading" && (
               <>
-                <NavigationMenuItem className="rounded-xl border border-gray-400/50">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    <Spinner className="h-6 w-6 text-center" />
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem className="rounded-xl border border-gray-400/50">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    <Spinner className="h-6 w-6 text-center" />
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
+                {buttonLoader}
+                {buttonLoader}
               </>
             )}
             <NavigationMenu dropdownLocation="left">

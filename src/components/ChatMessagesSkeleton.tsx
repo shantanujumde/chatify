@@ -4,23 +4,44 @@ import Skeleton from "react-loading-skeleton";
 
 const ChatMessagesSkeleton: FC = ({}) => {
   const LOADING_SKELETON = [];
+
   for (let i = 0; i <= 10; i++) {
     LOADING_SKELETON.push(
       <div key={i}>
-        <div className="ml-auto w-max max-w-[50%] rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
+        <div className="ml-auto w-max max-w-[50%] rounded-lg bg-primary px-3 py-2 text-right text-sm text-primary-foreground">
           <Skeleton
             direction="rtl"
             baseColor="#00ff5d"
             highlightColor="#d8ffe6"
-            width={130}
+            width={250}
+            borderRadius="1rem"
+          />
+          <Skeleton
+            direction="rtl"
+            baseColor="#00ff5d"
+            highlightColor="#d8ffe6"
+            width={140}
+            borderRadius="1rem"
           />
         </div>
         <div className="flex w-max max-w-[50%] flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-          <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={150} />
+          <Skeleton
+            baseColor="#7a7a7a"
+            highlightColor="#fff"
+            width={190}
+            borderRadius="1rem"
+          />
+          <Skeleton
+            baseColor="#7a7a7a"
+            highlightColor="#fff"
+            width={140}
+            borderRadius="1rem"
+          />
         </div>
       </div>
     );
   }
+
   return (
     <>
       <div className="my-4 flex items-center space-y-1.5 rounded-2xl border border-gray-500/50 p-2">
@@ -33,7 +54,7 @@ const ChatMessagesSkeleton: FC = ({}) => {
               <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={100} />
             </p>
             <p className="text-sm text-muted-foreground">
-              <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={100} />
+              <Skeleton baseColor="#7a7a7a" highlightColor="#fff" width={50} />
             </p>
           </div>
         </div>

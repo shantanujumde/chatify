@@ -56,15 +56,6 @@ model Embeddings {
     organizationId String?
 }
 
-model RolesAndPaymentInfo {
-    id             Int     @id @default(autoincrement())
-    userId         String
-    premiumUser    Boolean
-    paymentDetails Json
-    role           String  @default("user")
-    user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 model Organization {
     id         String       @id @default(cuid())
     name       String?
@@ -80,20 +71,20 @@ enum Role {
 }
 
 model User {
-    id                  String                @id @default(cuid())
-    name                String?
-    email               String?               @unique
-    emailVerified       DateTime?
-    image               String?
-    password            String?
-    role                Role?                 @default(ADMIN)
-    accounts            Account[]
-    sessions            Session[]
-    RolesAndPaymentInfo RolesAndPaymentInfo[]
-    Chats               Chats[]
-    Payment             Payment?
-    organizationId      String?
-    Organization        Organization?         @relation(fields: [organizationId], references: [id])
+    id             String        @id @default(cuid())
+    name           String?
+    email          String?       @unique
+    emailVerified  DateTime?
+    image          String?
+    password       String?
+    metaData       Json?
+    role           Role?         @default(ADMIN)
+    accounts       Account[]
+    sessions       Session[]
+    Chats          Chats[]
+    Payment        Payment?
+    organizationId String?
+    Organization   Organization? @relation(fields: [organizationId], references: [id])
 
     createdAt DateTime? @default(now())
     updatedAt DateTime? @default(now())

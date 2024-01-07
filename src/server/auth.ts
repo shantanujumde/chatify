@@ -11,8 +11,16 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
+
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
+import { createTransport } from "nodemailer";
+import {
+  inviteUserEmailHtml,
+  signInLinkEmailHtml,
+  text,
+} from "./api/helpers/auth.helpers";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -88,16 +96,44 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
-    // EmailProvider({
-    //   server: {
-    //     service: "Gmail",
-    //     auth: {
-    //       user: env.EMAIL_USER,
-    //       pass: env.EMAIL_PASS,
-    //     },
-    //   },
-    //   from: "noreply@example.com",
-    // }),
+
+    EmailProvider({
+      server: {
+        service: "Gmail",
+        auth: {
+          user: env.EMAIL_USER,
+          pass: env.EMAIL_PASS,
+        },
+      },
+      from: "noreply@example.com",
+      sendVerificationRequest: async (params) => {
+        const { identifier, url, provider } = params;
+        const { host } = new URL(url);
+        // NOTE: You are not required to use `nodemailer`, use whatever you want.
+        const transport = createTransport(provider.server as string);
+
+        const user = await prisma.user.findUnique({
+          where: {
+            email: identifier,
+          },
+        });
+
+        const result = await transport.sendMail({
+          to: identifier,
+          from: provider.from,
+          subject: `Sign in to Chatify`,
+          text: text({ url, host }),
+          html: user
+            ? signInLinkEmailHtml({ url, user })
+            : inviteUserEmailHtml({ url, user }),
+        });
+
+        const failed = result.rejected.concat(result.pending).filter(Boolean);
+        if (failed.length) {
+          throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
+        }
+      },
+    }),
 
     CredentialsProvider({
       name: "Credentials",

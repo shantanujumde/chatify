@@ -1,3 +1,4 @@
+"use client";
 import ChatMessages from "@/components/chatMessages";
 import EmptyItems from "@/components/emptyItems";
 import { Button, buttonVariants } from "@/components/ui/button";
