@@ -28,7 +28,7 @@ export function TopNavBar() {
 
   const components: { title: string; href: string; description: string }[] = [
     {
-      title: "Add PDFs",
+      title: "Knowledge Base",
       href: "/chatify/documents",
       description: "Add documents to chat with it",
     },

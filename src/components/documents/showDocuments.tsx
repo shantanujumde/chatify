@@ -154,7 +154,10 @@ const ShowDocuments: FC<ShowDocumentsProps> = ({
                       ) : (
                         <div className="flex justify-center gap-1">
                           <p className="cursor-pointer truncate rounded-2xl bg-gray-300/20 px-4 py-2 text-center transition duration-300 ease-in-out hover:bg-gray-300/50 ">
-                            {document.name}
+                            {document.name}{" "}
+                            {document.extension
+                              ? `(${document.extension})`
+                              : ""}
                           </p>
                         </div>
                       )}

@@ -12,18 +12,14 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
 }) => {
   const [textObj, getTextFromDoc] = useReadText();
   const [textContent, setTextContent] = useState("");
+  const [textName, setTextName] = useState("");
+  const [textNameExtension, setTextNameExtension] = useState("");
 
   useEffect(() => {
-    if (textObj.text) {
-      setTextContent(textObj.text);
-    }
+    if (textObj.text) setTextContent(textObj.text);
+    setTextNameExtension(textObj.name.split(".").pop() ?? "txt");
+    if (textObj.name) setTextName(textObj.name.replace(/\.[^/.]+$/, ""));
   }, [textObj]);
-
-  const {
-    text,
-    name,
-    states: { loading: loadingDocument },
-  } = textObj;
 
   const { mutate: createEmbedding, isLoading: isCreateEmbeddingLoading } =
     api.openAi.createEmbeddings.useMutation({
@@ -45,10 +41,12 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
   const handleCreateEmbedding = (text: string, name: string) => {
     if (!text || !name) return;
 
+    setTextName("");
+    setTextContent("");
     createEmbedding({
       content: text,
       name: name,
-      extension: name.split(".")[1] ?? "NOT_AVAILABLE",
+      extension: textNameExtension ?? "txt",
     });
   };
 
@@ -56,17 +54,29 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
     getTextFromDoc(e);
     e.target.value = "";
   };
-  const textArea = (
+
+  const inputForTextName = (
+    <Input
+      className="text-center"
+      value={textName}
+      onChange={(e) => setTextName(e.target.value)}
+      placeholder="Type file name here..."
+      disabled={textObj.states.loading}
+    />
+  );
+
+  const textAreaForTextContent = (
     <Textarea
       className="scrollbar-thumb-black scrollbar-track-black-lighter dark:scrollbar-thumb-white  
 dark:scrollbar-track-white-lighter scrollbar-thumb-rounded 
 scrollbar-w-2 scrolling-touch h-60 max-h-max resize-none overflow-auto"
       value={textContent}
       onChange={(e) => setTextContent(e.target.value)}
-      placeholder="Type something here..."
-      disabled={loadingDocument}
+      placeholder="Type file content here..."
+      disabled={textObj.states.loading}
     />
   );
+
   return (
     <div className="relative flex h-full w-full flex-row justify-between gap-4 max-md:flex-col max-md:items-center">
       <div className="ml-4 flex w-1/2 max-w-sm flex-col items-center justify-center gap-6 max-md:w-full">
@@ -77,9 +87,9 @@ scrollbar-w-2 scrolling-touch h-60 max-h-max resize-none overflow-auto"
 
         <Button
           className="w-full"
-          loading={loadingDocument || isCreateEmbeddingLoading}
-          disabled={textContent.length === 0 || loadingDocument}
-          onClick={() => handleCreateEmbedding(textContent, name)}
+          loading={textObj.states.loading || isCreateEmbeddingLoading}
+          disabled={textContent.length === 0 || textObj.states.loading}
+          onClick={() => handleCreateEmbedding(textContent, textName)}
         >
           Save
         </Button>
@@ -91,14 +101,12 @@ scrollbar-w-2 scrolling-touch h-60 max-h-max resize-none overflow-auto"
           scrollbar-thumb-rounded   scrollbar-w-2
          scrolling-touch flex h-80 max-h-screen w-1/2 flex-col gap-6 overflow-auto overflow-y-scroll rounded-xl bg-gray-300/20 p-6 py-2 pl-4 dark:bg-gray-300/5 max-md:w-full"
       >
-        <h2 className="flex justify-center">
-          <span className="text-xl uppercase underline">Content</span>
-        </h2>
-        {text ? (
-          <>{textArea}</>
+        <h2 className="flex justify-center">{inputForTextName}</h2>
+        {textObj.text ? (
+          <>{textAreaForTextContent}</>
         ) : (
           <div className="flex w-full flex-col items-center gap-2 align-middle">
-            {textArea}
+            {textAreaForTextContent}
           </div>
         )}
       </div>
