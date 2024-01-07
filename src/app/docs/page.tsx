@@ -36,24 +36,25 @@ const Docs: FC = ({}) => {
                   <h2 className="mb-2 text-2xl font-bold">Adding Documents</h2>
                   <ol className="list-inside list-decimal">
                     <li>
-                      Go to the &quot;Knowledge Base&quot; page after logging in
+                      Go to the &quot;Knowledge Base&quot; page after logging
+                      in.
                     </li>
-                    <li>Click the &quot;Add Document&quot; button</li>
-                    <li>Select a file from your computer to upload</li>
-                    <li>Add a title and description for the document</li>
+                    <li>Click the &quot;Add Document&quot; button.</li>
+                    <li>Select a file from your computer to upload.</li>
+                    <li>Add a title and description for the document.</li>
                     <li>
                       Click &quot;Upload&quot; and the document will be
-                      processed
+                      processed.
                     </li>
                     <li>
                       Wait for the processing to complete before the document
-                      can be chatted with
+                      can be chatted with.
                     </li>
                     <li>
-                      Repeat to add multiple documents to your knowledge base
+                      Repeat to add multiple documents to your knowledge base.
                     </li>
                     <li>
-                      The documents can be PDFs, Word, Excel, Text files etc
+                      The documents can be PDFs, Word, Excel, Text files etc.
                     </li>
                   </ol>
                 </div>
@@ -86,25 +87,26 @@ const Docs: FC = ({}) => {
                 <h2 className="mb-2 text-2xl font-bold">Chatting</h2>
                 <ol className="list-inside list-decimal">
                   <li>
-                    Go to the &quot;Chat&quot; page after documents are uploaded
+                    Go to the &quot;Chat&quot; page after documents are
+                    uploaded.
                   </li>
-                  <li>The left panel shows all your available documents</li>
-                  <li>Type a question in the chatbox at the bottom</li>
+                  <li>The left panel shows all your available documents.</li>
+                  <li>Type a question in the chatbox at the bottom.</li>
                   <li>
-                    The app will process and return an answer from the document
+                    The app will process and return an answer from the document.
                   </li>
                   <li>
                     You can keep asking followup questions to have a
-                    conversation
+                    conversation.
                   </li>
                   <li>
-                    Use natural language as you would normally ask a question
+                    Use natural language as you would normally ask a question.
                   </li>
                   <li>
-                    The chatbot will keep improving the more you chat with it
+                    The chatbot will keep improving the more you chat with it.
                   </li>
                   <li>
-                    Relevant sections from the document are shown as answers
+                    Relevant sections from the document are shown as answers.
                   </li>
                 </ol>
               </div>
@@ -124,33 +126,35 @@ const Docs: FC = ({}) => {
                 </h2>
                 <ol className="list-inside list-decimal">
                   <li>
-                    Go to &quot;Subscription&quot; page under your account menu
+                    Go to &quot;Subscription&quot; page under your account menu.
                   </li>
-                  <li>This shows your current subscription plan details</li>
+                  <li>This shows your current subscription plan details.</li>
                   <li>
-                    You can upgrade, downgrade or cancel your subscription here
+                    You can upgrade, downgrade or cancel your subscription here.
                   </li>
                   <li>
                     Paid plans unlock more features like integrations, priority
-                    support etc
+                    support etc.
                   </li>
                   <li>
                     When upgrading, you can pick between monthly or yearly
-                    billing
+                    billing.
                   </li>
-                  <li>Pick a plan and complete the payment to upgrade</li>
-                  <li>The new plan will be active immediately after payment</li>
+                  <li>Pick a plan and complete the payment to upgrade.</li>
+                  <li>
+                    The new plan will be active immediately after payment.
+                  </li>
                   <li>
                     You can cancel anytime - your plan will remain active until
-                    the next billing date
+                    the next billing date.
                   </li>
                   <li>
                     Downgrading plans also takes effect from the next billing
-                    cycle
+                    cycle.
                   </li>
                   <li>
                     Contact us if you need to change plans immediately or need
-                    assistance
+                    assistance.
                   </li>
                 </ol>
               </div>
@@ -181,25 +185,25 @@ const Docs: FC = ({}) => {
               <div className="mt-8 flex flex-col justify-center text-xl">
                 <h2 className="mb-2 text-2xl font-bold">Inviting Users</h2>
                 <ol className="list-inside list-decimal">
-                  <li> Go to &quot;Team&quot; page from your account menu</li>
-                  <li>Here you can invite new users to your knowledge base</li>
+                  <li> Go to &quot;Team&quot; page from your account menu.</li>
+                  <li>Here you can invite new users to your knowledge base.</li>
                   <li>
                     Enter email addresses separated by commas to invite multiple
-                    users
+                    users.
                   </li>
                   <li>
                     The invite email will be sent to them with sign up
-                    instructions
+                    instructions.
                   </li>
-                  <li>Revoke access for members any time by removing them</li>
+                  <li>Revoke access for members any time by removing them.</li>
                   <li>
-                    Manage roles like admin, editor, viewer etc for members
+                    Manage roles like admin, editor, viewer etc for members.
                   </li>
                   <li>
                     Admins can add, edit, delete documents in your knowledge
-                    base
+                    base.
                   </li>
-                  <li>Configure permissions as needed for each team member</li>
+                  <li>Configure permissions as needed for each team member.</li>
                 </ol>
               </div>
             </div>
@@ -215,16 +219,19 @@ const Docs: FC = ({}) => {
               <div className="mt-8 flex flex-col justify-center text-xl">
                 <h2 className="mb-2 text-2xl font-bold">Using Profile</h2>
                 <ol className="list-inside list-decimal">
-                  <li>Go to your profile page by clicking your avatar</li>
-                  <li>You can customize your profile</li>
-                  <li>Add your name, profile photo and other details here</li>
+                  <li>Go to your profile page by clicking your avatar.</li>
+                  <li>You can customize your profile.</li>
+                  <li>Add your name, profile photo and other details here.</li>
                   <li>
-                    You can view your subscription plan details and status
+                    You can view your subscription plan details and status.
                   </li>
-                  <li>See your knowledge base usage and limits on this page</li>
-                  <li>Number of all the documents you have uploaded</li>
                   <li>
-                    Customize your experience by modifying your profile settings
+                    See your knowledge base usage and limits on this page.
+                  </li>
+                  <li>Number of all the documents you have uploaded.</li>
+                  <li>
+                    Customize your experience by modifying your profile
+                    settings.
                   </li>
                 </ol>
               </div>
