@@ -159,7 +159,7 @@ const Docs: FC = ({}) => {
                 </ol>
               </div>
               <Image
-                src="/chat.webp"
+                src="/manageSubscriptions.webp"
                 alt="uploading preview"
                 width={800}
                 height={250}
@@ -176,7 +176,7 @@ const Docs: FC = ({}) => {
           >
             <div className="flex justify-center gap-8 align-middle max-md:flex-col-reverse md:flex-row">
               <Image
-                src="/chat.webp"
+                src="/inviteUsers.webp"
                 alt="uploading preview"
                 width={800}
                 height={250}
@@ -236,7 +236,7 @@ const Docs: FC = ({}) => {
                 </ol>
               </div>
               <Image
-                src="/chat.webp"
+                src="/profileSection.webp"
                 alt="uploading preview"
                 width={800}
                 height={250}
