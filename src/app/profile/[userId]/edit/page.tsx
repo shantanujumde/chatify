@@ -37,7 +37,7 @@ const EditProfile = ({}) => {
       field: "input",
       type: "text",
       placeholder: "e.g. John Doe",
-      value: userProfile?.user?.name ?? "",
+      defaultValue: userProfile?.user?.name ?? "",
     },
   ];
 
