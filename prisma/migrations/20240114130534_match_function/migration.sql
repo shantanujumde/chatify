@@ -1,7 +1,5 @@
 -- drop function match_page_sections;
 
-DROP FUNCTION match_documents(vector,double precision,integer);
-
 create or replace function match_documents (
   query_embedding vector(1536),
   match_threshold float,
