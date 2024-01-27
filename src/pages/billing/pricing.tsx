@@ -122,7 +122,7 @@ const Pricing = () => {
 
       <div className="grid grid-cols-1 gap-10 pt-12 md:grid-cols-2 lg:grid-cols-3">
         <TooltipProvider>
-          {pricingItems.map(({ plan, slug, tagline, features }) => {
+          {pricingItems.map(({ name, slug, tagline, features }) => {
             const price = PLANS.find((p) => p.slug === slug)?.price.amount ?? 0;
 
             return (
@@ -146,7 +146,7 @@ const Pricing = () => {
                 <div className="h-[80%]">
                   <div className="p-5">
                     <h3 className="font-display my-3 text-center text-3xl font-bold">
-                      {plan}
+                      {name}
                     </h3>
                     <p className="text-gray-500 dark:text-gray-300">
                       {tagline}
