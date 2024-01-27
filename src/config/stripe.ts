@@ -4,7 +4,6 @@ export const PLANS: Plans[] = [
   {
     name: "Intelligent",
     slug: "TIER-I",
-    characters: 300,
     price: {
       amount: 0,
       priceId: process.env.STRIPE_TIER_I ?? "",
@@ -13,7 +12,6 @@ export const PLANS: Plans[] = [
   {
     name: "Bright",
     slug: "TIER-II",
-    characters: 3000,
     price: {
       amount: 30,
       priceId: process.env.STRIPE_TIER_II ?? "",
@@ -22,9 +20,8 @@ export const PLANS: Plans[] = [
   {
     name: "Profound",
     slug: "TIER-III",
-    characters: 30000,
     price: {
-      amount: 50,
+      amount: "Custom",
       priceId: process.env.STRIPE_TIER_III ?? "",
     },
   },
@@ -33,9 +30,8 @@ export const PLANS: Plans[] = [
 export type Plans = {
   name: string;
   slug: TiersType;
-  characters: number;
   price: {
-    amount: number;
+    amount: number | "Custom";
     priceId: string;
   };
 };

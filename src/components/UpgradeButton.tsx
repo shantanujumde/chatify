@@ -13,6 +13,13 @@ const UpgradeButton = ({ tier }: { tier: TiersType }) => {
       },
     });
 
+  if (tier === "TIER-III")
+    return (
+      <Button className="w-full">
+        Contact us <ArrowRight className="ml-1.5 h-5 w-5" />
+      </Button>
+    );
+
   return (
     <Button
       onClick={() => createStripeSession({ tier })}
