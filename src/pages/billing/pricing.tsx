@@ -19,8 +19,7 @@ const Pricing = () => {
 
   const pricingItems = [
     {
-      plan: "Essential",
-
+      name: PLANS.find((plan) => plan.slug === "TIER-I")!.name,
       slug: "TIER-I" as TiersType,
       tagline: "Free trail for 30 days.",
       features: [
@@ -53,7 +52,7 @@ const Pricing = () => {
       ],
     },
     {
-      plan: "Business",
+      name: PLANS.find((plan) => plan.slug === "TIER-II")!.name,
       slug: "TIER-II" as TiersType,
       tagline: "For larger projects with higher needs.",
       features: [
@@ -85,7 +84,7 @@ const Pricing = () => {
       ],
     },
     {
-      plan: "Enterprise",
+      name: PLANS.find((plan) => plan.slug === "TIER-III")!.name,
       slug: "TIER-III" as TiersType,
       tagline: "Customized.",
       features: [
@@ -206,18 +205,7 @@ const Pricing = () => {
                 </div>
                 <div className="h-[20%] border-t border-gray-200">
                   <div className="p-5">
-                    {slug === "TIER-I" ? (
-                      <Link
-                        href={user ? "/dashboard" : "/auth/login"}
-                        className={buttonVariants({
-                          className: "w-full",
-                          variant: "secondary",
-                        })}
-                      >
-                        {user ? "Upgrade now" : "Sign up"}
-                        <ArrowRight className="ml-1.5 h-5 w-5" />
-                      </Link>
-                    ) : user ? (
+                    {user ? (
                       <UpgradeButton tier={slug} />
                     ) : (
                       <Link

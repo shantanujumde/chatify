@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const PLANS: Plans[] = [
   {
-    name: "Intelligent",
+    name: "Essential",
     slug: "TIER-I",
     price: {
       amount: 0,
@@ -10,7 +10,7 @@ export const PLANS: Plans[] = [
     },
   },
   {
-    name: "Bright",
+    name: "Business",
     slug: "TIER-II",
     price: {
       amount: 30,
@@ -18,17 +18,17 @@ export const PLANS: Plans[] = [
     },
   },
   {
-    name: "Profound",
+    name: "Enterprise",
     slug: "TIER-III",
     price: {
       amount: "Custom",
       priceId: process.env.STRIPE_TIER_III ?? "",
     },
   },
-];
+] as const;
 
 export type Plans = {
-  name: string;
+  name: "Essential" | "Business" | "Enterprise";
   slug: TiersType;
   price: {
     amount: number | "Custom";
