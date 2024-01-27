@@ -10,7 +10,8 @@ export const paymentsRouter = createTRPCRouter({
     .input(z.object({ tier: z.enum(["TIER-I", "TIER-II", "TIER-III"]) }))
     .mutation(async ({ input, ctx }) => {
       const user = ctx.session.user;
-      const billingUrl = getBaseUrl() + "/dashboard/billing";
+      const billingUrl =
+        getBaseUrl() + "/billing/manage/" + ctx.session.user.id;
 
       if (!user) throw new TRPCError({ code: "UNAUTHORIZED" });
 
