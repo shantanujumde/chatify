@@ -41,6 +41,13 @@ export const paymentsRouter = createTRPCRouter({
         metadata: {
           userId: user.id,
         },
+        subscription_data: {
+          trial_period_days: 30,
+          metadata: {
+            userId: user.id,
+          },
+        },
+        // payment_method_collection: "if_required", do not collect payment info
       });
 
       return { url: stripeSession.url };

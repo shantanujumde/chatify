@@ -6,7 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { PLANS, type TiersType } from "@/config/stripe";
+import { PLANS, type Plans, type TiersType } from "@/config/stripe";
 import { cn } from "@/utils/utils";
 import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -17,7 +17,16 @@ const Pricing = () => {
 
   const user = data?.user;
 
-  const pricingItems = [
+  type PricingItem = Omit<Plans, "price"> & {
+    tagline: string;
+    features: {
+      text: string;
+      footnote?: string;
+      negative?: boolean;
+    }[];
+  };
+
+  const pricingItems: PricingItem[] = [
     {
       name: PLANS.find((plan) => plan.slug === "TIER-I")!.name,
       slug: "TIER-I" as TiersType,
@@ -54,8 +63,11 @@ const Pricing = () => {
     {
       name: PLANS.find((plan) => plan.slug === "TIER-II")!.name,
       slug: "TIER-II" as TiersType,
-      tagline: "For larger projects with higher needs.",
+      tagline: "For all kinds of users.",
       features: [
+        {
+          text: "Enjoy a complimentary 30-day trial of Chatify!",
+        },
         {
           text: "Expansive storage up to 300 files.",
           footnote:
@@ -122,7 +134,7 @@ const Pricing = () => {
 
       <div className="grid grid-cols-1 gap-10 pt-12 md:grid-cols-2 lg:grid-cols-3">
         <TooltipProvider>
-          {pricingItems.map(({ name, slug, tagline, features }) => {
+          {pricingItems.slice(1).map(({ name, slug, tagline, features }) => {
             const price = PLANS.find((p) => p.slug === slug)?.price.amount ?? 0;
 
             return (
@@ -139,8 +151,9 @@ const Pricing = () => {
                 )}
               >
                 {slug === "TIER-II" && (
-                  <div className="absolute -top-5 left-0 right-0 mx-auto w-32 rounded-full bg-gradient-to-r from-primary to-cyan-600 px-3 py-2 text-sm font-medium text-white">
-                    Upgrade now
+                  <div className="absolute -top-5 left-0 right-0 mx-auto w-1/2 rounded-full bg-gradient-to-r from-primary to-cyan-600 px-3 py-2 text-sm font-medium text-white">
+                    FREE trail: Generous{" "}
+                    <span className="font-extrabold">30 days</span>.
                   </div>
                 )}
                 <div className="h-[80%]">
