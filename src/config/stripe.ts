@@ -25,7 +25,7 @@ export const PLANS: Plans[] = [
       priceId: process.env.STRIPE_TIER_III ?? "",
     },
   },
-] as const;
+];
 
 export type Plans = {
   name: "Essential" | "Business" | "Enterprise";
