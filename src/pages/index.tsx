@@ -26,7 +26,6 @@ export default function Home() {
           Chatify is proudly open-source on Github ❤️
         </p>
       </div>
-
       <div className="-mt-24 flex h-screen flex-col items-center justify-center">
         <h1 className="max-w-4xl text-center text-5xl font-bold md:text-6xl lg:text-7xl">
           Chatify makes <span className="text-primary">understand </span>data
@@ -35,7 +34,6 @@ export default function Home() {
         <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
           Worlds best tool to understand your data easily with chat interface.
         </p>
-
         <Link
           className={buttonVariants({
             size: "lg",
@@ -45,8 +43,17 @@ export default function Home() {
         >
           Get started <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
+        <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
+          Unlock the full potential of Chatify with our{" "}
+          <span className="font-bold">Exclusive 30-Day Free </span>
+          trial. Experience the power of seamless information retrieval,
+          collaborative knowledge sharing, and priority support, all at no cost.
+          Dive in today and elevate your productivity with Chatify – where
+          innovation meets efficiency. Sign up now for your complimentary 30-day
+          trial and discover a new era of effortless communication and data
+          access.
+        </p>
       </div>
-
       {/* value proposition section */}
       <div
         aria-hidden="true"
@@ -84,12 +91,15 @@ export default function Home() {
                   quality={100}
                   className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
                 />
+                <p className="mt-5 w-full rounded-2xl bg-white bg-opacity-50 text-center text-dark sm:text-lg">
+                  Worlds best tool to understand your data easily with chat
+                  interface.
+                </p>
               </div>
             </div>
           </div>
         </RevealOnScroll>
       </div>
-
       {/* Feature section */}
       <div className="mx-auto mb-32 mt-32 max-w-5xl sm:mt-56">
         <RevealOnScroll>
@@ -176,6 +186,10 @@ export default function Home() {
                   quality={100}
                   className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
                 />
+                <p className="mt-5 w-full rounded-2xl bg-white bg-opacity-50 text-center text-dark sm:text-lg">
+                  {" "}
+                  Add documents with few simple clicks.
+                </p>
               </div>
             </div>
           </div>
