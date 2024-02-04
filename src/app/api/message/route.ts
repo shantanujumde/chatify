@@ -26,6 +26,7 @@ const createEmbedding = async (
 
 const getClosestEmbeddings = async (text: string) => {
   const embeddingResponse = await createEmbedding(text);
+
   if (!embeddingResponse)
     throw new Error("Failed to create embedding for question");
 
@@ -94,11 +95,12 @@ export async function POST(request: NextRequest) {
 
   if (!user) return new Response("Unauthorized", { status: 401 });
 
-  if (!(await chatLimit(user.id)))
-    throw new TRPCError({
-      code: "UNAUTHORIZED",
-      message: "LIMIT_EXCEEDED for chats",
-    });
+  if (!(await chatLimit(user.id))) {
+    return new Response(
+      "LIMIT_EXCEEDED You have reached your chat limit. Upgrade to a paid plan to increase your limit.",
+      { status: 403 }
+    );
+  }
 
   const { message, chats } = body;
 
