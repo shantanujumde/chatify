@@ -34,9 +34,17 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
         });
       },
       onError: (error) => {
+        if (error.message.includes("LIMIT_EXCEEDED")) {
+          return toast({
+            title: "Error saving document",
+            description: "You have reached your limit of free documents",
+            variant: "destructive",
+          });
+        }
+
         toast({
           title: "Error creating embedding",
-          description: error.message,
+          description: "Contact support for more info",
           variant: "destructive",
         });
       },
