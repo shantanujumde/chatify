@@ -1,4 +1,10 @@
-import { ArrowRight, Check, HelpCircle, Link } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  HelpCircle,
+  Link,
+  MessageCircleCode,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import { FC } from "react";
 import { cn } from "../utils/utils";
@@ -57,27 +63,13 @@ const FreePricing: FC<freePricingProps> = ({}) => {
               </div>
             </li>
             <li className="flex space-x-5">
-              {" "}
               <div className="flex-shrink-0">
-                <Check className="h-6 w-6 text-primary/80" />
+                <MessageCircleCode className="top-3 h-6 w-6 text-primary/80" />
               </div>
-              <div className="flex items-center space-x-1">
-                <p className={cn("text-gray-600 dark:text-gray-300")}>
-                  Use your own OpenAI API key & Access all Chatify's Business
-                  plan features for free.
-                </p>
-                <Tooltip delayDuration={300}>
-                  <TooltipTrigger className="ml-1.5 cursor-default">
-                    <HelpCircle className="h-4 w-4 text-zinc-500" />
-                  </TooltipTrigger>
-                  <TooltipContent className="w-80 p-2">
-                    Leverage your personal OpenAI API key to seamlessly unlock
-                    all premium features of Chatify's Business plan,
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              '
-              <Input className="" />
+              <Input
+                className="w-full"
+                placeholder="Enter your OpenAI API key"
+              />
             </li>
           </ul>
         </div>
