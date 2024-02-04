@@ -11,6 +11,7 @@ import { cn } from "@/utils/utils";
 import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import FreePricing from "../../components/freePricing";
 
 const Pricing = () => {
   const { data } = useSession();
@@ -71,7 +72,7 @@ const Pricing = () => {
         {
           text: "Expansive storage up to 300 files.",
           footnote:
-            "Each file can have only 1000 characters. This is the maximum number of characters that can be stored in a single document.",
+            "We do not store your original files we store a copy of text and index them for better search.",
         },
         {
           text: "Unlimited collaborators",
@@ -133,6 +134,7 @@ const Pricing = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-10 pt-12 md:grid-cols-2 lg:grid-cols-3">
+        <FreePricing />
         <TooltipProvider>
           {pricingItems.slice(1).map(({ name, slug, tagline, features }) => {
             const price = PLANS.find((p) => p.slug === slug)?.price.amount ?? 0;
@@ -152,8 +154,10 @@ const Pricing = () => {
               >
                 {slug === "TIER-II" && (
                   <div className="absolute -top-5 left-0 right-0 mx-auto w-1/2 rounded-full bg-gradient-to-r from-primary to-cyan-600 px-3 py-2 text-sm font-medium text-white">
-                    FREE trail: Generous{" "}
-                    <span className="font-extrabold">30 days</span>.
+                    <div className="text-center">
+                      FREE trail:{" "}
+                      <span className="font-extrabold">30 days</span>.
+                    </div>
                   </div>
                 )}
                 <div className="h-[80%]">
