@@ -14,6 +14,7 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { chatLimit, fileLimit } from "./routers/freeTrial";
 import { PaymentTokenSchema } from "./types/payments.types";
 
 /**
@@ -130,7 +131,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
-const enforceUserIsSubscribed = t.middleware(({ ctx, next }) => {
+const enforceUserIsSubscribed = t.middleware(async ({ ctx, next }) => {
   const parsedData = PaymentTokenSchema.safeParse(ctx.session?.user);
   if (!parsedData.success) {
     throw new TRPCError({
@@ -141,6 +142,21 @@ const enforceUserIsSubscribed = t.middleware(({ ctx, next }) => {
 
   const user = parsedData.data;
   const userPlan = parsedData.data.plan;
+
+  if (userPlan.cid.includes("freeTrial")) {
+    if ((await chatLimit(ctx)) && (await fileLimit(ctx)))
+      return next({
+        ctx: {
+          // infers the `session` as non-nullable
+          session: { ...ctx.session, user: user },
+        },
+      });
+
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "LIMIT_EXCEEDED " + JSON.stringify(userPlan),
+    });
+  }
 
   if (
     !(

@@ -1,15 +1,9 @@
-import {
-  ArrowRight,
-  Check,
-  HelpCircle,
-  Link,
-  MessageCircleCode,
-} from "lucide-react";
+import { ArrowRight, Check, HelpCircle, Link } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { FC } from "react";
+import { api } from "../utils/api";
 import { cn } from "../utils/utils";
 import { Button, buttonVariants } from "./ui/button";
-import { Input } from "./ui/input";
 import {
   Tooltip,
   TooltipContent,
@@ -23,6 +17,8 @@ const FreePricing: FC<freePricingProps> = ({}) => {
   const { data } = useSession();
 
   const user = data?.user;
+  const { mutate: createFreeTrail, isLoading: isCreatingFreeTrailLoading } =
+    api.freeTrial.createFreeTrail.useMutation();
 
   return (
     <TooltipProvider>
@@ -34,7 +30,7 @@ const FreePricing: FC<freePricingProps> = ({}) => {
         <div className="h-[80%]">
           <div className="p-5">
             <h3 className="font-display my-3 text-center text-3xl font-bold">
-              Free trial
+              Free
             </h3>
             <p className="text-gray-500 dark:text-gray-300">Try for free!</p>
             <p className="font-display my-5 text-6xl font-semibold">$0</p>
@@ -48,35 +44,27 @@ const FreePricing: FC<freePricingProps> = ({}) => {
 
               <div className="flex items-center space-x-1">
                 <p className={cn("text-gray-600 dark:text-gray-300")}>
-                  Use your own OpenAI API key & Access all Chatify's Business
-                  plan features for free.
+                  File limit of 2 files and 100 chats per day.
                 </p>
                 <Tooltip delayDuration={300}>
                   <TooltipTrigger className="ml-1.5 cursor-default">
                     <HelpCircle className="h-4 w-4 text-zinc-500" />
                   </TooltipTrigger>
                   <TooltipContent className="w-80 p-2">
-                    Leverage your personal OpenAI API key to seamlessly unlock
-                    all premium features of Chatify's Business plan,
+                    Avail the full power of the platform with a free trial.
                   </TooltipContent>
                 </Tooltip>
               </div>
             </li>
-            <li className="flex space-x-5">
-              <div className="flex-shrink-0">
-                <MessageCircleCode className="top-3 h-6 w-6 text-primary/80" />
-              </div>
-              <Input
-                className="w-full"
-                placeholder="Enter your OpenAI API key"
-              />
-            </li>
+            <li className="flex space-x-5"></li>
           </ul>
         </div>
         <div className="h-[20%] border-t border-gray-200">
           <div className="p-5">
             {user ? (
               <Button
+                onClick={() => createFreeTrail()}
+                loading={isCreatingFreeTrailLoading}
                 className={buttonVariants({
                   className: "w-full",
                 })}
