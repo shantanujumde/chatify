@@ -138,9 +138,9 @@ const Chat: FC = ({}) => {
 
       if (accResponse.includes("LIMIT_EXCEEDED")) {
         toast({
-          title: "LIMIT_EXCEEDED",
+          title: "Error sending message",
           description:
-            "You have reached your chat limit. Upgrade to a paid plan to increase your limit.",
+            "You have reached your limit for chats. Upgrade to a paid plan for unlimited chats.",
           variant: "destructive",
         });
       }

@@ -37,7 +37,8 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
         if (error.message.includes("LIMIT_EXCEEDED")) {
           return toast({
             title: "Error saving document",
-            description: "You have reached your limit of free documents",
+            description:
+              "You have reached your limit of documents for free plan. Upgrade to premium to add more documents.",
             variant: "destructive",
           });
         }
