@@ -28,7 +28,7 @@ export const PLANS: Plans[] = [
 ];
 
 export type Plans = {
-  name: "Essential" | "Business" | "Enterprise";
+  name: z.infer<typeof PlanNames>;
   slug: TiersType;
   price: {
     amount: number | "Custom";
@@ -37,4 +37,5 @@ export type Plans = {
 };
 
 export const Tiers = z.enum(["TIER-I", "TIER-II", "TIER-III"]);
+export const PlanNames = z.enum(["Essential", "Business", "Enterprise"]);
 export type TiersType = z.infer<typeof Tiers>;
