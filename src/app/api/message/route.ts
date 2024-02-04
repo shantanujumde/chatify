@@ -9,6 +9,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import OpenAI from "openai";
 import { type CreateEmbeddingResponse } from "openai/resources";
 import { z } from "zod";
+import { chatLimit } from "../../../server/api/helpers/freeTrial.helpers";
 
 const openAi = new OpenAI({
   apiKey: process.env.OPEN_AI_API_KEY,
@@ -92,6 +93,12 @@ export async function POST(request: NextRequest) {
   const user = session?.user;
 
   if (!user) return new Response("Unauthorized", { status: 401 });
+
+  if (!(await chatLimit(user.id)))
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "LIMIT_EXCEEDED for chats",
+    });
 
   const { message, chats } = body;
 

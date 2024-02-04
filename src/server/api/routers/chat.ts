@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  subscribedProcedure,
-} from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const chatRouter = createTRPCRouter({
   getChats: protectedProcedure
@@ -31,24 +27,5 @@ export const chatRouter = createTRPCRouter({
         chatLength: Math.ceil(chatLength / 10),
         chats: chats.reverse(),
       };
-    }),
-
-  createChat: subscribedProcedure
-    .input(
-      z.object({
-        question: z.string(),
-        response: z.string(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const chat = await ctx.prisma.chats.create({
-        data: {
-          question: input.question,
-          response: input.response,
-          userId: ctx.session.user.id,
-        },
-      });
-
-      return chat;
     }),
 });

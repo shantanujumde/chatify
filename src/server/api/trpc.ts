@@ -150,7 +150,7 @@ const enforceUserIsSubscribed = t.middleware(async ({ ctx, next }) => {
   const userPlan = parsedData.data.plan;
 
   if (userPlan.cid.includes("freeTrial")) {
-    if ((await chatLimit(ctx)) && (await fileLimit(ctx)))
+    if (await fileLimit(ctx))
       return next({
         ctx: {
           // infers the `session` as non-nullable
