@@ -1,8 +1,12 @@
 import { z } from "zod";
-import { createTRPCRouter, subscribedProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  subscribedProcedure,
+} from "../trpc";
 
 export const chatRouter = createTRPCRouter({
-  getChats: subscribedProcedure
+  getChats: protectedProcedure
     .input(z.object({ page: z.number().default(1) }))
     .query(async ({ input, ctx }) => {
       const [chatLength, chats] = await ctx.prisma.$transaction([

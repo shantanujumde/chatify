@@ -1,16 +1,11 @@
-import { type Prisma, type PrismaClient } from "@prisma/client";
-import { type DefaultArgs } from "@prisma/client/runtime/library";
-import { type Session } from "next-auth";
+import { Context } from "../trpc";
 
-export const getOrganizationId = async (ctx: {
-  session: Session;
-  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>;
-}): Promise<string> => {
-  let organizationId = ctx.session.user.organizationId;
+export const getOrganizationId = async (ctx: Context): Promise<string> => {
+  let organizationId = ctx.session?.user.organizationId;
   if (!organizationId) {
     const user = await ctx.prisma.user.findUnique({
       where: {
-        id: ctx.session.user.id,
+        id: ctx.session?.user.id,
       },
     });
 
@@ -20,7 +15,7 @@ export const getOrganizationId = async (ctx: {
         data: {
           users: {
             connect: {
-              id: ctx.session.user.id,
+              id: ctx.session?.user.id,
             },
           },
         },
