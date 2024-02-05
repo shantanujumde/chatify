@@ -17,7 +17,11 @@ export const paymentsRouter = createTRPCRouter({
 
       const subscriptionPlan = await getUserSubscriptionPlan(user);
 
-      if (subscriptionPlan.isSubscribed && subscriptionPlan.stripeCustomerId) {
+      if (
+        subscriptionPlan.isSubscribed &&
+        subscriptionPlan.stripeCustomerId &&
+        !(subscriptionPlan.stripeCustomerId === "freeTrial")
+      ) {
         const stripeSession = await stripe.billingPortal.sessions.create({
           customer: subscriptionPlan.stripeCustomerId,
           return_url: billingUrl,
