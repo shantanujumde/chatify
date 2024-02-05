@@ -9,11 +9,14 @@
 
 import { getServerAuthSession } from "@/server/auth";
 import { prisma } from "@/server/db";
-import { initTRPC, TRPCError } from "@trpc/server";
+import { Prisma, PrismaClient } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
+import { TRPCError, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { fileLimit } from "./helpers/freeTrial.helpers";
 import { PaymentTokenSchema } from "./types/payments.types";
 
 /**
@@ -26,6 +29,10 @@ import { PaymentTokenSchema } from "./types/payments.types";
 
 interface CreateContextOptions {
   session: Session | null;
+}
+
+export interface Context extends CreateContextOptions {
+  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>;
 }
 
 /**
@@ -130,7 +137,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
-const enforceUserIsSubscribed = t.middleware(({ ctx, next }) => {
+const enforceUserIsSubscribed = t.middleware(async ({ ctx, next }) => {
   const parsedData = PaymentTokenSchema.safeParse(ctx.session?.user);
   if (!parsedData.success) {
     throw new TRPCError({
@@ -141,6 +148,21 @@ const enforceUserIsSubscribed = t.middleware(({ ctx, next }) => {
 
   const user = parsedData.data;
   const userPlan = parsedData.data.plan;
+
+  if (userPlan.cid.includes("freeTrial")) {
+    if (await fileLimit(ctx))
+      return next({
+        ctx: {
+          // infers the `session` as non-nullable
+          session: { ...ctx.session, user },
+        },
+      });
+
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "LIMIT_EXCEEDED " + JSON.stringify(userPlan),
+    });
+  }
 
   if (
     !(
@@ -159,7 +181,7 @@ const enforceUserIsSubscribed = t.middleware(({ ctx, next }) => {
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: user },
+      session: { ...ctx.session, user },
     },
   });
 });

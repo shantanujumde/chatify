@@ -1,4 +1,9 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  Context,
+  createTRPCRouter,
+  protectedProcedure,
+  subscribedProcedure,
+} from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { randomInt } from "crypto";
 import { encode } from "gpt-3-encoder";
@@ -13,7 +18,7 @@ import { getOrganizationId } from "../helpers/profile.helpers";
 import type { Embeddings } from "../types/openAi.types";
 
 export const openAiRouter = createTRPCRouter({
-  createEmbeddings: protectedProcedure
+  createEmbeddings: subscribedProcedure
     .input(
       z.object({
         name: z.string(),
@@ -34,7 +39,7 @@ export const openAiRouter = createTRPCRouter({
 
       const uniqueIdForText = randomInt(5000000);
 
-      const organizationId = await getOrganizationId(ctx);
+      const organizationId = await getOrganizationId(ctx as unknown as Context);
 
       const { error: insertTextError } = await supabaseClient
         .from("File")

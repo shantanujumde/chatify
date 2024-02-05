@@ -76,7 +76,8 @@ const Manage = (props: ManageFormProps) => {
         </CardHeader>
 
         <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
-          {subscriptionPlan.isSubscribed ? (
+          {subscriptionPlan.isSubscribed &&
+          !(subscriptionPlan.plan?.name === "Essential") ? (
             <Button type="submit">
               {isLoading ? (
                 <Loader2 className="mr-4 h-4 w-4 animate-spin" />
