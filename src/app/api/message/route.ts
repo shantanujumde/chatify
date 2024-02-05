@@ -9,6 +9,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import OpenAI from "openai";
 import { type CreateEmbeddingResponse } from "openai/resources";
 import { z } from "zod";
+import { chatLimit } from "../../../server/api/helpers/freeTrial.helpers";
 
 const openAi = new OpenAI({
   apiKey: process.env.OPEN_AI_API_KEY,
@@ -25,6 +26,7 @@ const createEmbedding = async (
 
 const getClosestEmbeddings = async (text: string) => {
   const embeddingResponse = await createEmbedding(text);
+
   if (!embeddingResponse)
     throw new Error("Failed to create embedding for question");
 
@@ -92,6 +94,13 @@ export async function POST(request: NextRequest) {
   const user = session?.user;
 
   if (!user) return new Response("Unauthorized", { status: 401 });
+
+  if (!(await chatLimit(user.id))) {
+    return new Response(
+      "LIMIT_EXCEEDED You have reached your chat limit. Upgrade to a paid plan to increase your limit.",
+      { status: 403 }
+    );
+  }
 
   const { message, chats } = body;
 

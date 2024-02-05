@@ -16,6 +16,8 @@ import EmailProvider from "next-auth/providers/email";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 import { createTransport } from "nodemailer";
+import { z } from "zod";
+import { PlanNames } from "../config/stripe";
 import {
   inviteUserEmailHtml,
   signInLinkEmailHtml,
@@ -33,8 +35,17 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string;
       organizationId: string;
+      name: string;
+      email: string;
       // ...other properties
       role: Role;
+      plan: {
+        cid: string | undefined;
+        sid: string | undefined;
+        plan: z.infer<typeof PlanNames>;
+        exp: Date | null | undefined;
+        active: string | boolean | undefined;
+      };
     };
   }
 

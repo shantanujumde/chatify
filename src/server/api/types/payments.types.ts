@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PlanNames } from "../../../config/stripe";
 
 export const PaymentTokenSchema = z.object({
   name: z.string(),
@@ -9,7 +10,7 @@ export const PaymentTokenSchema = z.object({
   plan: z.object({
     cid: z.string(),
     sid: z.string(),
-    plan: z.enum(["Bright", "Profound"]),
+    plan: PlanNames,
     exp: z.string(),
     active: z.boolean(),
   }),

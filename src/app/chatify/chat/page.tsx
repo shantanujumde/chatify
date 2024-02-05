@@ -109,7 +109,7 @@ const Chat: FC = ({}) => {
 
       return addMessageToChats(message);
     },
-    async onSuccess(stream, { message }) {
+    onSuccess: async (stream, { message }) => {
       if (!stream)
         return toast({
           title: "There was a problem sending this message",
@@ -135,6 +135,16 @@ const Chat: FC = ({}) => {
 
         chatsUpdated = addMessageToChats(message, accResponse);
       }
+
+      if (accResponse.includes("LIMIT_EXCEEDED")) {
+        toast({
+          title: "Error sending message",
+          description:
+            "You have reached your limit for chats. Upgrade to a paid plan for unlimited chats.",
+          variant: "destructive",
+        });
+      }
+
       return chatsUpdated;
     },
     onError: () => {

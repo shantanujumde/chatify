@@ -11,7 +11,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
 export async function getUserSubscriptionPlan(user: Partial<User>) {
   if (!user.id) {
     return {
-      ...PLANS[0],
+      plan: PLANS[0],
       isSubscribed: false,
       isCanceled: false,
       stripeCurrentPeriodEnd: null,
@@ -29,10 +29,21 @@ export async function getUserSubscriptionPlan(user: Partial<User>) {
 
   if (!dbUser) {
     return {
-      ...PLANS[0],
+      plan: PLANS[0],
       isSubscribed: false,
       isCanceled: false,
       stripeCurrentPeriodEnd: null,
+    };
+  }
+
+  if (dbUser.Payment?.stripeCustomerId?.includes("freeTrial")) {
+    return {
+      plan: PLANS[0],
+      isSubscribed: true,
+      stripeSubscriptionId: dbUser.Payment?.stripeSubscriptionId,
+      stripeCurrentPeriodEnd: dbUser.Payment?.stripeCurrentPeriodEnd,
+      stripeCustomerId: dbUser.Payment?.stripeCustomerId,
+      isCanceled: false,
     };
   }
 

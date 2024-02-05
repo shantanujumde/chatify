@@ -10,13 +10,18 @@ export const paymentsRouter = createTRPCRouter({
     .input(z.object({ tier: z.enum(["TIER-I", "TIER-II", "TIER-III"]) }))
     .mutation(async ({ input, ctx }) => {
       const user = ctx.session.user;
-      const billingUrl = getBaseUrl() + "/dashboard/billing";
+      const billingUrl =
+        getBaseUrl() + "/billing/manage/" + ctx.session.user.id;
 
       if (!user) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       const subscriptionPlan = await getUserSubscriptionPlan(user);
 
-      if (subscriptionPlan.isSubscribed && subscriptionPlan.stripeCustomerId) {
+      if (
+        subscriptionPlan.isSubscribed &&
+        subscriptionPlan.stripeCustomerId &&
+        !(subscriptionPlan.stripeCustomerId === "freeTrial")
+      ) {
         const stripeSession = await stripe.billingPortal.sessions.create({
           customer: subscriptionPlan.stripeCustomerId,
           return_url: billingUrl,
@@ -40,6 +45,13 @@ export const paymentsRouter = createTRPCRouter({
         metadata: {
           userId: user.id,
         },
+        subscription_data: {
+          trial_period_days: 30,
+          metadata: {
+            userId: user.id,
+          },
+        },
+        // payment_method_collection: "if_required", do not collect payment info
       });
 
       return { url: stripeSession.url };

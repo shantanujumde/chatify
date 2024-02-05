@@ -2,43 +2,40 @@ import { z } from "zod";
 
 export const PLANS: Plans[] = [
   {
-    name: "Intelligent",
+    name: "Essential",
     slug: "TIER-I",
-    characters: 300,
     price: {
       amount: 0,
       priceId: process.env.STRIPE_TIER_I ?? "",
     },
   },
   {
-    name: "Bright",
+    name: "Business",
     slug: "TIER-II",
-    characters: 3000,
     price: {
       amount: 30,
       priceId: process.env.STRIPE_TIER_II ?? "",
     },
   },
   {
-    name: "Profound",
+    name: "Enterprise",
     slug: "TIER-III",
-    characters: 30000,
     price: {
-      amount: 50,
+      amount: "Custom",
       priceId: process.env.STRIPE_TIER_III ?? "",
     },
   },
 ];
 
 export type Plans = {
-  name: string;
+  name: z.infer<typeof PlanNames>;
   slug: TiersType;
-  characters: number;
   price: {
-    amount: number;
+    amount: number | "Custom";
     priceId: string;
   };
 };
 
 export const Tiers = z.enum(["TIER-I", "TIER-II", "TIER-III"]);
+export const PlanNames = z.enum(["Essential", "Business", "Enterprise"]);
 export type TiersType = z.infer<typeof Tiers>;
