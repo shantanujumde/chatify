@@ -17,9 +17,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 
-interface freePricingProps {}
-
-const FreePricing: FC<freePricingProps> = ({}) => {
+const FreePricing: FC = () => {
   const { data } = useSession();
 
   const user = data?.user;
@@ -48,8 +46,8 @@ const FreePricing: FC<freePricingProps> = ({}) => {
 
               <div className="flex items-center space-x-1">
                 <p className={cn("text-gray-600 dark:text-gray-300")}>
-                  Use your own OpenAI API key & Access all Chatify's Business
-                  plan features for free.
+                  Use your own OpenAI API key & Access all Chatify&apos;s
+                  Business plan features for free.
                 </p>
                 <Tooltip delayDuration={300}>
                   <TooltipTrigger className="ml-1.5 cursor-default">
@@ -57,7 +55,7 @@ const FreePricing: FC<freePricingProps> = ({}) => {
                   </TooltipTrigger>
                   <TooltipContent className="w-80 p-2">
                     Leverage your personal OpenAI API key to seamlessly unlock
-                    all premium features of Chatify's Business plan,
+                    all premium features of Chatify&apos;s Business plan,
                   </TooltipContent>
                 </Tooltip>
               </div>

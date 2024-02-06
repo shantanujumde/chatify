@@ -1,4 +1,4 @@
-import { Context } from "../trpc";
+import { type Context } from "../trpc";
 
 export const getOrganizationId = async (ctx: Context): Promise<string> => {
   let organizationId = ctx.session?.user.organizationId;

@@ -1,5 +1,5 @@
 import { prisma } from "../../db";
-import { Context } from "../trpc";
+import { type Context } from "../trpc";
 
 export const CHAT_LIMIT = 15;
 export const FILES_LIMIT = 2;
