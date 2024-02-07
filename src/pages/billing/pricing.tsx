@@ -11,7 +11,7 @@ import { cn } from "@/utils/utils";
 import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import FreePricing from "../../components/freePricing";
+import FreeTrial from "../../components/freeTrial";
 
 const Pricing = () => {
   const { data } = useSession();
@@ -134,7 +134,7 @@ const Pricing = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-10 pt-12 md:grid-cols-2 lg:grid-cols-3">
-        <FreePricing />
+        <FreeTrial />
         <TooltipProvider>
           {pricingItems.slice(1).map(({ name, slug, tagline, features }) => {
             const price = PLANS.find((p) => p.slug === slug)?.price.amount ?? 0;

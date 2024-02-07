@@ -16,7 +16,7 @@ import EmailProvider from "next-auth/providers/email";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 import { createTransport } from "nodemailer";
-import { z } from "zod";
+import { type z } from "zod";
 import { type PlanNames } from "../config/stripe";
 import {
   inviteUserEmailHtml,
@@ -79,8 +79,10 @@ export const authOptions: NextAuthOptions = {
 
     async jwt({ token, user }) {
       // called before session callback
+      console.log("🚀 ~ jwt ~ user:", user);
       if (user) {
         const plan = await getUserSubscriptionPlan(user);
+        console.log("🚀 ~ jwt ~ plan:", plan);
 
         token.id = user.id;
         token.organizationId = (user as User).organizationId;

@@ -1,4 +1,4 @@
-import { getUuid } from "pdfjs-dist/types/src/shared/util";
+import { randomBytes } from "crypto";
 import { FREE_TRIAL } from "../helpers/freeTrial.helpers";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -8,7 +8,7 @@ export const freeTrialRouter = createTRPCRouter({
     const dateAfterOneYear = new Date(
       new Date().setFullYear(new Date().getFullYear() + 1)
     );
-    const freeTrialId = FREE_TRIAL + "_" + getUuid();
+    const freeTrialId = FREE_TRIAL + "_" + randomBytes(20).toString("hex");
 
     await ctx.prisma.payment.upsert({
       create: {

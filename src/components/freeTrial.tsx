@@ -1,12 +1,8 @@
-import {
-  ArrowRight,
-  Check,
-  HelpCircle,
-  Link,
-  MessageCircle,
-} from "lucide-react";
-import { useSession } from "next-auth/react";
+import { ArrowRight, Check, HelpCircle, MessageCircle } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { type FC } from "react";
+import { api } from "../utils/api";
 import { cn } from "../utils/utils";
 import { Button, buttonVariants } from "./ui/button";
 import { Input } from "./ui/input";
@@ -16,11 +12,27 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { toast } from "./ui/use-toast";
 
-const FreePricing: FC = () => {
+const FreeTrial: FC = () => {
   const { data } = useSession();
 
   const user = data?.user;
+
+  const { mutate: createFreeTrail, isLoading: createFreeTrailIsLoading } =
+    api.freeTrial.createFreeTrail.useMutation({
+      onSuccess: () => {
+        toast({
+          title: "Success",
+          description:
+            "Your free trial has been created, Please re-login to continue!",
+        });
+
+        setTimeout(() => {
+          void signOut({ callbackUrl: "/auth/login" });
+        }, 3000);
+      },
+    });
 
   return (
     <TooltipProvider>
@@ -75,11 +87,13 @@ const FreePricing: FC = () => {
           <div className="p-5">
             {user ? (
               <Button
+                loading={createFreeTrailIsLoading}
                 className={buttonVariants({
                   className: "w-full",
                 })}
+                onClick={() => createFreeTrail()}
               >
-                Save & Start using
+                Avail Free Trial
               </Button>
             ) : (
               <Link
@@ -88,7 +102,7 @@ const FreePricing: FC = () => {
                   className: "w-full",
                 })}
               >
-                Sign up
+                {user ? "Upgrade now" : "Sign up"}
                 <ArrowRight className="ml-1.5 h-5 w-5" />
               </Link>
             )}
@@ -99,4 +113,4 @@ const FreePricing: FC = () => {
   );
 };
 
-export default FreePricing;
+export default FreeTrial;
