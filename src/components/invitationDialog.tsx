@@ -65,7 +65,7 @@ const InvitationDialog: FC = ({}) => {
           <li>
             Invited to:{" "}
             <span className="font-normal">
-              {inviteMetaData?.invitedBy?.Organization?.name ??
+              {inviteMetaData?.invitedBy?.organization?.name ??
                 inviteMetaData?.invitedToOrganization}
             </span>
           </li>

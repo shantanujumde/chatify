@@ -41,7 +41,7 @@ type ShowDocumentsProps = {
       documents: ({
         _count: {
           embedding: number;
-          Organization: number;
+          organization: number;
         };
       } & {
         id: number;

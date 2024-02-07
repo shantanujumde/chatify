@@ -18,24 +18,24 @@ export const profileRouter = createTRPCRouter({
       const user = await ctx.prisma.user.findFirst({
         where: { id: input.id },
         include: {
-          Organization: {
+          organization: {
             select: {
               id: true,
               name: true,
-              File: true,
+              file: true,
               users: true,
-              _count: { select: { File: true } },
+              _count: { select: { file: true } },
             },
           },
-          _count: { select: { Chats: true } },
+          _count: { select: { chats: true } },
         },
       });
 
       return {
         user,
-        organization: user?.Organization,
-        documentsCount: user?.Organization?._count.File,
-        chatsCount: user?._count.Chats,
+        organization: user?.organization,
+        documentsCount: user?.organization?._count.file,
+        chatsCount: user?._count.chats,
       };
     }),
 
@@ -74,7 +74,7 @@ export const profileRouter = createTRPCRouter({
           id: validationMetaData.data.invitedBy,
         },
         include: {
-          Organization: true,
+          organization: true,
         },
       });
 
@@ -93,7 +93,7 @@ export const profileRouter = createTRPCRouter({
 
       const user = await ctx.prisma.user.findUnique({
         where: { email: input.email },
-        include: { Organization: true },
+        include: { organization: true },
       });
 
       if (user) {
@@ -116,7 +116,7 @@ export const profileRouter = createTRPCRouter({
               user,
               message: {
                 title: "Warning",
-                body: `Your email will be unlinked from the previous organization (${user.organizationId}, ${user.Organization?.name}). (If you don't want this to happen please use different email, contact support for more info)`,
+                body: `Your email will be unlinked from the previous organization (${user.organizationId}, ${user.organization?.name}). (If you don't want this to happen please use different email, contact support for more info)`,
               },
             }),
             input.email

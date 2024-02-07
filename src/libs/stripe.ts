@@ -23,7 +23,7 @@ export async function getUserSubscriptionPlan(user: Partial<User>) {
       id: user.id,
     },
     include: {
-      Payment: true,
+      payment: true,
     },
   });
 
@@ -36,45 +36,45 @@ export async function getUserSubscriptionPlan(user: Partial<User>) {
     };
   }
 
-  if (dbUser.Payment?.stripeCustomerId?.includes("freeTrial")) {
+  if (dbUser.payment?.stripeCustomerId?.includes("freeTrial")) {
     return {
       plan: PLANS[0],
       isSubscribed: true,
-      stripeSubscriptionId: dbUser.Payment?.stripeSubscriptionId,
-      stripeCurrentPeriodEnd: dbUser.Payment?.stripeCurrentPeriodEnd,
-      stripeCustomerId: dbUser.Payment?.stripeCustomerId,
+      stripeSubscriptionId: dbUser.payment?.stripeSubscriptionId,
+      stripeCurrentPeriodEnd: dbUser.payment?.stripeCurrentPeriodEnd,
+      stripeCustomerId: dbUser.payment?.stripeCustomerId,
       isCanceled: false,
-      stripeCreatedAt: dbUser.Payment?.createdAt,
-      stripeUpdatedAt: dbUser.Payment?.updatedAt,
+      stripeCreatedAt: dbUser.payment?.createdAt,
+      stripeUpdatedAt: dbUser.payment?.updatedAt,
     };
   }
 
   const isSubscribed = Boolean(
-    dbUser.Payment?.stripePriceId &&
-      dbUser.Payment.stripeCurrentPeriodEnd && // 86400000 = 1 day
-      dbUser.Payment.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now()
+    dbUser.payment?.stripePriceId &&
+      dbUser.payment.stripeCurrentPeriodEnd && // 86400000 = 1 day
+      dbUser.payment.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now()
   );
 
   const plan = isSubscribed
-    ? PLANS.find((plan) => plan.price.priceId === dbUser.Payment?.stripePriceId)
+    ? PLANS.find((plan) => plan.price.priceId === dbUser.payment?.stripePriceId)
     : null;
 
   let isCanceled = false;
-  if (isSubscribed && dbUser.Payment?.stripeSubscriptionId) {
+  if (isSubscribed && dbUser.payment?.stripeSubscriptionId) {
     const stripePlan = await stripe.subscriptions.retrieve(
-      dbUser.Payment.stripeSubscriptionId
+      dbUser.payment.stripeSubscriptionId
     );
     isCanceled = stripePlan.cancel_at_period_end;
   }
 
   return {
     plan,
-    stripeSubscriptionId: dbUser.Payment?.stripeSubscriptionId,
-    stripeCurrentPeriodEnd: dbUser.Payment?.stripeCurrentPeriodEnd,
-    stripeCustomerId: dbUser.Payment?.stripeCustomerId,
+    stripeSubscriptionId: dbUser.payment?.stripeSubscriptionId,
+    stripeCurrentPeriodEnd: dbUser.payment?.stripeCurrentPeriodEnd,
+    stripeCustomerId: dbUser.payment?.stripeCustomerId,
     isSubscribed,
     isCanceled,
-    stripeCreatedAt: dbUser.Payment?.createdAt,
-    stripeUpdatedAt: dbUser.Payment?.updatedAt,
+    stripeCreatedAt: dbUser.payment?.createdAt,
+    stripeUpdatedAt: dbUser.payment?.updatedAt,
   };
 }
