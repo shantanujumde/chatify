@@ -6,7 +6,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { FC } from "react";
+import { type FC } from "react";
 import { cn } from "../utils/utils";
 import { Button, buttonVariants } from "./ui/button";
 import { Input } from "./ui/input";

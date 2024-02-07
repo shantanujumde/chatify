@@ -44,6 +44,8 @@ export async function getUserSubscriptionPlan(user: Partial<User>) {
       stripeCurrentPeriodEnd: dbUser.Payment?.stripeCurrentPeriodEnd,
       stripeCustomerId: dbUser.Payment?.stripeCustomerId,
       isCanceled: false,
+      stripeCreatedAt: dbUser.Payment?.createdAt,
+      stripeUpdatedAt: dbUser.Payment?.updatedAt,
     };
   }
 
@@ -72,5 +74,7 @@ export async function getUserSubscriptionPlan(user: Partial<User>) {
     stripeCustomerId: dbUser.Payment?.stripeCustomerId,
     isSubscribed,
     isCanceled,
+    stripeCreatedAt: dbUser.Payment?.createdAt,
+    stripeUpdatedAt: dbUser.Payment?.updatedAt,
   };
 }
