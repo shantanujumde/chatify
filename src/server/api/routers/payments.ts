@@ -3,6 +3,7 @@ import { getUserSubscriptionPlan, stripe } from "@/libs/stripe";
 import { getBaseUrl } from "@/utils/api";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { FREE_TRIAL } from "../helpers/freeTrial.helpers";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const paymentsRouter = createTRPCRouter({
@@ -20,7 +21,7 @@ export const paymentsRouter = createTRPCRouter({
       if (
         subscriptionPlan.isSubscribed &&
         subscriptionPlan.stripeCustomerId &&
-        !(subscriptionPlan.stripeCustomerId === "freeTrial")
+        !subscriptionPlan.stripeCustomerId.includes(FREE_TRIAL)
       ) {
         const stripeSession = await stripe.billingPortal.sessions.create({
           customer: subscriptionPlan.stripeCustomerId,

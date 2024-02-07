@@ -2,6 +2,7 @@ import { PLANS } from "@/config/stripe";
 import { prisma } from "@/server/db";
 import type { User } from "next-auth";
 import Stripe from "stripe";
+import { FREE_TRIAL } from "../server/api/helpers/freeTrial.helpers";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
   apiVersion: "2023-10-16",
@@ -36,7 +37,7 @@ export async function getUserSubscriptionPlan(user: Partial<User>) {
     };
   }
 
-  if (dbUser.payment?.stripeCustomerId?.includes("freeTrial")) {
+  if (dbUser.payment?.stripeCustomerId?.includes(FREE_TRIAL)) {
     return {
       plan: PLANS[0],
       isSubscribed: true,

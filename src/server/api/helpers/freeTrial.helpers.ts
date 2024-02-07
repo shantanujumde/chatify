@@ -3,6 +3,7 @@ import { type Context } from "../trpc";
 
 export const CHAT_LIMIT = 100;
 export const FILES_LIMIT = 2;
+export const FREE_TRIAL = "FREE_TRIAL";
 
 export const chatLimit = async (userId: string) => {
   const chatCount = await prisma.chats.count({
@@ -27,7 +28,6 @@ export const fileLimit = async (ctx: Context) => {
   });
 
   if (!fileCount?._count) return false;
-  console.log("freeTrial.helpers=>fileCount", fileCount);
 
   return fileCount?._count.file <= FILES_LIMIT;
 };

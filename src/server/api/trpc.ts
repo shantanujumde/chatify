@@ -16,7 +16,7 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { fileLimit } from "./helpers/freeTrial.helpers";
+import { FREE_TRIAL, fileLimit } from "./helpers/freeTrial.helpers";
 import { PaymentTokenSchema } from "./types/payments.types";
 
 /**
@@ -149,7 +149,7 @@ const enforceUserIsSubscribed = t.middleware(async ({ ctx, next }) => {
   const user = parsedData.data;
   const userPlan = parsedData.data.plan;
 
-  if (userPlan.cid.includes("freeTrial")) {
+  if (userPlan.cid.includes(FREE_TRIAL)) {
     if (await fileLimit(ctx))
       return next({
         ctx: {
