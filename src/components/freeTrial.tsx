@@ -41,7 +41,7 @@ const FreeTrial: FC = () => {
           "relative rounded-2xl border border-gray-200 bg-white shadow-lg dark:bg-secondary"
         )}
       >
-        <div className="h-[80%]">
+        <div className="h-[85%]">
           <div className="p-5">
             <h3 className="font-display my-3 text-center text-3xl font-bold">
               Free trial
@@ -83,7 +83,7 @@ const FreeTrial: FC = () => {
             </li>
           </ul>
         </div>
-        <div className="h-[20%] border-t border-gray-200">
+        <div className="h-1/6 border-t border-gray-200">
           <div className="p-5">
             {user ? (
               <Button
