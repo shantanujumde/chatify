@@ -79,10 +79,8 @@ export const authOptions: NextAuthOptions = {
 
     async jwt({ token, user }) {
       // called before session callback
-      console.log("🚀 ~ jwt ~ user:", user);
       if (user) {
         const plan = await getUserSubscriptionPlan(user);
-        console.log("🚀 ~ jwt ~ plan:", plan);
 
         token.id = user.id;
         token.organizationId = (user as User).organizationId;
