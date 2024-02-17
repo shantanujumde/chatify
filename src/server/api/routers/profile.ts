@@ -10,6 +10,7 @@ import {
   UserMetadataInviteSchema,
   type UserMetadataInviteType,
 } from "../types/profile.types";
+import { getBaseUrl } from "@/utils/api";
 
 export const profileRouter = createTRPCRouter({
   getUser: protectedProcedure
@@ -95,6 +96,7 @@ export const profileRouter = createTRPCRouter({
         where: { email: input.email },
         include: { organization: true },
       });
+      const websiteUrl = getBaseUrl();
 
       if (user) {
         if (user.organizationId) {
@@ -112,11 +114,15 @@ export const profileRouter = createTRPCRouter({
           return sendEmail(
             "You are invited to Chatify",
             inviteUserEmailHtml({
-              url: "http://localhost:3000/auth/login",
+              url: websiteUrl + "/auth/login",
               user,
               message: {
                 title: "Warning",
-                body: `Your email will be unlinked from the previous organization (${user.organizationId}, ${user.organization?.name}). (If you don't want this to happen please use different email, contact support for more info)`,
+                body: `Your email will be unlinked from the previous organization (${
+                  user.organizationId
+                }, ${
+                  user.organization?.name ?? "Organization name not available"
+                }). (If you don't want this to happen please use different email, contact support for more info)`,
               },
             }),
             input.email
@@ -138,7 +144,7 @@ export const profileRouter = createTRPCRouter({
 
       sendEmail(
         "You are invited to Chatify",
-        inviteUserEmailHtml({ url: "http://localhost:3000/auth/login", user }),
+        inviteUserEmailHtml({ url: websiteUrl + "/auth/login", user }),
         input.email
       );
     }),

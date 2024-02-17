@@ -54,12 +54,12 @@ const FreeTrial: FC = () => {
           <ul className="my-10 space-y-5 px-8">
             {[
               {
-                text: "Create a knowledge base of 2 files.",
+                text: "Create a knowledge base of 2+ files.",
                 footnote:
                   "You can store up to 2 files. Each file can have more than 3000+ characters.",
               },
               {
-                text: "Up to 100 chat messages.",
+                text: "Up to 100+ chat messages.",
                 footnote:
                   "You can have up to 100 chat messages. And understand every aspects of your file",
               },
@@ -129,7 +129,7 @@ const FreeTrial: FC = () => {
                 })}
                 onClick={() => createFreeTrail()}
               >
-                Avail Free Trial
+                Activate Free Trial
               </Button>
             ) : (
               <Link
