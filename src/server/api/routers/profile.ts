@@ -1,4 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { getBaseUrl } from "@/utils/api";
 import { type User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import nodemailer from "nodemailer";
@@ -10,7 +11,6 @@ import {
   UserMetadataInviteSchema,
   type UserMetadataInviteType,
 } from "../types/profile.types";
-import { getBaseUrl } from "@/utils/api";
 
 export const profileRouter = createTRPCRouter({
   getUser: protectedProcedure
@@ -118,11 +118,11 @@ export const profileRouter = createTRPCRouter({
               user,
               message: {
                 title: "Warning",
-                body: `Your email will be unlinked from the previous organization (${
+                body: `Your email will be unlinked from the previous organization, please use different email (${
                   user.organizationId
                 }, ${
                   user.organization?.name ?? "Organization name not available"
-                }). (If you don't want this to happen please use different email, contact support for more info)`,
+                }). Contact support for more information.`,
               },
             }),
             input.email
