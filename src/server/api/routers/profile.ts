@@ -1,4 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { getBaseUrl } from "@/utils/api";
 import { type User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import nodemailer from "nodemailer";
@@ -18,24 +19,24 @@ export const profileRouter = createTRPCRouter({
       const user = await ctx.prisma.user.findFirst({
         where: { id: input.id },
         include: {
-          Organization: {
+          organization: {
             select: {
               id: true,
               name: true,
-              File: true,
+              file: true,
               users: true,
-              _count: { select: { File: true } },
+              _count: { select: { file: true } },
             },
           },
-          _count: { select: { Chats: true } },
+          _count: { select: { chats: true } },
         },
       });
 
       return {
         user,
-        organization: user?.Organization,
-        documentsCount: user?.Organization?._count.File,
-        chatsCount: user?._count.Chats,
+        organization: user?.organization,
+        documentsCount: user?.organization?._count.file,
+        chatsCount: user?._count.chats,
       };
     }),
 
@@ -74,7 +75,7 @@ export const profileRouter = createTRPCRouter({
           id: validationMetaData.data.invitedBy,
         },
         include: {
-          Organization: true,
+          organization: true,
         },
       });
 
@@ -93,8 +94,9 @@ export const profileRouter = createTRPCRouter({
 
       const user = await ctx.prisma.user.findUnique({
         where: { email: input.email },
-        include: { Organization: true },
+        include: { organization: true },
       });
+      const websiteUrl = getBaseUrl();
 
       if (user) {
         if (user.organizationId) {
@@ -112,11 +114,15 @@ export const profileRouter = createTRPCRouter({
           return sendEmail(
             "You are invited to Chatify",
             inviteUserEmailHtml({
-              url: "http://localhost:3000/auth/login",
+              url: websiteUrl + "/auth/login",
               user,
               message: {
                 title: "Warning",
-                body: `Your email will be unlinked from the previous organization (${user.organizationId}, ${user.Organization?.name}). (If you don't want this to happen please use different email, contact support for more info)`,
+                body: `Your email will be unlinked from the previous organization, please use different email (${
+                  user.organizationId
+                }, ${
+                  user.organization?.name ?? "Organization name not available"
+                }). Contact support for more information.`,
               },
             }),
             input.email
@@ -138,7 +144,7 @@ export const profileRouter = createTRPCRouter({
 
       sendEmail(
         "You are invited to Chatify",
-        inviteUserEmailHtml({ url: "http://localhost:3000/auth/login", user }),
+        inviteUserEmailHtml({ url: websiteUrl + "/auth/login", user }),
         input.email
       );
     }),

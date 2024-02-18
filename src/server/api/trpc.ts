@@ -9,14 +9,14 @@
 
 import { getServerAuthSession } from "@/server/auth";
 import { prisma } from "@/server/db";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
+import { type Prisma, type PrismaClient } from "@prisma/client";
+import { type DefaultArgs } from "@prisma/client/runtime/library";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { fileLimit } from "./helpers/freeTrial.helpers";
+import { FREE_TRIAL, fileLimit } from "./helpers/freeTrial.helpers";
 import { PaymentTokenSchema } from "./types/payments.types";
 
 /**
@@ -138,7 +138,8 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
 const enforceUserIsSubscribed = t.middleware(async ({ ctx, next }) => {
-  const parsedData = PaymentTokenSchema.safeParse(ctx.session?.user);
+  const parsedData = PaymentTokenSchema.partial().safeParse(ctx.session?.user);
+
   if (!parsedData.success) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
@@ -149,7 +150,7 @@ const enforceUserIsSubscribed = t.middleware(async ({ ctx, next }) => {
   const user = parsedData.data;
   const userPlan = parsedData.data.plan;
 
-  if (userPlan.cid.includes("freeTrial")) {
+  if (userPlan?.cid.includes(FREE_TRIAL)) {
     if (await fileLimit(ctx))
       return next({
         ctx: {
@@ -166,7 +167,7 @@ const enforceUserIsSubscribed = t.middleware(async ({ ctx, next }) => {
 
   if (
     !(
-      userPlan.cid.includes("cus") &&
+      userPlan?.cid.includes("cus") &&
       userPlan.sid.includes("sub") &&
       userPlan.active === true &&
       new Date(userPlan.exp) >= new Date()

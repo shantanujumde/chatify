@@ -11,26 +11,39 @@ import { type Plans } from "@/config/stripe";
 import { getUserSubscriptionPlan } from "@/libs/stripe";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/utils/api";
-import { format } from "date-fns";
+import { format, sub } from "date-fns";
 import { Loader2 } from "lucide-react";
 import type { GetServerSideProps, GetServerSidePropsResult } from "next";
 import Link from "next/link";
+import { useEffect } from "react";
 
-type ManageFormProps =
-  | {
-      subscription: {
-        isCanceled: boolean;
-        isSubscribed: boolean;
-        stripeCurrentPeriodEnd: string;
-        plan: Plans | undefined | null;
-      };
-    }
-  | {
-      subscription: null;
-    };
+type ManageFormProps = {
+  subscription: {
+    isCanceled: boolean;
+    isSubscribed: boolean;
+    stripeCurrentPeriodEnd: string;
+    plan: Plans | undefined | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
 
 const Manage = (props: ManageFormProps) => {
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (!props.subscription?.createdAt) return;
+
+    if (
+      new Date(props.subscription?.createdAt) >= sub(new Date(), { days: 2 })
+    ) {
+      toast({
+        title: "Please re-login to continue",
+        description:
+          "If you have made changes to your subscription, please re-login to continue.",
+      });
+    }
+  }, [props.subscription?.createdAt, toast]);
 
   if (props.subscription === null)
     return <>You are not authorized to view this page</>;
@@ -144,6 +157,8 @@ export const getServerSideProps: GetServerSideProps = async (
         stripeCurrentPeriodEnd:
           subscriptionPlan.stripeCurrentPeriodEnd?.toISOString() ?? "",
         plan: subscriptionPlan.plan,
+        createdAt: subscriptionPlan.stripeCreatedAt?.toISOString() ?? "",
+        updatedAt: subscriptionPlan.stripeUpdatedAt?.toISOString() ?? "",
       },
     },
   };

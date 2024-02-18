@@ -3,8 +3,9 @@ import type { User } from "@prisma/client";
 type EmailOptionsType = {
   url: string;
   user?: User | null;
-  message?: { title: string; body: string };
+  message?: { title?: string; body?: string };
 };
+
 export function inviteUserEmailHtml({ url, user, message }: EmailOptionsType) {
   return `
 <!DOCTYPE html>
@@ -64,7 +65,9 @@ export function inviteUserEmailHtml({ url, user, message }: EmailOptionsType) {
       <p>Dear ${user?.name ?? user?.email?.split("@")[0] ?? "user"},</p><br/>
       <p>Welcome to Chatify! We're thrilled to have you on board and excited for the journey ahead. You've taken the first step toward effortless information retrieval, and we're here to guide you through it.</p>
       ${
-        message && `<h3>${message.title}: </h3><strong>${message.body}</strong>`
+        message?.title && message?.body
+          ? `<h3>${message.title}: </h3><strong>${message.body}</strong>`
+          : ""
       }
       
       <br/><p>Your Account Details:</p>
@@ -145,7 +148,13 @@ export function signInLinkEmailHtml({ url, user, message }: EmailOptionsType) {
       </div>
       <p>Dear ${user?.name ?? user?.email?.split("@")[0] ?? "user"},</p>
      <br/>
-     ${message && `<h3>${message.title}: </h3><strong>${message.body}</strong>`}
+
+     ${
+       message?.title && message?.body
+         ? `<h3>${message.title}: </h3><strong>${message.body}</strong>`
+         : ""
+     }
+
      <p>Your Account Details:</p>
       <br/>
       <p>To Login:</p><br/>

@@ -1,5 +1,5 @@
 import {
-  Context,
+  type Context,
   createTRPCRouter,
   protectedProcedure,
   subscribedProcedure,

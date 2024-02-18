@@ -1,3 +1,5 @@
+import { randomBytes } from "crypto";
+import { FREE_TRIAL } from "../helpers/freeTrial.helpers";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const freeTrialRouter = createTRPCRouter({
@@ -6,19 +8,20 @@ export const freeTrialRouter = createTRPCRouter({
     const dateAfterOneYear = new Date(
       new Date().setFullYear(new Date().getFullYear() + 1)
     );
+    const freeTrialId = FREE_TRIAL + "_" + randomBytes(20).toString("hex");
 
     await ctx.prisma.payment.upsert({
       create: {
-        stripeCustomerId: "freeTrial",
-        stripeSubscriptionId: "freeTrial",
-        stripePriceId: "freeTrial",
+        stripeCustomerId: freeTrialId,
+        stripeSubscriptionId: freeTrialId,
+        stripePriceId: freeTrialId,
         stripeCurrentPeriodEnd: dateAfterOneYear,
         userId: user.id,
       },
       update: {
-        stripeCustomerId: "freeTrial",
-        stripeSubscriptionId: "freeTrial",
-        stripePriceId: "freeTrial",
+        stripeCustomerId: freeTrialId,
+        stripeSubscriptionId: freeTrialId,
+        stripePriceId: freeTrialId,
         stripeCurrentPeriodEnd: dateAfterOneYear,
         userId: user.id,
       },

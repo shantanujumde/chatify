@@ -16,8 +16,8 @@ import EmailProvider from "next-auth/providers/email";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 import { createTransport } from "nodemailer";
-import { z } from "zod";
-import { PlanNames } from "../config/stripe";
+import { type z } from "zod";
+import { type PlanNames } from "../config/stripe";
 import {
   inviteUserEmailHtml,
   signInLinkEmailHtml,

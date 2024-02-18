@@ -52,7 +52,6 @@ const EditProfile = ({}) => {
 
   const onSubmit: SubmitHandler<EditFormType> = (data) => {
     updateUserProfile(data);
-    console.log(data);
   };
 
   return (

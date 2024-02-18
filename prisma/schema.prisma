@@ -33,11 +33,11 @@ model File {
     extension String
     deleted   Boolean @default(false)
 
-    embedding Embeddings[]
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @default(now())
 
-    createdAt      DateTime?     @default(now())
-    updatedAt      DateTime?     @default(now())
-    Organization   Organization? @relation(fields: [organizationId], references: [id])
+    embedding      Embeddings[]
+    organization   Organization? @relation(fields: [organizationId], references: [id])
     organizationId String?
 }
 
@@ -48,21 +48,25 @@ model Embeddings {
     contentTokens  Int
     embedding      Unsupported("vector(1536)")?
     openAiResponce Json
-    createdAt      DateTime                     @default(now())
+
+    createdAt DateTime @default(now())
 
     text           File          @relation(fields: [fileId], references: [id])
     fileId         Int
-    Organization   Organization? @relation(fields: [organizationId], references: [id])
+    organization   Organization? @relation(fields: [organizationId], references: [id])
     organizationId String?
 }
 
 model Organization {
     id         String       @id @default(cuid())
     name       String?
-    Embeddings Embeddings[]
-    File       File[]
+    embeddings Embeddings[]
+    file       File[]
 
     users User[]
+
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @default(now())
 }
 
 enum Role {
@@ -81,10 +85,10 @@ model User {
     role           Role?         @default(ADMIN)
     accounts       Account[]
     sessions       Session[]
-    Chats          Chats[]
-    Payment        Payment?
+    chats          Chats[]
+    payment        Payment?
     organizationId String?
-    Organization   Organization? @relation(fields: [organizationId], references: [id])
+    organization   Organization? @relation(fields: [organizationId], references: [id])
 
     createdAt DateTime? @default(now())
     updatedAt DateTime? @default(now())
@@ -98,7 +102,10 @@ model Payment {
     stripeCurrentPeriodEnd DateTime?
 
     userId String? @unique
-    User   User?   @relation(fields: [userId], references: [id])
+    user   User?   @relation(fields: [userId], references: [id])
+
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @default(now())
 }
 
 // Necessary for Next auth
@@ -116,6 +123,9 @@ model Account {
     id_token          String? // @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @default(now())
 
     @@unique([provider, providerAccountId])
 }
