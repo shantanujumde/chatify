@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { BRAND_NAME } from "../utils/utils";
 
 // t3- https://www.youtube.com/watch?v=J1gzN1SAhyM
 // embeddings and chatbot- https://www.youtube.com/watch?v=RM-v7zoYQo0
@@ -13,23 +14,23 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Chatify</title>
+        <title>{BRAND_NAME}</title>
         <meta
           name="description"
-          content="With Chatify you can create knowledge base for your company, by which you can understand data easily"
+          content={`With ${BRAND_NAME} you can create knowledge base for your company, by which you can understand data easily`}
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <InvitationDialog />
       <div className="mx-auto mb-4 flex max-w-fit cursor-pointer items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
         <p className="text-sm font-semibold text-gray-700">
-          Chatify is proudly open-source on Github ❤️
+          {BRAND_NAME} is proudly open-source on Github ❤️
         </p>
       </div>
       <div className="-mt-24 flex h-screen flex-col items-center justify-center">
         <h1 className="max-w-4xl text-center text-5xl font-bold md:text-6xl lg:text-7xl">
-          Chatify makes <span className="text-primary">understand </span>data
-          easy!
+          {BRAND_NAME} makes <span className="text-primary">understand </span>
+          data easy!
         </h1>
         <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
           Worlds best tool to understand your data easily with chat interface.
@@ -44,11 +45,11 @@ export default function Home() {
           Get started <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
         <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
-          Unlock the full potential of Chatify with our{" "}
+          Unlock the full potential of {BRAND_NAME} with our{" "}
           <span className="font-bold">Exclusive 30-Day Free </span>
           trial. Experience the power of seamless information retrieval,
           collaborative knowledge sharing, and priority support, all at no cost.
-          Dive in today and elevate your productivity with Chatify – where
+          Dive in today and elevate your productivity with {BRAND_NAME} – where
           innovation meets efficiency. Sign up now for your complimentary 30-day
           trial and discover a new era of effortless communication and data
           access.
@@ -167,8 +168,8 @@ export default function Home() {
                   Start asking questions
                 </span>
                 <span className="mt-2 text-zinc-700">
-                  It&apos;s that simple. Try out Chatify today - it really takes
-                  less than a minute.
+                  It&apos;s that simple. Try out {BRAND_NAME} today - it really
+                  takes less than a minute.
                 </span>
               </div>
             </li>

@@ -7,7 +7,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { PLANS, type Plans, type TiersType } from "@/config/stripe";
-import { cn } from "@/utils/utils";
+import { BRAND_NAME, cn } from "@/utils/utils";
 import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -67,7 +67,7 @@ const Pricing = () => {
       tagline: "For all kinds of users.",
       features: [
         {
-          text: "Enjoy a complimentary 30-day trial of Chatify!",
+          text: `Enjoy a complimentary 30-day trial of ${BRAND_NAME}!`,
         },
         {
           text: "Expansive storage up to 300 files.",

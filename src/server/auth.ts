@@ -18,6 +18,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { createTransport } from "nodemailer";
 import { type z } from "zod";
 import { type PlanNames } from "../config/stripe";
+import { BRAND_NAME } from "../utils/utils";
 import {
   inviteUserEmailHtml,
   signInLinkEmailHtml,
@@ -132,7 +133,7 @@ export const authOptions: NextAuthOptions = {
         const result = await transport.sendMail({
           to: identifier,
           from: provider.from,
-          subject: `Sign in to Chatify`,
+          subject: `Sign in to ${BRAND_NAME}`,
           text: text({ url, host }),
           html: user
             ? signInLinkEmailHtml({ url, user })

@@ -12,6 +12,7 @@ import {
   ZoomIn,
   batch,
 } from "react-scroll-motion";
+import { BRAND_NAME } from "../../utils/utils";
 
 // interface DocsProps {}
 
@@ -28,7 +29,7 @@ const Docs: FC = ({}) => {
           >
             <div>
               <h1 className="my-32 text-center text-6xl font-bold">
-                How to Use Chatify App
+                How to Use {BRAND_NAME} App
               </h1>
 
               <div className="flex justify-center gap-8 align-middle max-md:flex-col md:flex-row">
@@ -87,8 +88,7 @@ const Docs: FC = ({}) => {
                 <h2 className="mb-2 text-2xl font-bold">Chatting</h2>
                 <ol className="list-inside list-decimal">
                   <li>
-                    Go to the &quot;Chat&quot; page after documents are
-                    uploaded.
+                    Go to &quot;Chatify&quot; page after documents are uploaded.
                   </li>
                   <li>The left panel shows all your available documents.</li>
                   <li>Type a question in the chatbox at the bottom.</li>

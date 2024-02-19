@@ -1,4 +1,5 @@
 import type { User } from "@prisma/client";
+import { BRAND_NAME } from "../../../utils/utils";
 
 type EmailOptionsType = {
   url: string;
@@ -13,7 +14,7 @@ export function inviteUserEmailHtml({ url, user, message }: EmailOptionsType) {
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Chatify!</title>
+    <title>Welcome to ${BRAND_NAME}!</title>
     <style>
       /* Custom styles with theme colors */
       body {
@@ -60,10 +61,10 @@ export function inviteUserEmailHtml({ url, user, message }: EmailOptionsType) {
   <body>
     <div class="container">
       <div class="header">
-        <h1>Welcome to Chatify!</h1>
+        <h1>Welcome to ${BRAND_NAME}!</h1>
       </div>
       <p>Dear ${user?.name ?? user?.email?.split("@")[0] ?? "user"},</p><br/>
-      <p>Welcome to Chatify! We're thrilled to have you on board and excited for the journey ahead. You've taken the first step toward effortless information retrieval, and we're here to guide you through it.</p>
+      <p>Welcome to ${BRAND_NAME}! We're thrilled to have you on board and excited for the journey ahead. You've taken the first step toward effortless information retrieval, and we're here to guide you through it.</p>
       ${
         message?.title && message?.body
           ? `<h3>${message.title}: </h3><strong>${message.body}</strong>`
@@ -74,14 +75,14 @@ export function inviteUserEmailHtml({ url, user, message }: EmailOptionsType) {
       <br/>
       <p>To get started:</p><br/>
       <ol>
-        <li><strong>Login to Chatify:</strong> Click on the button to login <br/><a href="${url}" class="button">Login Now</a>.</li>
-        <li><strong>Explore Chatify:</strong> Add documents or type in information manually, and start chatting with Chatify to retrieve the data you need effortlessly.</li>
+        <li><strong>Login to ${BRAND_NAME}:</strong> Click on the button to login <br/><a href="${url}" class="button">Login Now</a>.</li>
+        <li><strong>Explore ${BRAND_NAME}:</strong> Add documents or type in information manually, and start chatting with ${BRAND_NAME} to retrieve the data you need effortlessly.</li>
         <li><strong>Need Help?</strong> Don't hesitate to reach out to our support team at [Support Email] if you have any questions or need assistance.</li>
       </ol>
-      <p>Remember, at Chatify, we're committed to simplifying information access for you. Your satisfaction is our priority.</p>
-      <p>Once again, welcome aboard, and thank you for choosing Chatify!</p>
+      <p>Remember, at ${BRAND_NAME}, we're committed to simplifying information access for you. Your satisfaction is our priority.</p>
+      <p>Once again, welcome aboard, and thank you for choosing ${BRAND_NAME}!</p>
       <div class="footer">
-        <p>Best regards,<br>Shantanu Jumde<br>CEO<br>Chatify Team</p>
+        <p>Best regards,<br>Shantanu Jumde<br>CEO<br>${BRAND_NAME} Team</p>
       </div>
     </div>
   </body>
@@ -97,7 +98,7 @@ export function signInLinkEmailHtml({ url, user, message }: EmailOptionsType) {
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Chatify!</title>
+    <title>Welcome to ${BRAND_NAME}!</title>
     <style>
       /* Custom styles with theme colors */
       body {
@@ -144,7 +145,7 @@ export function signInLinkEmailHtml({ url, user, message }: EmailOptionsType) {
   <body>
     <div class="container">
       <div class="header">
-        <h1>Welcome to Chatify!</h1>
+        <h1>Welcome to ${BRAND_NAME}!</h1>
       </div>
       <p>Dear ${user?.name ?? user?.email?.split("@")[0] ?? "user"},</p>
      <br/>
@@ -159,7 +160,7 @@ export function signInLinkEmailHtml({ url, user, message }: EmailOptionsType) {
       <br/>
       <p>To Login:</p><br/>
       <ol>
-        <li><strong>Login to Chatify:</strong> Please use the button to login directly <br/><a href="${url}" class="button">Login Now</a>.</li>
+        <li><strong>Login to ${BRAND_NAME}:</strong> Please use the button to login directly <br/><a href="${url}" class="button">Login Now</a>.</li>
         <li><strong>Dont&apos;s:</strong> Please do not share the contents of the mail with anyone.</li>
       </ol>
   
@@ -172,5 +173,5 @@ export function signInLinkEmailHtml({ url, user, message }: EmailOptionsType) {
 
 /** Email Text body (fallback for email clients that don't render HTML, e.g. feature phones) */
 export function text({ url, host }: { url: string; host: string }) {
-  return `Sign in to ${host}\n${url}\n\n ❤️ Chatify`;
+  return `Sign in to ${host}\n${url}\n\n ❤️ ${BRAND_NAME}`;
 }

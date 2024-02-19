@@ -5,6 +5,7 @@ import { TRPCError } from "@trpc/server";
 import nodemailer from "nodemailer";
 import { env } from "process";
 import { z } from "zod";
+import { BRAND_NAME, FROM_EMAIL } from "../../../utils/utils";
 import { inviteUserEmailHtml } from "../helpers/auth.helpers";
 import { getOrganizationId } from "../helpers/profile.helpers";
 import {
@@ -112,7 +113,7 @@ export const profileRouter = createTRPCRouter({
             data: { metaData },
           });
           return sendEmail(
-            "You are invited to Chatify",
+            `You are invited to ${BRAND_NAME}`,
             inviteUserEmailHtml({
               url: websiteUrl + "/auth/login",
               user,
@@ -143,7 +144,7 @@ export const profileRouter = createTRPCRouter({
       console.info("invited the user by InviteUser functionality", user);
 
       sendEmail(
-        "You are invited to Chatify",
+        `You are invited to ${BRAND_NAME}`,
         inviteUserEmailHtml({ url: websiteUrl + "/auth/login", user }),
         input.email
       );
@@ -154,7 +155,7 @@ export const sendEmail = (
   subject: string,
   html: string,
   emailTo: string,
-  emailFrom = "noreply@chatify.com"
+  emailFrom = FROM_EMAIL
 ) => {
   const mailer = nodemailer.createTransport({
     service: "Gmail",
