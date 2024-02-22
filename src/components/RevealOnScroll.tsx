@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef, useState, type FC } from "react";
 
 type RevealOnScrollProps = {
