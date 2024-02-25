@@ -84,6 +84,77 @@ export default function Home() {
           className="relative  aspect-[0.8] w-screen  bg-primary md:aspect-[1155/998] lg:aspect-[1155/798]"
         />
       </div>
+
+      <RevealOnScroll>
+        <div className="mb-12 px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl sm:text-center">
+            <h2 className="mt-2 text-4xl font-bold sm:text-5xl">
+              Explore knowledge base just by asking questions
+            </h2>
+            <p className="mt-4 text-lg  text-zinc-700">
+              Share, Learn, Prompt questions to your knowledge base was never
+              easier before.
+            </p>
+          </div>
+        </div>
+      </RevealOnScroll>
+
+      {/* steps */}
+
+      <ol className="my-8 space-y-4 rounded-xl bg-white p-8 dark:bg-black md:flex md:space-x-12 md:space-y-0">
+        <li className="md:flex-1">
+          <RevealOnScroll>
+            <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+              <span className="text-sm font-medium text-primary/70">
+                Step 1
+              </span>
+              <span className="text-xl font-semibold">
+                Sign up for an account
+              </span>
+              <span className="mt-2 text-zinc-700 dark:text-zinc-400">
+                Either starting out with a free plan or choose our{" "}
+                <Link
+                  href="billing/pricing"
+                  className="text-primary underline underline-offset-2"
+                >
+                  pro plan
+                </Link>
+                .
+              </span>
+            </div>
+          </RevealOnScroll>
+        </li>
+        <li className="md:flex-1">
+          <RevealOnScroll>
+            <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+              <span className="text-sm font-medium text-primary/70">
+                Step 2
+              </span>
+              <span className="text-xl font-semibold">Upload your files.</span>
+              <span className="mt-2 text-zinc-700 dark:text-zinc-400">
+                We&apos;ll process your file and make it ready for you to chat
+                with.
+              </span>
+            </div>
+          </RevealOnScroll>
+        </li>
+        <li className="md:flex-1">
+          <RevealOnScroll>
+            <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+              <span className="text-sm font-medium text-primary/70">
+                Step 3
+              </span>
+              <span className="text-xl font-semibold">
+                Start asking questions
+              </span>
+              <span className="mt-2 text-zinc-700 dark:text-zinc-400">
+                It&apos;s that simple. Try out {BRAND_NAME} today - it really
+                takes less than a minute.
+              </span>
+            </div>
+          </RevealOnScroll>
+        </li>
+      </ol>
       <div className="relative isolate">
         <RevealOnScroll>
           <div className="mx-auto max-w-6xl px-6 lg:px-8">
@@ -97,7 +168,7 @@ export default function Home() {
                   quality={100}
                   className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
                 />
-                <p className="mt-5 w-full rounded-2xl bg-white bg-opacity-50 text-center text-dark sm:text-lg">
+                <p className="-mt-3 w-full rounded-b-2xl bg-white py-1 text-center text-dark ring-1 ring-inset ring-gray-900/10 sm:text-lg">
                   Chat with your data, and get insights easily.
                 </p>
               </div>
@@ -106,79 +177,7 @@ export default function Home() {
         </RevealOnScroll>
       </div>
       {/* Feature section */}
-      <div className="mx-auto mb-32 mt-32 max-w-5xl sm:mt-56">
-        <RevealOnScroll>
-          <div className="mb-12 px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl sm:text-center">
-              <h2 className="mt-2 text-4xl font-bold sm:text-5xl">
-                Explore knowledge base just by asking questions
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                Share, Learn, Prompt questions to your knowledge base was never
-                easier before.
-              </p>
-            </div>
-          </div>
-        </RevealOnScroll>
-
-        {/* steps */}
-
-        <ol className="my-8 space-y-4 pt-8 md:flex md:space-x-12 md:space-y-0">
-          <RevealOnScroll>
-            <li className="md:flex-1">
-              <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-                <span className="text-sm font-medium text-primary/70">
-                  Step 1
-                </span>
-                <span className="text-xl font-semibold">
-                  Sign up for an account
-                </span>
-                <span className="mt-2 text-zinc-700">
-                  Either starting out with a free plan or choose our{" "}
-                  <Link
-                    href="billing/pricing"
-                    className="text-primary underline underline-offset-2"
-                  >
-                    pro plan
-                  </Link>
-                  .
-                </span>
-              </div>
-            </li>
-          </RevealOnScroll>
-          <RevealOnScroll>
-            <li className="md:flex-1">
-              <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-                <span className="text-sm font-medium text-primary/70">
-                  Step 2
-                </span>
-                <span className="text-xl font-semibold">
-                  Upload your files.
-                </span>
-                <span className="mt-2 text-zinc-700">
-                  We&apos;ll process your file and make it ready for you to chat
-                  with.
-                </span>
-              </div>
-            </li>
-          </RevealOnScroll>
-          <RevealOnScroll>
-            <li className="md:flex-1">
-              <div className="flex flex-col space-y-2 border-l-4 border-zinc-300 py-2 pl-4 md:border-l-0 md:border-t-2 md:pb-0 md:pl-0 md:pt-4">
-                <span className="text-sm font-medium text-primary/70">
-                  Step 3
-                </span>
-                <span className="text-xl font-semibold">
-                  Start asking questions
-                </span>
-                <span className="mt-2 text-zinc-700">
-                  It&apos;s that simple. Try out {BRAND_NAME} today - it really
-                  takes less than a minute.
-                </span>
-              </div>
-            </li>
-          </RevealOnScroll>
-        </ol>
+      <div className="mx-auto mb-32 mt-32 sm:mt-56">
         <RevealOnScroll>
           <div className="mx-auto max-w-6xl px-6 lg:px-8">
             <div className="mt-16 flow-root sm:mt-24">
@@ -191,7 +190,7 @@ export default function Home() {
                   quality={100}
                   className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
                 />
-                <p className="mt-5 w-full rounded-2xl bg-white bg-opacity-50 text-center text-dark sm:text-lg">
+                <p className="-mt-3 w-full rounded-b-2xl bg-white py-1 text-center text-dark ring-1 ring-inset ring-gray-900/10 sm:text-lg">
                   Add documents with few simple clicks.
                 </p>
               </div>
