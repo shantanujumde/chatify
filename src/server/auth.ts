@@ -130,6 +130,12 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
+        const urlToPricingPage = new URL(url);
+        urlToPricingPage.searchParams.set(
+          "callbackUrl",
+          urlToPricingPage.origin + "/billing/pricing?newUser=true"
+        );
+
         const result = await transport.sendMail({
           to: identifier,
           from: provider.from,
@@ -137,7 +143,7 @@ export const authOptions: NextAuthOptions = {
           text: text({ url, host }),
           html: user
             ? signInLinkEmailHtml({ url, user })
-            : inviteUserEmailHtml({ url, user }),
+            : inviteUserEmailHtml({ url: urlToPricingPage.toString(), user }),
         });
 
         const failed = result.rejected.concat(result.pending).filter(Boolean);

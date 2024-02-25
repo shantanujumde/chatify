@@ -23,19 +23,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <InvitationDialog />
-      <div className="mx-auto mb-4 flex max-w-fit cursor-pointer items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
+      <a
+        href="https://Github.com/shantanujumde/chatify"
+        className="mx-auto mb-4 flex max-w-fit cursor-pointer items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50"
+      >
         <p className="text-sm font-semibold text-gray-700">
           <Icons.logoShort className="inline h-5 w-5" /> is proudly open-source
           on Github ❤️
         </p>
-      </div>
+      </a>
       <div className="-mt-24 flex h-screen flex-col items-center justify-center">
         <h1 className="max-w-4xl text-center text-5xl font-bold md:text-6xl lg:text-7xl">
           {BRAND_NAME} makes <span className="text-primary">understand </span>
           data easy!
         </h1>
         <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
-          Worlds best tool to understand your data easily with chat interface.
+          Worlds best tool to understand any data easily with chat interface.
         </p>
         <Link
           className={buttonVariants({
@@ -48,16 +51,16 @@ export default function Home() {
         </Link>
         <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
           Unlock the full potential of {BRAND_NAME} with our{" "}
-          <span className="font-bold">Exclusive 30-Day Free </span>
-          trial. Experience the power of seamless information retrieval,
+          <span className="font-bold">Exclusive UNLIMITED Free </span>
+          trial*. Experience the power of seamless information retrieval,
           collaborative knowledge sharing, and priority support, all at no cost.
           Dive in today and elevate your productivity with {BRAND_NAME} – where
-          innovation meets efficiency. Sign up now for your complimentary 30-day
-          trial and discover a new era of effortless communication and data
-          access.
+          innovation meets efficiency. Sign up now for your complimentary
+          unlimited trial and discover a new era of effortless communication and
+          data access.
         </p>
       </div>
-      {/* value proposition section */}
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -95,8 +98,7 @@ export default function Home() {
                   className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
                 />
                 <p className="mt-5 w-full rounded-2xl bg-white bg-opacity-50 text-center text-dark sm:text-lg">
-                  Worlds best tool to understand your data easily with chat
-                  interface.
+                  Chat with your data, and get insights easily.
                 </p>
               </div>
             </div>
@@ -190,7 +192,6 @@ export default function Home() {
                   className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
                 />
                 <p className="mt-5 w-full rounded-2xl bg-white bg-opacity-50 text-center text-dark sm:text-lg">
-                  {" "}
                   Add documents with few simple clicks.
                 </p>
               </div>
