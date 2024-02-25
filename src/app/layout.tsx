@@ -13,7 +13,8 @@ import { BRAND_NAME } from "../utils/utils";
 
 export const metadata = {
   title: BRAND_NAME,
-  description: "",
+  description:
+    "Worlds best tool to understand any data easily with chat interface.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

@@ -2,7 +2,6 @@ import RevealOnScroll from "@/components/RevealOnScroll";
 import InvitationDialog from "@/components/invitationDialog";
 import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { Icons } from "../components/ui/icons";
@@ -14,14 +13,6 @@ import { BRAND_NAME } from "../utils/utils";
 export default function Home() {
   return (
     <>
-      <Head>
-        <title>{BRAND_NAME}</title>
-        <meta
-          name="description"
-          content={`With ${BRAND_NAME} you can create knowledge base for your company, by which you can understand data easily`}
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <InvitationDialog />
       <a
         href="https://Github.com/shantanujumde/chatify"
