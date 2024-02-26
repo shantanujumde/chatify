@@ -150,53 +150,87 @@ export default function Home() {
           </li>
         </ol>
       </RevealOnScroll>
+
       {/* Usecases section */}
-      <div className="relative isolate mt-10 flex flex-col gap-8">
+      <div className="relative isolate mt-10 flex flex-col gap-8 max-sm:text-center md:text-left">
         <RevealOnScroll>
-          <div className="flex gap-4 max-sm:flex-col md:flex-row">
-            <div className="w-1/2 max-sm:w-full">
-              <h2 className="text-5xl font-semibold">
+          <div className="flex items-center gap-4 max-sm:flex-col md:flex-row">
+            <div className="w-3/4 p-8 max-sm:w-full">
+              <h2 className="text-5xl font-semibold italic">
                 Onboard new employees faster.
               </h2>
-              <p className="mt-2 text-xl text-zinc-700 dark:text-gray-300">
-                Onboarding new employees can be a time-consuming process. With{" "}
-                {BRAND_NAME}, you can provide new employees with the information
-                they need to get started quickly and easily.{" "}
-              </p>
+              <blockquote className="text-xl font-semibold italic text-gray-900 dark:text-gray-200">
+                <p className="mt-4 max-sm:pl-0 md:pl-8">
+                  Onboarding new employees can be a time-consuming process. With{" "}
+                  {BRAND_NAME}, you can provide new employees with the
+                  information they need to get started quickly and easily.
+                </p>
+              </blockquote>
             </div>
-            <div className="w-1/2 max-sm:w-full">
+            <div className="w-1/4 max-sm:w-full">
               <Image
                 src="/onboardingOwl.webp"
                 alt="uploading preview"
                 width={350}
                 height={350}
                 quality={100}
-                className="ml-auto rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
+                className="m-auto rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
               />
             </div>
           </div>
         </RevealOnScroll>
 
         <RevealOnScroll>
-          <div className="flex items-center sm:flex-col md:flex-row">
-            <div className="w-1/2">
+          <div className="flex items-center gap-4 max-sm:flex-col-reverse md:flex-row">
+            <div className="w-1/4 max-sm:w-full">
               <Image
                 src="/chattingOwl.webp"
                 alt="uploading preview"
                 width={350}
                 height={350}
                 quality={100}
-                className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
+                className="m-auto rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
               />
             </div>
 
-            <div className="w-1/2">
-              <h2 className="text-5xl font-semibold">Get insights easily.</h2>
-              <p className="mt-2 text-xl text-zinc-700 dark:text-gray-300">
-                Chat with your data, and get insights easily. {BRAND_NAME} is a
-                powerful tool that allows you to ask questions and get answers
-                from your data in real-time.
-              </p>
+            <div className="w-3/4 p-8 max-sm:w-full">
+              <h2 className="text-5xl font-semibold italic">
+                Get insights easily.
+              </h2>
+              <blockquote className="text-xl font-semibold italic text-gray-900 dark:text-gray-300">
+                <p className="mt-4 max-sm:pl-0 md:pl-8">
+                  Chat with your data, and get insights easily. {BRAND_NAME} is
+                  a powerful tool that allows you to ask questions and get
+                  answers from your data in real-time.
+                </p>
+              </blockquote>
+            </div>
+          </div>
+        </RevealOnScroll>
+
+        <RevealOnScroll>
+          <div className="flex items-center gap-4 max-sm:flex-col md:flex-row">
+            <div className="w-3/4 p-8 max-sm:w-full">
+              <h2 className="text-5xl font-semibold italic">
+                Manage your team&apos;s knowledge.
+              </h2>
+              <blockquote className="text-xl font-semibold italic text-gray-900 dark:text-gray-200">
+                <p className="mt-4 max-sm:pl-0 md:pl-8">
+                  {BRAND_NAME} allows you to create a knowledge base for your
+                  team. You can easily share information, ask questions, and
+                  collaborate with your team to find the answers you need.
+                </p>
+              </blockquote>
+            </div>
+            <div className="w-1/4 max-sm:w-full">
+              <Image
+                src="/owlOnBooks.webp"
+                alt="uploading preview"
+                width={350}
+                height={350}
+                quality={100}
+                className="m-auto rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10"
+              />
             </div>
           </div>
         </RevealOnScroll>
