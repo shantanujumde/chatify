@@ -33,7 +33,7 @@ const RevealOnScroll: FC<RevealOnScrollProps> = ({ children }) => {
       style={{
         animationDuration: "2.5s",
       }}
-      className={`scroll-smooth transition-opacity   duration-1000 
+      className={`scroll-smooth transition-opacity duration-1000 
     ${isVisible ? "opacity-100" : "opacity-0"}`}
     >
       {children}
