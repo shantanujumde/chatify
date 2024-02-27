@@ -261,7 +261,7 @@ const Chat: FC = ({}) => {
         </div>
         <div className="flex w-4/5 flex-col max-md:w-full">
           <CardHeader>
-            <CardTitle>Chat</CardTitle>
+            <CardTitle>Chatify</CardTitle>
             <CardDescription>
               Type descriptive messages to get results
             </CardDescription>

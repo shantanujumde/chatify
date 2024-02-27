@@ -6,15 +6,27 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { toast } from "@/components/ui/use-toast";
 import { PLANS, type Plans, type TiersType } from "@/config/stripe";
-import { cn } from "@/utils/utils";
+import { BRAND_NAME, cn } from "@/utils/utils";
 import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import FreeTrial from "../../components/freeTrial";
 
 const Pricing = () => {
   const { data } = useSession();
+  const searchParams = useSearchParams();
+  const isNewUser = searchParams?.get("newUser") === "true";
+
+  if (isNewUser) {
+    toast({
+      title: "Welcome to Chatify!",
+      description:
+        "Please click on Activate Free Trial to activate your free trial.",
+    });
+  }
 
   const user = data?.user;
 
@@ -67,7 +79,7 @@ const Pricing = () => {
       tagline: "For all kinds of users.",
       features: [
         {
-          text: "Enjoy a complimentary 30-day trial of Chatify!",
+          text: `Enjoy a complimentary 30-day trial of ${BRAND_NAME}!`,
         },
         {
           text: "Expansive storage up to 300 files.",

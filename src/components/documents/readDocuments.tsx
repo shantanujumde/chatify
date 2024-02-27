@@ -40,8 +40,8 @@ const ReadDocuments: FC<{ refetchDocuments: () => Promise<void> }> = ({
         }
 
         toast({
-          title: "Error creating embedding",
-          description: "Contact support for more info",
+          title: "Please subscribe to a plan!",
+          description: "If already subscribed, please try re-login.",
           variant: "destructive",
         });
       },

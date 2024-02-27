@@ -14,7 +14,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { cn } from "@/utils/utils";
+import { BRAND_NAME, cn } from "@/utils/utils";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -33,7 +33,7 @@ export function TopNavBar() {
       description: "Add documents to chat with it",
     },
     {
-      title: "Chat",
+      title: "Chatify",
       href: "/chatify/chat",
       description:
         "Type interactive messages to get information form documents you added",
@@ -145,7 +145,7 @@ export function TopNavBar() {
                       >
                         <Icons.logo className="z-10 dark:fill-white" />
                         <div className="mb-2 mt-4 text-center text-lg font-medium">
-                          Chatify
+                          {BRAND_NAME}
                         </div>
                         <p className="text-center text-sm leading-tight text-muted-foreground">
                           Worlds best tool to create knowledge-base and
@@ -155,13 +155,13 @@ export function TopNavBar() {
                     </NavigationMenuLink>
                   </li>
                   <ListItem href="/docs" title="Introduction">
-                    Know how to use Chatify. Step by step instruction guide.
+                    Know how to use {BRAND_NAME} Step by step instruction guide.
                   </ListItem>
                   <ListItem href="/docs/about-us" title="About Us">
-                    Know about chatify team and contributors.
+                    Know about {BRAND_NAME} team and contributors.
                   </ListItem>
                   <ListItem href="/docs/privacy-policy" title="Privacy Policy">
-                    Know about chatify privacy policy.
+                    Know about {BRAND_NAME} privacy policy.
                   </ListItem>
                 </ul>
               </NavigationMenuContent>

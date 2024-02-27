@@ -21,8 +21,10 @@ const config = {
   //   locales: ["en"],
   //   defaultLocale: "en",
   // },
+
   webpack: function webpack(config) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    config.externals = [...config.externals, { canvas: "canvas" }];
     config.resolve.fallback = {
       // if you miss it, all the other options in fallback, specified
       // by next.js will be dropped.
@@ -36,7 +38,18 @@ const config = {
     return config;
   },
   images: {
-    domains: ["images.unsplash.com", "lh3.googleusercontent.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "**",
+      },
+    ],
   },
 };
 

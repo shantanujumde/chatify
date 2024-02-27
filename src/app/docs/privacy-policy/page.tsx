@@ -13,6 +13,7 @@ import {
   ZoomIn,
   batch,
 } from "react-scroll-motion";
+import { BRAND_NAME, CONTACT_US_EMAIL } from "../../../utils/utils";
 
 const PrivacyPolicy = ({}) => {
   const ZoomInScrollOut = batch(Sticky(), FadeIn(), ZoomIn(), MoveOut(0, -200));
@@ -25,10 +26,10 @@ const PrivacyPolicy = ({}) => {
             className="flex flex-col gap-4"
             animation={batch(Sticky(), Fade(), MoveOut(0, -200))}
           >
-            <h1 className="text-6xl font-bold">Chatify Privacy Policy</h1>
+            <h1 className="text-6xl font-bold">{BRAND_NAME} Privacy Policy</h1>
             <p>
-              Welcome to Chatify! This Privacy Policy is designed to help you
-              understand how we collect, use, and safeguard your information
+              Welcome to {BRAND_NAME}! This Privacy Policy is designed to help
+              you understand how we collect, use, and safeguard your information
               when you use our services.
             </p>
             <span className="text-right text-2xl">Scroll 👇</span>
@@ -45,15 +46,15 @@ const PrivacyPolicy = ({}) => {
               1. User-Provided Information:
             </h2>
             <p>
-              When you sign up for Chatify, we collect personal information such
-              as your name, email address, and any other information you choose
-              to provide.
+              When you sign up for {BRAND_NAME}, we collect personal information
+              such as your name, email address, and any other information you
+              choose to provide.
             </p>
             <h2 className="text-3xl font-bold">2. Uploaded Documents:</h2>
             <p>
-              Documents you upload to Chatify are stored securely on our
+              Documents you upload to {BRAND_NAME} are stored securely on our
               servers. We do not access the content of your documents unless
-              explicitly requested by you through the Chatify interface.
+              explicitly requested by you through the {BRAND_NAME} interface.
             </p>
           </Animator>
         </ScrollPage>
@@ -104,7 +105,8 @@ const PrivacyPolicy = ({}) => {
             <h2 className="text-4xl font-bold">1. Account Settings:</h2>
             <p>
               You have control over the information you provide. You can review
-              and update your account information through the Chatify platform.
+              and update your account information through the {BRAND_NAME}{" "}
+              platform.
             </p>
             <h2 className="text-4xl font-bold">
               2. Communication Preferences:
@@ -155,7 +157,7 @@ const PrivacyPolicy = ({}) => {
             <h2 className="text-5xl font-extrabold">Contact Us</h2>
             <p>
               If you have any questions or concerns about this Privacy Policy,
-              please contact us at contact@chatify.com.
+              please contact us at {CONTACT_US_EMAIL}.
             </p>
             <Link
               className={buttonVariants({
@@ -176,7 +178,7 @@ const PrivacyPolicy = ({}) => {
           >
             <h2 className="text-4xl font-bold">Acceptance of Terms</h2>
             <p>
-              By using Chatify, you signify your acceptance of this Privacy
+              By using {BRAND_NAME}, you signify your acceptance of this Privacy
               Policy. If you do not agree to this policy, please do not use our
               services.
             </p>

@@ -1,3 +1,4 @@
+"use client";
 import ReadDocuments from "@/components/documents/readDocuments";
 import ShowDocuments from "@/components/documents/showDocuments";
 import {

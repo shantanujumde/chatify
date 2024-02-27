@@ -18,6 +18,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { createTransport } from "nodemailer";
 import { type z } from "zod";
 import { type PlanNames } from "../config/stripe";
+import { BRAND_NAME } from "../utils/utils";
 import {
   inviteUserEmailHtml,
   signInLinkEmailHtml,
@@ -129,14 +130,20 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
+        const urlToPricingPage = new URL(url);
+        urlToPricingPage.searchParams.set(
+          "callbackUrl",
+          urlToPricingPage.origin + "/billing/pricing?newUser=true"
+        );
+
         const result = await transport.sendMail({
           to: identifier,
           from: provider.from,
-          subject: `Sign in to Chatify`,
+          subject: `Sign in to ${BRAND_NAME}`,
           text: text({ url, host }),
           html: user
             ? signInLinkEmailHtml({ url, user })
-            : inviteUserEmailHtml({ url, user }),
+            : inviteUserEmailHtml({ url: urlToPricingPage.toString(), user }),
         });
 
         const failed = result.rejected.concat(result.pending).filter(Boolean);
