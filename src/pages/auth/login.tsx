@@ -82,22 +82,26 @@ export default function LoginAccount({
           className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
         />
       </div>
-      <div className="relative m-auto flex h-[85vh] flex-col items-center justify-center overflow-hidden align-middle">
+      <div className="relative m-auto flex h-[75vh] flex-col items-center justify-center overflow-hidden align-middle">
         <div className="m-auto w-full lg:max-w-lg">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-center text-2xl">Sign in</CardTitle>
+            <CardTitle className="text-center text-2xl">
+              Sign In / Register
+            </CardTitle>
             <CardDescription className="text-center">
-              Enter your email and sign in with the magic link on your email.
+              Enter your email to sign in or register with the magic.
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
             <CardContent className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="p-1">
+                  Email
+                </Label>
                 <Input
                   id="email"
                   type="text"
-                  placeholder="email"
+                  placeholder="e.g. johndoe@gmail.com"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
@@ -141,7 +145,7 @@ export default function LoginAccount({
               </Button>
             </CardFooter>
           </form>
-          <div className="relative mb-2">
+          <div className="relative m-2">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
@@ -151,7 +155,7 @@ export default function LoginAccount({
               </span>
             </div>
           </div>
-          <div className="m-2 mx-6 grid grid-cols-2 gap-6">
+          <div className="flex justify-center space-x-2 px-6">
             {Object.values(providers).map((provider) => {
               if (provider.id === "credentials" || provider.id === "email")
                 return;
@@ -159,6 +163,7 @@ export default function LoginAccount({
                 <Button
                   key={provider.name}
                   variant="outline"
+                  className="w-full"
                   onClick={() => signIn(provider.name.toLowerCase())}
                 >
                   {provider.id === "discord" ? (
@@ -173,15 +178,6 @@ export default function LoginAccount({
               );
             })}
           </div>
-          <p className="mb-2 mt-2 text-center text-xs text-gray-700">
-            Don&apos;t have an account?{" "}
-            <span
-              className=" text-blue-600 hover:underline"
-              onClick={() => router.push("/auth/register")}
-            >
-              Sign up
-            </span>
-          </p>
         </div>
       </div>
     </>

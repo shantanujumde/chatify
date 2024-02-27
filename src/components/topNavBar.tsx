@@ -190,7 +190,7 @@ export function TopNavBar() {
             {status === "unauthenticated" && (
               <>
                 <NavigationMenuItem className="rounded-xl border border-gray-400/50">
-                  <Link href="/auth/register" legacyBehavior passHref>
+                  <Link href="/auth/login" legacyBehavior passHref>
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
                     >
