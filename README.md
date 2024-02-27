@@ -1,49 +1,59 @@
-# Chatify App
+# Onboard Owl - Unlocking Seamless Data Understanding
 
-## Getting Started
+**Getting Started | Utilities | Profile | Logout | Toggle Theme**
 
-- To use this app, you will need:
+Onboard Owl is proudly open-source on [Github](https://github.com/onboardowl) ❤️
 
-* Node.js installed
-* A database like PostgreSQL
-* An account with Vercel or other hosting platform to deploy
+## Welcome to Onboard Owl!
 
-## Installation
+Making data understandable has never been easier! Onboard Owl is the world's leading tool for effortlessly understanding any data through a simple chat interface.
 
-- Clone the repo: `git clone <repo>`
-- Install dependencies: `npm install`
-- Configure environment variables:
+### Get Started
 
-* Copy `.env.example` to `.env`
-* Add your database connection URL, keys etc
+Unlock the full potential of Onboard Owl with our Exclusive UNLIMITED Free trial\*. Experience the power of seamless information retrieval, collaborative knowledge sharing, and priority support, all at no cost. Dive in today and elevate your productivity with Onboard Owl – where innovation meets efficiency. Sign up now for your complimentary unlimited trial and discover a new era of effortless communication and data access.
 
-- Migrate database: `npx prisma migrate dev`
-- Run locally: npm run dev
-- Open http://localhost:3000 to view the app
+### Explore Knowledge Base with Ease
 
-## Usage
+- Explore your knowledge base by asking questions
+- Share, learn, and prompt questions effortlessly
 
-- The main features are:
+### Simple Onboarding Process
 
-* User authentication via NextAuth
-* CRUD operations on data via tRPC API routes
-* Tailwind CSS for styling
-* Some key things you can do:
+1. **Sign up for an account:**
 
-* Register a new user
-* Log in/out
-* View, add, edit, delete records like posts, comments etc
-* Secure routes and API endpoints
-* The code is documented to understand the implementation.
+   - Choose between our free plan or upgrade to the pro plan.
 
-## Deployment
+2. **Upload your files:**
 
-- To deploy this Next.js app, you can use Vercel or any other platform that supports it.
+   - We'll process your files, making them ready for seamless chatting.
 
-* Create an account on Vercel
-* Connect your Git repository
-* It will automatically detect the framework and configure deployment
-* Make sure environment variables are set
-* Trigger deploy and your app will be live!
-* And that's it! The T3 stack makes it easy to build and deploy fullstack apps. Let me know if you have any other questions!
-*
+3. **Start asking questions:**
+   - It's that simple! Try out Onboard Owl today - it takes less than a minute.
+
+### Onboard New Employees Faster
+
+Onboarding new employees is now a breeze. With Onboard Owl, provide new team members with the information they need to get started quickly and easily.
+
+![Onboarding Preview](link_to_image)
+
+### Get Insights Easily
+
+Chat with your data and gain insights effortlessly. Onboard Owl is a powerful tool that allows you to ask questions and receive real-time answers from your data.
+
+![Insights Preview](link_to_image)
+
+### Manage Your Team's Knowledge
+
+Create a knowledge base for your team using Onboard Owl. Easily share information, ask questions, and collaborate with your team to find the answers you need.
+
+![Knowledge Management Preview](link_to_image)
+
+### Add Documents with a Few Simple Clicks
+
+![Document Upload Preview](link_to_image)
+
+Ready to embark on a journey of streamlined data understanding? Sign up for Onboard Owl now and revolutionize the way you interact with your information.
+
+---
+
+_Note: Onboard Owl is a product of onboardowl. All rights reserved._
