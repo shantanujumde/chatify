@@ -21,7 +21,6 @@ import {
 } from "next";
 import { getServerSession } from "next-auth";
 import { getProviders, signIn } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
@@ -34,11 +33,12 @@ export default function LoginAccount({
     // password: z.string().min(6, "Password must be at least 6 characters"),
   });
 
+  console.log("providers", providers);
+
   const [signInLoading, setSignInLoading] = useState(false);
 
   type LoginFormType = z.infer<typeof LoginFormSchema>;
 
-  const router = useRouter();
   const {
     register,
     handleSubmit,
