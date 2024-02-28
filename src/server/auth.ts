@@ -119,6 +119,8 @@ export const authOptions: NextAuthOptions = {
       },
       from: "noreply@example.com",
       sendVerificationRequest: async (params) => {
+        console.log("providers", env);
+        console.log("env", process.env);
         const { identifier, url, provider } = params;
         const { host } = new URL(url);
         // NOTE: You are not required to use `nodemailer`, use whatever you want.
