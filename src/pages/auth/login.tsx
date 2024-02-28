@@ -13,6 +13,7 @@ import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
+import { env } from "@/env.mjs";
 import { authOptions } from "@/server/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -33,7 +34,9 @@ export default function LoginAccount({
     // password: z.string().min(6, "Password must be at least 6 characters"),
   });
 
-  console.log("providers", providers);
+  console.log("providers", providers, env);
+
+  console.log("env", process.env);
 
   const [signInLoading, setSignInLoading] = useState(false);
 
