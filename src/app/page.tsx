@@ -2,6 +2,7 @@ import RevealOnScroll from "@/components/RevealOnScroll";
 import InvitationDialog from "@/components/invitationDialog";
 import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { Icons } from "../components/ui/icons";
@@ -10,7 +11,9 @@ import { BRAND_NAME } from "../utils/utils";
 // t3- https://www.youtube.com/watch?v=J1gzN1SAhyM
 // embeddings and chatbot- https://www.youtube.com/watch?v=RM-v7zoYQo0
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession();
+
   return (
     <>
       <a
@@ -30,14 +33,16 @@ export default function Home() {
         <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
           Worlds best tool to understand any data easily with chat interface.
         </p>
+
         <Link
+          href={session?.user ? "/billing/pricing" : "/auth/login"}
           className={buttonVariants({
             size: "lg",
             className: "mt-5",
           })}
-          href="/billing/pricing"
         >
-          Get started <ArrowRight className="ml-2 h-5 w-5" />
+          {session?.user ? "Activate free trial" : "Sign-Up Now"}
+          <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
         <p className="mt-5 max-w-prose text-center text-zinc-700 dark:text-zinc-400 sm:text-lg">
           Unlock the full potential of {BRAND_NAME} with our{" "}
