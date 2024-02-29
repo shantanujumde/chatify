@@ -1,4 +1,3 @@
-import { env } from "@/env.mjs";
 import { getUserSubscriptionPlan } from "@/libs/stripe";
 import { prisma } from "@/server/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -101,26 +100,24 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+      clientId: process.env.DISCORD_CLIENT_ID ?? "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET ?? "",
     }),
     GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
 
     EmailProvider({
       server: {
         service: "Gmail",
         auth: {
-          user: env.EMAIL_USER,
-          pass: env.EMAIL_PASS,
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         },
       },
       from: "noreply@example.com",
       sendVerificationRequest: async (params) => {
-        console.log("providers", env);
-        console.log("env", process.env);
         const { identifier, url, provider } = params;
         const { host } = new URL(url);
         // NOTE: You are not required to use `nodemailer`, use whatever you want.
