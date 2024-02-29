@@ -21,7 +21,6 @@ import {
 } from "next";
 import { getServerSession } from "next-auth";
 import { getProviders, signIn } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
@@ -38,7 +37,6 @@ export default function LoginAccount({
 
   type LoginFormType = z.infer<typeof LoginFormSchema>;
 
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -145,16 +143,20 @@ export default function LoginAccount({
               </Button>
             </CardFooter>
           </form>
-          <div className="relative m-2">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+
+          {Object.values(providers).length && (
+            <div className="relative m-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
+          )}
+
           <div className="flex justify-center space-x-2 px-6">
             {Object.values(providers).map((provider) => {
               if (provider.id === "credentials" || provider.id === "email")
