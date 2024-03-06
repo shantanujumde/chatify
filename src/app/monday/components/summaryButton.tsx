@@ -3,18 +3,17 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
 import { Button, Loader } from "monday-ui-react-core";
 import { FC } from "react";
+import { api } from "../../../utils/api";
 
-interface SummaryButtonProps {
-  generator: (
-    boardId: number | null,
-    jwtToken: string
-  ) => Promise<string | undefined>;
-}
+interface SummaryButtonProps {}
 
-const SummaryButton: FC<SummaryButtonProps> = ({ generator }) => {
+const SummaryButton: FC<SummaryButtonProps> = ({}) => {
   const monday = mondaySdk();
   monday.setApiVersion("2023-10");
   monday.setToken(process.env.MONDAY_API_KEY ?? "");
+
+  const { mutateAsync: generator } =
+    api.monday.generateBoardSummary.useMutation();
 
   const { data: boardId, isLoading: isBoardIdLoading } = useQuery(
     ["boardId"],
@@ -30,10 +29,10 @@ const SummaryButton: FC<SummaryButtonProps> = ({ generator }) => {
     mutate: getSummary,
     isLoading: isGetSummaryLoading,
   } = useMutation(["summary"], async () => {
-    const summaryRes = await generator(
-      boardId?.boardId ?? null,
-      boardId?.jwtToken.data ?? ""
-    );
+    const summaryRes = await generator({
+      boardId: boardId?.boardId ?? 0,
+      jwtToken: boardId?.jwtToken.data ?? "",
+    });
     return summaryRes;
   });
 

@@ -2,19 +2,15 @@
 import { useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
 import { Button, Loader } from "monday-ui-react-core";
-import { PropsWithChildren } from "react";
+import { api } from "../../../utils/api";
 import { AppData, SessionTokenData } from "./summaryButton";
-
-export const ClientButton = ({
-  fn,
-  param,
-}: PropsWithChildren<{
-  fn: (boardName: string, content: string, jwtToken: string) => Promise<void>;
-  param: string;
-}>) => {
+export const ClientButton = ({}) => {
   const monday = mondaySdk();
   monday.setApiVersion("2023-10");
   monday.setToken(process.env.MONDAY_API_KEY ?? "");
+
+  const { mutate: generateNewBoard } =
+    api.monday.generateNewBoard.useMutation();
 
   const { data: documentData, isLoading: isBoardIdLoading } = useQuery(
     ["boardId"],
@@ -47,7 +43,11 @@ export const ClientButton = ({
       <Button
         size={Button.sizes.MEDIUM}
         onClick={() =>
-          fn(param, documentData.document ?? "", documentData.jwt.data)
+          generateNewBoard({
+            boardName: "Ai-generated-board",
+            content: documentData.document,
+            jwtToken: documentData.jwt.data,
+          })
         }
       >
         Generate Board
