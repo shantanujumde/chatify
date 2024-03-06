@@ -1,7 +1,7 @@
 "use server";
 import OpenAI from "openai";
 import { FC } from "react";
-import { ClientButton } from "./components/button";
+import { ClientButton } from "./components/clientButton";
 interface MondayProps {}
 
 const Monday: FC<MondayProps> = async ({}) => {
@@ -42,7 +42,7 @@ const headers = {
   Authorization: process.env.MONDAY_API_KEY ?? "",
 };
 
-async function queryFireHelper<T>(query: string) {
+export async function queryFireHelper<T>(query: string) {
   const result = await fetch("https://api.monday.com/v2", {
     method: "post",
     headers,
