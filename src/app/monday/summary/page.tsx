@@ -2,7 +2,7 @@
 import OpenAI from "openai";
 import { FC } from "react";
 import SummaryButton from "../components/summaryButton";
-import { queryFireHelper } from "../page";
+import { isAuthorized, queryFireHelper } from "../page";
 
 interface SummaryProps {}
 
@@ -17,9 +17,12 @@ const Summary: FC<SummaryProps> = ({}) => {
 export default Summary;
 
 export async function getBoardData(
-  boardId: number | null
+  boardId: number | null,
+  jwtToken: string
 ): Promise<string | undefined> {
   "use server";
+
+  if (!isAuthorized(jwtToken)) throw new Error("Not authorized");
 
   if (!boardId) return;
   const getBoardData = `{ boards(ids: ${boardId}) { items_page(limit: 100) { cursor items { id name column_values { id text value } } } } }`;

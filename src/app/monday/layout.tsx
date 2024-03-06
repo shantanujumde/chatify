@@ -1,7 +1,7 @@
 import "monday-ui-react-core/tokens";
 
 export default function DashboardLayout({
-  children, // will be a page or nested layout
+  children,
 }: {
   children: React.ReactNode;
 }) {
@@ -12,7 +12,6 @@ export default function DashboardLayout({
         rel="stylesheet"
       />
       <section className="flex h-full flex-col items-center justify-center">
-        <nav></nav>
         {children}
       </section>
     </>

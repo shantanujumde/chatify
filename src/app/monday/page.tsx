@@ -1,38 +1,13 @@
 "use server";
+import jwt from "jsonwebtoken";
 import OpenAI from "openai";
 import { FC } from "react";
 import { ClientButton } from "./components/clientButton";
+
 interface MondayProps {}
 
 const Monday: FC<MondayProps> = async ({}) => {
-  try {
-    const docs = await getDocuments();
-    if (docs.data) {
-      return (
-        <>
-          Select from the following board
-          <ul className="cursor-pointer list-inside list-disc">
-            {docs.data.docs.map((document, indx) => (
-              <li key={indx}>
-                <ClientButton
-                  fn={generateNewBoard}
-                  param={"ApiDoc"}
-                  content={document.blocks}
-                >
-                  {document.name}
-                </ClientButton>
-              </li>
-            ))}
-          </ul>
-        </>
-      );
-    }
-  } catch (err) {
-    console.error(err);
-    return <h2>Something went wrong</h2>;
-  }
-
-  return <h2>Loading...</h2>;
+  return <ClientButton fn={generateNewBoard} param={"ApiDoc"} />;
 };
 
 export default Monday;
@@ -55,8 +30,12 @@ export async function queryFireHelper<T>(query: string) {
 }
 export const generateNewBoard = async (
   boardName: string,
-  content: { content: string }[]
+  content: string,
+  jwtToken: string
 ) => {
+  //0. validate
+  if (!isAuthorized(jwtToken)) throw new Error("Not authorized");
+
   //1. create board
   type CreateBoardResponse = {
     data: {
@@ -115,6 +94,7 @@ export const generateNewBoard = async (
     task: string;
     description: string;
   }[];
+  console.info("items", boardItems);
 
   // add data to columns
   const addDataQuery = `mutation {
@@ -157,7 +137,7 @@ export const getDocuments = async () => {
   return docsResponse;
 };
 
-const gptGeneration = async (content: object) => {
+const gptGeneration = async (content: string) => {
   const openAi = new OpenAI({
     apiKey: process.env.OPEN_AI_API_KEY,
   });
@@ -187,7 +167,7 @@ const gptGeneration = async (content: object) => {
           }
         ]
         
-        Return it as a plain string JSON format. Ensure that the result is easily parsable using JSON.parse.
+        Return it as a plain string JSON format in single line. Ensure that the result is easily parsable using JSON.parse.
         
         In the generated response, please provide data for the tasks and descriptions.
         `,
@@ -197,3 +177,16 @@ const gptGeneration = async (content: object) => {
 
   return chatResponse.choices[0]?.message;
 };
+
+export async function isAuthorized(token: string) {
+  try {
+    const clientSecret: string = process.env.CLIENT_SECRET ?? "";
+    const payload = jwt.verify(token, clientSecret);
+    if (payload) {
+      return true;
+    }
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}

@@ -2,15 +2,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
 import { Button, Loader } from "monday-ui-react-core";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 interface SummaryButtonProps {
-  generator: (boardId: number | null) => Promise<string | undefined>;
+  generator: (
+    boardId: number | null,
+    jwtToken: string
+  ) => Promise<string | undefined>;
 }
 
 const SummaryButton: FC<SummaryButtonProps> = ({ generator }) => {
-  const [summary, setSummary] = useState<string>();
-
   const monday = mondaySdk();
   monday.setApiVersion("2023-10");
   monday.setToken(process.env.MONDAY_API_KEY ?? "");
@@ -19,17 +20,22 @@ const SummaryButton: FC<SummaryButtonProps> = ({ generator }) => {
     ["boardId"],
     async () => {
       const res = (await monday.get("context")) as AppData;
-      return res.data.locationContext.boardId;
+      const jwt = (await monday.get("sessionToken")) as SessionTokenData;
+      return { boardId: res?.data?.locationContext?.boardId, jwtToken: jwt };
     }
   );
 
-  const { mutate: getSummary, isLoading: isGetSummaryLoading } = useMutation(
-    ["summary"],
-    async () => {
-      const summaryRes = await generator(boardId ?? null);
-      setSummary(summaryRes);
-    }
-  );
+  const {
+    data: summary,
+    mutate: getSummary,
+    isLoading: isGetSummaryLoading,
+  } = useMutation(["summary"], async () => {
+    const summaryRes = await generator(
+      boardId?.boardId ?? null,
+      boardId?.jwtToken.data ?? ""
+    );
+    return summaryRes;
+  });
 
   if (isBoardIdLoading)
     return (
@@ -74,7 +80,14 @@ const SummaryButton: FC<SummaryButtonProps> = ({ generator }) => {
 
 export default SummaryButton;
 
-type AppData = {
+export type SessionTokenData = {
+  method: string;
+  type: string;
+  data: string;
+  requestId: string;
+};
+
+export type AppData = {
   method: string;
   type: string;
   data: {
