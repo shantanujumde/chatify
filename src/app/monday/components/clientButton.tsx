@@ -11,7 +11,7 @@ export const ClientButton = ({}) => {
   monday.setToken(process.env.MONDAY_API_KEY ?? "");
   const [documentName, setDocumentName] = useState("my-awesome-document");
 
-  const { mutate: generateNewBoard } =
+  const { mutate: generateNewBoard, isLoading: isGenerateNewBoardLoading } =
     api.monday.generateNewBoard.useMutation();
 
   const { data: documentData, isLoading: isBoardIdLoading } = useQuery(
@@ -49,6 +49,7 @@ export const ClientButton = ({}) => {
       />
       <Button
         size={Button.sizes.MEDIUM}
+        disabled={isGenerateNewBoardLoading}
         onClick={() =>
           generateNewBoard({
             boardName: documentName,
@@ -57,7 +58,12 @@ export const ClientButton = ({}) => {
           })
         }
       >
-        Generate Board
+        Generate Board{" "}
+        {isGenerateNewBoardLoading && (
+          <div className="h-3 w-3">
+            <Loader />
+          </div>
+        )}
       </Button>
     </div>
   );

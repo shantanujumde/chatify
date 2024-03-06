@@ -1,13 +1,16 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
-import { Button, Loader } from "monday-ui-react-core";
-import { FC } from "react";
+import { Button, EditableInput, Loader } from "monday-ui-react-core";
+import { FC, useState } from "react";
 import { api } from "../../../utils/api";
 
 interface SummaryButtonProps {}
 
 const SummaryButton: FC<SummaryButtonProps> = ({}) => {
+  const [documentName, setDocumentName] = useState("my-awesome-document");
+  const [copy, SetCopy] = useState(false);
+
   const monday = mondaySdk();
   monday.setApiVersion("2023-10");
   monday.setToken(process.env.MONDAY_API_KEY ?? "");
@@ -18,12 +21,18 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
     isLoading: isGeneratorLoading,
   } = api.monday.generateBoardSummary.useMutation();
 
-  const { data: boardId, isLoading: isBoardIdLoading } = useQuery(
+  const {
+    // data: generatedData,
+    mutate: createDocument,
+    isLoading: isCreateDocumentLoading,
+  } = api.monday.generateDocument.useMutation();
+
+  const { data: boardDetails, isLoading: isBoardIdLoading } = useQuery(
     ["boardId"],
     async () => {
       const res = (await monday.get("context")) as AppData;
       const jwt = (await monday.get("sessionToken")) as SessionTokenData;
-      return { boardId: res?.data?.locationContext?.boardId, jwtToken: jwt };
+      return { boardDetails: res, jwtToken: jwt };
     }
   );
 
@@ -34,6 +43,10 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
       </div>
     );
 
+  const handleCopy = async () => {
+    navigator.clipboard.writeText(generatedData ?? "");
+    SetCopy(true);
+  };
   return (
     <div className="mt-10 flex flex-col gap-4 text-center">
       <h2 className="text-2xl font-bold">
@@ -45,8 +58,8 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
           size={Button.sizes.SMALL}
           onClick={() =>
             generator({
-              boardId: boardId?.boardId ?? 0,
-              jwtToken: boardId?.jwtToken.data ?? "",
+              boardId: boardDetails?.boardDetails.data.boardId ?? 0,
+              jwtToken: boardDetails?.jwtToken.data ?? "",
               type: "detailed",
             })
           }
@@ -58,8 +71,8 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
           size={Button.sizes.SMALL}
           onClick={() =>
             generator({
-              boardId: boardId?.boardId ?? 0,
-              jwtToken: boardId?.jwtToken.data ?? "",
+              boardId: boardDetails?.boardDetails.data.boardId ?? 0,
+              jwtToken: boardDetails?.jwtToken.data ?? "",
               type: "summary",
             })
           }
@@ -73,17 +86,37 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
         <Button
           kind={Button.kinds.SECONDARY}
           size={Button.sizes.MEDIUM}
-          onClick={() => navigator.clipboard.writeText(generatedData ?? "")}
+          onClick={() => handleCopy()}
         >
-          copy
+          {copy ? "Copied" : "Copy"}
         </Button>
-        <Button
-          kind={Button.kinds.SECONDARY}
-          size={Button.sizes.MEDIUM}
-          // onClick={}
-        >
-          Generate document
-        </Button>
+        <div className="flex flex-col gap-2">
+          <EditableInput
+            placeholder="Document name"
+            value={documentName}
+            onChange={(value) => setDocumentName(value ?? "")}
+          />
+          <Button
+            disabled={isCreateDocumentLoading}
+            kind={Button.kinds.SECONDARY}
+            size={Button.sizes.MEDIUM}
+            onClick={() =>
+              createDocument({
+                name: documentName,
+                content: generatedData ?? "",
+                workspaceId: boardDetails?.boardDetails.data.workspaceId ?? 0,
+                jwtToken: boardDetails?.jwtToken.data ?? "",
+              })
+            }
+          >
+            Generate document{" "}
+            {isCreateDocumentLoading && (
+              <div className="h-3 w-3">
+                <Loader />
+              </div>
+            )}
+          </Button>
+        </div>
         {isGeneratorLoading && (
           <div className="flex flex-col items-center gap-4">
             <div className="mt-5 h-5 w-10">

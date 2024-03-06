@@ -84,7 +84,7 @@ export const monday = createTRPCRouter({
             return `
             addData${indx}: create_item(
               board_id: ${boardId}
-              item_name: "new item"
+              item_name: "Item ${indx + 1}"
               column_values: "${JSON.stringify(item).replaceAll('"', '\\"')}"
             ) {
               id
@@ -114,6 +114,44 @@ export const monday = createTRPCRouter({
       const data = await queryFireHelper<object>(getBoardData);
       const summary = await gptDocumentGeneration(data, type);
       return summary?.content ?? undefined;
+    }),
+
+  generateDocument: publicProcedure
+    .input(
+      z.object({
+        workspaceId: z.number(),
+        name: z.string(),
+        content: z.string(),
+        jwtToken: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { content, jwtToken, workspaceId, name } = input;
+      if (!isAuthorized(jwtToken)) throw new Error("Not authorized");
+
+      //1. create document
+      const createDocumentQuery = `mutation { create_doc( location: {workspace: {workspace_id: ${workspaceId}, name: "${name}", kind: public}}) { id } }`;
+
+      const createDocumentData = await queryFireHelper<{
+        data: { create_doc: { id: string } };
+        account_id: number;
+      }>(createDocumentQuery);
+
+      const documentId = createDocumentData.data.create_doc.id;
+      let addBlockQuery = `mutation {  create_doc_block (type: normal_text, doc_id: ${documentId}, content: "{\\"alignment\\":\\"left\\",\\"direction\\":\\"ltr\\",\\"deltaFormat\\":[{\\"insert\\":\\"${content.replaceAll(
+        '"',
+        ""
+      )}\\"}]}") { id }}`;
+
+      const addBlockData = await queryFireHelper<object>(addBlockQuery);
+
+      console.dir(
+        {
+          addBlockQuery,
+          addBlockData,
+        },
+        { depth: 10 }
+      );
     }),
 });
 
