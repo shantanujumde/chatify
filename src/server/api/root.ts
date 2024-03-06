@@ -5,6 +5,7 @@ import { openAiRouter } from "@/server/api/routers/openAi";
 import { profileRouter } from "@/server/api/routers/profile";
 import { createTRPCRouter } from "@/server/api/trpc";
 import { freeTrialRouter } from "./routers/freeTrial";
+import { monday } from "./routers/monday";
 import { paymentsRouter } from "./routers/payments";
 
 /**
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   chat: chatRouter,
   payments: paymentsRouter,
   freeTrial: freeTrialRouter,
+  monday: monday,
 });
 
 // export type definition of API
