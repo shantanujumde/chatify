@@ -1,5 +1,5 @@
 "use client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
 import { Button, Loader } from "monday-ui-react-core";
 import { FC } from "react";
@@ -12,8 +12,11 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
   monday.setApiVersion("2023-10");
   monday.setToken(process.env.MONDAY_API_KEY ?? "");
 
-  const { mutateAsync: generator } =
-    api.monday.generateBoardSummary.useMutation();
+  const {
+    data: generatedData,
+    mutateAsync: generator,
+    isLoading: isGeneratorLoading,
+  } = api.monday.generateBoardSummary.useMutation();
 
   const { data: boardId, isLoading: isBoardIdLoading } = useQuery(
     ["boardId"],
@@ -24,18 +27,6 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
     }
   );
 
-  const {
-    data: summary,
-    mutate: getSummary,
-    isLoading: isGetSummaryLoading,
-  } = useMutation(["summary"], async () => {
-    const summaryRes = await generator({
-      boardId: boardId?.boardId ?? 0,
-      jwtToken: boardId?.jwtToken.data ?? "",
-    });
-    return summaryRes;
-  });
-
   if (isBoardIdLoading)
     return (
       <div className="mt-10 h-10 w-10">
@@ -45,17 +36,44 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
 
   return (
     <div className="mt-10 flex flex-col gap-4 text-center">
-      <h2 className="text-2xl font-bold">Generate summary for current board</h2>
-      <Button size={Button.sizes.MEDIUM} onClick={() => getSummary()}>
-        Generate Summary
-      </Button>
+      <h2 className="text-2xl font-bold">
+        Select from the generation strategies
+      </h2>
+      <div className="flex justify-around">
+        <Button
+          color={Button.colors.POSITIVE}
+          size={Button.sizes.SMALL}
+          onClick={() =>
+            generator({
+              boardId: boardId?.boardId ?? 0,
+              jwtToken: boardId?.jwtToken.data ?? "",
+              type: "detailed",
+            })
+          }
+        >
+          Detailed
+        </Button>
+        <Button
+          color={Button.colors.INVERTED}
+          size={Button.sizes.SMALL}
+          onClick={() =>
+            generator({
+              boardId: boardId?.boardId ?? 0,
+              jwtToken: boardId?.jwtToken.data ?? "",
+              type: "summary",
+            })
+          }
+        >
+          Summary
+        </Button>
+      </div>
 
       <div className="flex flex-col gap-4 text-center">
-        <h2 className="text-2xl font-bold">Summary</h2>
+        <h2 className="text-2xl font-bold">Document</h2>
         <Button
           kind={Button.kinds.SECONDARY}
           size={Button.sizes.MEDIUM}
-          onClick={() => navigator.clipboard.writeText(summary ?? "")}
+          onClick={() => navigator.clipboard.writeText(generatedData ?? "")}
         >
           copy
         </Button>
@@ -66,13 +84,17 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
         >
           Generate document
         </Button>
+        {isGeneratorLoading && (
+          <div className="flex flex-col items-center gap-4">
+            <div className="mt-5 h-5 w-10">
+              <Loader />
+            </div>
+            <p>Generating document...</p>
+          </div>
+        )}
       </div>
-      {isGetSummaryLoading && (
-        <div className="mt-5 h-5 w-10">
-          <Loader /> Generating summary...
-        </div>
-      )}
-      {summary && <p>{summary}</p>}
+
+      {generatedData && <p>{generatedData}</p>}
     </div>
   );
 };

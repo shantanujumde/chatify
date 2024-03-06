@@ -101,17 +101,18 @@ export const monday = createTRPCRouter({
       z.object({
         boardId: z.number(),
         jwtToken: z.string(),
+        type: z.enum(["detailed", "summary"]),
       })
     )
     .mutation(async ({ input }) => {
-      const { boardId, jwtToken } = input;
+      const { boardId, jwtToken, type } = input;
       if (!isAuthorized(jwtToken)) throw new Error("Not authorized");
 
       if (!boardId) return;
       const getBoardData = `{ boards(ids: ${boardId}) { items_page(limit: 100) { cursor items { id name column_values { id text value } } } } }`;
 
       const data = await queryFireHelper<object>(getBoardData);
-      const summary = await gptSummaryGeneration(data);
+      const summary = await gptDocumentGeneration(data, type);
       return summary?.content ?? undefined;
     }),
 });
@@ -133,7 +134,10 @@ async function queryFireHelper<T>(query: string) {
   return (await result.json()) as T;
 }
 
-const gptSummaryGeneration = async (content: object) => {
+const gptDocumentGeneration = async (
+  content: object,
+  type: "detailed" | "summary"
+) => {
   const openAi = new OpenAI({
     apiKey: process.env.OPEN_AI_API_KEY,
   });
@@ -152,9 +156,10 @@ const gptSummaryGeneration = async (content: object) => {
       },
       {
         role: "system",
-        content: `
-          Summarize the data provided by the user in easy to understand format.
-          `,
+        content:
+          type === "summary"
+            ? "Summarize the data provided by the user in easy to understand format."
+            : "Generate a detailed report from the data provided by the user",
       },
     ],
   });

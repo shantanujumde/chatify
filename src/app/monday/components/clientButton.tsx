@@ -1,13 +1,15 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
-import { Button, Loader } from "monday-ui-react-core";
+import { Button, EditableInput, Loader } from "monday-ui-react-core";
+import { useState } from "react";
 import { api } from "../../../utils/api";
 import { AppData, SessionTokenData } from "./summaryButton";
 export const ClientButton = ({}) => {
   const monday = mondaySdk();
   monday.setApiVersion("2023-10");
   monday.setToken(process.env.MONDAY_API_KEY ?? "");
+  const [documentName, setDocumentName] = useState("my-awesome-document");
 
   const { mutate: generateNewBoard } =
     api.monday.generateNewBoard.useMutation();
@@ -40,11 +42,16 @@ export const ClientButton = ({}) => {
         Generate board for current document
       </h2>
 
+      <EditableInput
+        placeholder="Document name"
+        value={documentName}
+        onChange={(value) => setDocumentName(value ?? "")}
+      />
       <Button
         size={Button.sizes.MEDIUM}
         onClick={() =>
           generateNewBoard({
-            boardName: "Ai-generated-board",
+            boardName: documentName,
             content: documentData.document,
             jwtToken: documentData.jwt.data,
           })
