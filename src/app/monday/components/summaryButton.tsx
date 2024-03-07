@@ -52,10 +52,11 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
       <h2 className="text-2xl font-bold">
         Select from the generation strategies
       </h2>
-      <div className="flex justify-around">
+      <div className="flex gap-2">
         <Button
           color={Button.colors.POSITIVE}
-          size={Button.sizes.SMALL}
+          size={Button.sizes.MEDIUM}
+          className="w-full"
           onClick={() =>
             generator({
               boardId: boardDetails?.boardDetails.data.boardId ?? 0,
@@ -68,7 +69,8 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
         </Button>
         <Button
           color={Button.colors.INVERTED}
-          size={Button.sizes.SMALL}
+          size={Button.sizes.MEDIUM}
+          className="w-full"
           onClick={() =>
             generator({
               boardId: boardDetails?.boardDetails.data.boardId ?? 0,

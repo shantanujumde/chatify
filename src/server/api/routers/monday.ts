@@ -109,7 +109,7 @@ export const monday = createTRPCRouter({
       if (!isAuthorized(jwtToken)) throw new Error("Not authorized");
 
       if (!boardId) return;
-      const getBoardData = `{ boards(ids: ${boardId}) { items_page(limit: 100) { cursor items { id name column_values { id text value } } } } }`;
+      const getBoardData = `{ boards(ids: ${boardId}) { items_page(limit: 1000) { cursor items { id name column_values { id text value } } } } }`;
 
       const data = await queryFireHelper<object>(getBoardData);
       const summary = await gptDocumentGeneration(data, type);
