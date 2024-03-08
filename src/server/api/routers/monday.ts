@@ -26,7 +26,7 @@ export const monday = createTRPCRouter({
         account_id: number;
       };
 
-      let createBoardQuery = `mutation { create_board (board_name: "${boardName}", board_kind: public) {	id }}`;
+      const createBoardQuery = `mutation { create_board (board_name: "${boardName}", board_kind: public) {	id }}`;
 
       const board = await queryFireHelper<CreateBoardResponse>(
         createBoardQuery
@@ -35,7 +35,7 @@ export const monday = createTRPCRouter({
       const boardId = board.data.create_board.id;
 
       //2. create columns in board
-      let createColumnQuery = `mutation {
+      const createColumnQuery = `mutation {
           col1: create_column(
             board_id:${boardId} 
             title: "Task"
@@ -67,7 +67,7 @@ export const monday = createTRPCRouter({
             description
           }
         }`;
-      await queryFireHelper<any>(createColumnQuery);
+      await queryFireHelper<unknown>(createColumnQuery);
 
       // generate data for columns
       const boardItemsContent = await gptBoardGeneration(content);
@@ -80,8 +80,10 @@ export const monday = createTRPCRouter({
 
       // add data to columns
       const addDataQuery = `mutation {
-          ${boardItems.map((item, indx) => {
-            return `
+          ${
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            boardItems.map((item, indx) => {
+              return `
             addData${indx}: create_item(
               board_id: ${boardId}
               item_name: "Item ${indx + 1}"
@@ -90,10 +92,11 @@ export const monday = createTRPCRouter({
               id
             }
             `;
-          })}
+            })
+          }
         }`;
 
-      await queryFireHelper<any>(addDataQuery);
+      await queryFireHelper<unknown>(addDataQuery);
     }),
 
   generateBoardSummary: publicProcedure
@@ -138,7 +141,7 @@ export const monday = createTRPCRouter({
       }>(createDocumentQuery);
 
       const documentId = createDocumentData.data.create_doc.id;
-      let addBlockQuery = `mutation {  create_doc_block (type: normal_text, doc_id: ${documentId}, content: "{\\"alignment\\":\\"left\\",\\"direction\\":\\"ltr\\",\\"deltaFormat\\":[{\\"insert\\":\\"${content.replaceAll(
+      const addBlockQuery = `mutation {  create_doc_block (type: normal_text, doc_id: ${documentId}, content: "{\\"alignment\\":\\"left\\",\\"direction\\":\\"ltr\\",\\"deltaFormat\\":[{\\"insert\\":\\"${content.replaceAll(
         '"',
         ""
       )}\\"}]}") { id }}`;

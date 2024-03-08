@@ -2,12 +2,10 @@
 import { useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
 import { Button, EditableInput, Loader } from "monday-ui-react-core";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { api } from "../../../utils/api";
 
-interface SummaryButtonProps {}
-
-const SummaryButton: FC<SummaryButtonProps> = ({}) => {
+const SummaryButton = ({}) => {
   const [documentName, setDocumentName] = useState("my-awesome-document");
   const [copy, SetCopy] = useState(false);
 
@@ -17,7 +15,7 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
 
   const {
     data: generatedData,
-    mutateAsync: generator,
+    mutate: generator,
     isLoading: isGeneratorLoading,
   } = api.monday.generateBoardSummary.useMutation();
 
@@ -44,7 +42,9 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
     );
 
   const handleCopy = async () => {
-    navigator.clipboard.writeText(generatedData ?? "");
+    if (!generatedData) return;
+
+    await navigator.clipboard.writeText(generatedData);
     SetCopy(true);
   };
   return (
@@ -88,7 +88,7 @@ const SummaryButton: FC<SummaryButtonProps> = ({}) => {
         <Button
           kind={Button.kinds.SECONDARY}
           size={Button.sizes.MEDIUM}
-          onClick={() => handleCopy()}
+          onClick={() => void handleCopy()}
         >
           {copy ? "Copied" : "Copy"}
         </Button>

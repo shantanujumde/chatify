@@ -4,7 +4,7 @@ import mondaySdk from "monday-sdk-js";
 import { Button, EditableInput, Loader } from "monday-ui-react-core";
 import { useState } from "react";
 import { api } from "../../../utils/api";
-import { AppData, SessionTokenData } from "./summaryButton";
+import { type AppData, type SessionTokenData } from "./summaryButton";
 export const ClientButton = ({}) => {
   const monday = mondaySdk();
   monday.setApiVersion("2023-10");
