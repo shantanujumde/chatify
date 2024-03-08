@@ -1,8 +1,10 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
-import { Button, EditableInput, Loader } from "monday-ui-react-core";
 import { useState } from "react";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import Spinner from "../../../components/ui/spinner";
 import { api } from "../../../utils/api";
 import { type AppData, type SessionTokenData } from "./summaryButton";
 export const ClientButton = ({}) => {
@@ -30,7 +32,7 @@ export const ClientButton = ({}) => {
   if (isBoardIdLoading)
     return (
       <div className="mt-10 h-10 w-10">
-        <Loader />
+        <Spinner />
       </div>
     );
 
@@ -42,13 +44,12 @@ export const ClientButton = ({}) => {
         Generate board for current document
       </h2>
 
-      <EditableInput
+      <Input
         placeholder="Document name"
         value={documentName}
-        onChange={(value) => setDocumentName(value ?? "")}
+        onChange={(e) => setDocumentName(e.target.value ?? "")}
       />
       <Button
-        size={Button.sizes.MEDIUM}
         disabled={isGenerateNewBoardLoading}
         onClick={() =>
           generateNewBoard({
@@ -61,7 +62,7 @@ export const ClientButton = ({}) => {
         Generate Board{" "}
         {isGenerateNewBoardLoading && (
           <div className="h-3 w-3">
-            <Loader />
+            <Spinner />
           </div>
         )}
       </Button>

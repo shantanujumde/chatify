@@ -1,8 +1,10 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import mondaySdk from "monday-sdk-js";
-import { Button, EditableInput, Loader } from "monday-ui-react-core";
 import { useState } from "react";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import Spinner from "../../../components/ui/spinner";
 import { api } from "../../../utils/api";
 
 const SummaryButton = ({}) => {
@@ -37,7 +39,7 @@ const SummaryButton = ({}) => {
   if (isBoardIdLoading)
     return (
       <div className="mt-10 h-10 w-10">
-        <Loader />
+        <Spinner />
       </div>
     );
 
@@ -54,8 +56,6 @@ const SummaryButton = ({}) => {
       </h2>
       <div className="flex gap-2">
         <Button
-          color={Button.colors.POSITIVE}
-          size={Button.sizes.MEDIUM}
           className="w-full"
           onClick={() =>
             generator({
@@ -68,8 +68,6 @@ const SummaryButton = ({}) => {
           Detailed
         </Button>
         <Button
-          color={Button.colors.INVERTED}
-          size={Button.sizes.MEDIUM}
           className="w-full"
           onClick={() =>
             generator({
@@ -85,23 +83,17 @@ const SummaryButton = ({}) => {
 
       <div className="flex flex-col gap-4 text-center">
         <h2 className="text-2xl font-bold">Document</h2>
-        <Button
-          kind={Button.kinds.SECONDARY}
-          size={Button.sizes.MEDIUM}
-          onClick={() => void handleCopy()}
-        >
+        <Button onClick={() => void handleCopy()}>
           {copy ? "Copied" : "Copy"}
         </Button>
         <div className="flex flex-col gap-2">
-          <EditableInput
+          <Input
             placeholder="Document name"
             value={documentName}
-            onChange={(value) => setDocumentName(value ?? "")}
+            onChange={(e) => setDocumentName(e.target.value ?? "")}
           />
           <Button
             disabled={isCreateDocumentLoading}
-            kind={Button.kinds.SECONDARY}
-            size={Button.sizes.MEDIUM}
             onClick={() =>
               createDocument({
                 name: documentName,
@@ -114,7 +106,7 @@ const SummaryButton = ({}) => {
             Generate document{" "}
             {isCreateDocumentLoading && (
               <div className="h-3 w-3">
-                <Loader />
+                <Spinner />
               </div>
             )}
           </Button>
@@ -122,7 +114,7 @@ const SummaryButton = ({}) => {
         {isGeneratorLoading && (
           <div className="flex flex-col items-center gap-4">
             <div className="mt-5 h-5 w-10">
-              <Loader />
+              <Spinner />
             </div>
             <p>Generating document...</p>
           </div>
