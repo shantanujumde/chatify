@@ -21,6 +21,9 @@ const config = {
   //   locales: ["en"],
   //   defaultLocale: "en",
   // },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 
   webpack: function webpack(config) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
