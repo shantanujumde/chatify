@@ -94,6 +94,11 @@ const PrivacyPolicy = ({}) => {
               implement strict access controls to ensure the confidentiality and
               integrity of your information.
             </p>
+            <h2 className="text-4xl font-bold">3. Sharing:</h2>
+            <p>
+              App only makes request to openAi to generate a response. We do not
+              store any of the information that you provide to openAi.
+            </p>
           </Animator>
         </ScrollPage>
         <ScrollPage>
