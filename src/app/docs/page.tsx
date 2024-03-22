@@ -21,7 +21,7 @@ const Docs: FC = ({}) => {
 
   return (
     <div className="flex flex-col gap-80">
-      <ScrollContainer snap="proximity">
+      <ScrollContainer>
         <ScrollPage>
           <Animator
             className="flex w-[90vw] flex-col gap-4"

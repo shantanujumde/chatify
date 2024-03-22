@@ -20,7 +20,7 @@ const AboutUs = ({}) => {
 
   return (
     <div className="text-2xl">
-      <ScrollContainer snap="proximity">
+      <ScrollContainer>
         <ScrollPage>
           <Animator
             className="flex flex-col gap-4"
