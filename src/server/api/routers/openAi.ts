@@ -1,8 +1,8 @@
 import {
-  type Context,
   createTRPCRouter,
   protectedProcedure,
   subscribedProcedure,
+  type Context,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { randomInt } from "crypto";
@@ -62,6 +62,7 @@ export const openAiRouter = createTRPCRouter({
         });
 
       const embeddingArray: Embeddings[] = [];
+
       for (const chunk of chunkArray.chunks) {
         const embeddingResponse = await openAi.embeddings.create({
           model: "text-embedding-ada-002",
